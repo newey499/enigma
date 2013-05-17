@@ -5,13 +5,16 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += sql
 
 TARGET = gui
 TEMPLATE = app
 
+INCLUDEPATH += "../cmdline"
+DEPENDPATH  += "../cmdline"
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+           mainwindow.cpp
 
 HEADERS  += mainwindow.h
 
