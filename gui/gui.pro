@@ -14,8 +14,12 @@ INCLUDEPATH += "../cmdline"
 DEPENDPATH  += "../cmdline"
 
 SOURCES += main.cpp\
-           mainwindow.cpp
+           mainwindow.cpp \
+           ../cmdline/globals.cpp \
+           ../cmdline/enigmadatabase.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+            ../cmdline/globals.h \
+           ../cmdline/enigmadatabase.h
 
 FORMS    += mainwindow.ui

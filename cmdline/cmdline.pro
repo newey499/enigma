@@ -16,4 +16,14 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    globals.cpp \
+    entrypoint.cpp \
+    enigmadatabase.cpp \
+    rotor.cpp
+
+HEADERS += \
+    globals.h \
+    entrypoint.h \
+    enigmadatabase.h \
+    rotor.h
