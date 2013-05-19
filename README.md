@@ -1,4 +1,8 @@
-First commit. Adding a README.
 
+Simulator for WW II Enigma cyper machine.
 
-# This is my README
+Built with:
+QT 4.8
+Qt Creator 2.4.1
+MySql 5.5.31
+
