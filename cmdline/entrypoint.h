@@ -1,6 +1,8 @@
 #ifndef ENTRYPOINT_H
 #define ENTRYPOINT_H
 
+#include <QCoreApplication>
+
 #include <QObject>
 #include <QPointer>
 #include <QSqlQuery>

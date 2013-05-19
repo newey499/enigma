@@ -1,12 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QtGui/QApplication>
+
 #include <QMainWindow>
 #include <QPointer>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QString>
 
 #include "globals.h"
+#include "enigmaexception.h"
 
 namespace Ui {
 class MainWindow;

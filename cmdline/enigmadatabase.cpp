@@ -23,6 +23,7 @@ EnigmaDatabase::EnigmaDatabase(QObject *parent) :
     qDebug("enigma database driver [%s] opened [%s]",
                  db.driverName().toAscii().data(),
                  (ok ? "Yes": "No") );
+
 }
 
 

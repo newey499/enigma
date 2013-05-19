@@ -8,7 +8,7 @@
 #include <QSqlRecord>
 #include <QVariant>
 
-
+#include "enigmaexception.h"
 #include "enigmadatabase.h"
 
 class Rotor : public QObject
@@ -31,6 +31,9 @@ protected:
 
     QSqlRecord recRotor;
     QSqlRecord recAlphabet;
+    QHash<QString, QString> map;
+
+    bool sanityCheck();
 
 private:
 

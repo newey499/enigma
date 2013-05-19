@@ -16,10 +16,12 @@ DEPENDPATH  += "../cmdline"
 SOURCES += main.cpp\
            mainwindow.cpp \
            ../cmdline/globals.cpp \
-           ../cmdline/enigmadatabase.cpp
+           ../cmdline/enigmadatabase.cpp \
+           ../cmdline/enigmaexception.cpp
 
 HEADERS  += mainwindow.h \
             ../cmdline/globals.h \
-           ../cmdline/enigmadatabase.h
+           ../cmdline/enigmadatabase.h \
+           ../cmdline/enigmaexception.h
 
 FORMS    += mainwindow.ui

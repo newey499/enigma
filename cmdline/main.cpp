@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
         delete globals;
     }
 
-    //return a.exec();
-    QCoreApplication::exit(result);
+    // Don't need an event loop for the command line app
+    // result = a.exec();
+
+    return result;
 }

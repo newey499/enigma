@@ -13,6 +13,7 @@ TARGET = cmdline
 CONFIG   += console
 CONFIG   -= app_bundle
 
+
 TEMPLATE = app
 
 
@@ -20,10 +21,12 @@ SOURCES += main.cpp \
     globals.cpp \
     entrypoint.cpp \
     enigmadatabase.cpp \
-    rotor.cpp
+    rotor.cpp \
+    enigmaexception.cpp
 
 HEADERS += \
     globals.h \
     entrypoint.h \
     enigmadatabase.h \
-    rotor.h
+    rotor.h \
+    enigmaexception.h

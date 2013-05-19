@@ -6,7 +6,10 @@
 
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QString>
 #include <QVariant>
+
+
 
 class EnigmaDatabase : public QObject
 {
@@ -17,7 +20,6 @@ public:
     static EnigmaDatabase *getInstance();
 
     ~EnigmaDatabase();
-
 
     QSqlRecord getRotor(const QString &rotorName);
     QSqlRecord getRotor(int id);
