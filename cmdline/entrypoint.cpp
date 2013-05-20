@@ -40,17 +40,7 @@ int EntryPoint::exec()
     {
         edb = EnigmaDatabase::getInstance();
 
-        QSqlQuery qry("select * from rotor");
-        QSqlRecord rec;
-
-        while (qry.next())
-        {
-            rec = qry.record();
-            qDebug("%s", rec.value("name").toString().toAscii().data());
-        }
-
-        Rotor rotor;
-
+        testMapping();
     }
     catch (EnigmaException &e)
     {
@@ -59,4 +49,24 @@ int EntryPoint::exec()
     }
 
     return result;
+}
+
+
+void EntryPoint::testMapping()
+{
+    //Rotor rotor("NOMAP", this);
+    Rotor rotor("REVERSE", this);
+
+    int pinIn;
+
+    pinIn = 1;
+    rotor.setRingSetting(1);
+    rotor.setLetterSetting("A");
+    rotor.mapLeftToRight(pinIn);
+
+    pinIn = 1;
+    rotor.setRingSetting(1);
+    rotor.setLetterSetting("Z");
+    rotor.mapLeftToRight(pinIn);
+
 }

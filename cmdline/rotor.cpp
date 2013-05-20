@@ -24,21 +24,48 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "rotor.h"
 
-Rotor::Rotor(QObject *parent) :
+
+Rotor::Rotor(QString rotorName, QObject *parent) :
     QObject(parent)
 {
-
+    map.clear();
     edb = EnigmaDatabase::getInstance();
 
-    recRotor = edb->getRotor("NOMAP");
+    try
+    {
+        recRotor = edb->getRotor(rotorName);
+        recAlphabet = edb->getAlphabet(recRotor.value("alphabetid").toInt());
 
-    recAlphabet = edb->getAlphabet(recRotor.value("alphabetid").toInt());
+        alphabetMap = recAlphabet.value("alphabet").toString();
+        // This has to be set before a space is prepended
+        alphabetSize = alphabetMap.size();
 
-    qDebug("rotor [%s] alphabet [%s]",
-           recRotor.value("name").toString().toAscii().data(),
-           recAlphabet.value("name").toString().toAscii().data());
+        // Place a space at the start of the string so that pin
+        // numbers need not be zero based.
+        alphabetMap.prepend(" ");
+        alphabetName = recAlphabet.value("name").toString();
 
-    sanityCheck();
+        ringSetting = 1;
+        setLetterSetting(alphabetMap.at(1));
+
+        rotorMap = recRotor.value("pinright").toString();
+        // Place a space at the start of the string so that pin
+        // numbers need not be zero based.
+        rotorMap.prepend(" ");
+        rotorName = recRotor.value("name").toString();
+
+
+        qDebug("rotor [%s] alphabet [%s]",
+               recRotor.value("name").toString().toAscii().data(),
+               recAlphabet.value("name").toString().toAscii().data());
+
+        sanityCheck();
+    }
+    catch (EnigmaException &e)
+    {
+        throw e;
+    }
+
 
 }
 
@@ -53,50 +80,200 @@ bool Rotor::sanityCheck()
 {
     bool result = true;
 
-    QString alphabet = recAlphabet.value("alphabet").toString();
-    QString rotor = recRotor.value("pinright").toString();
+    result = GenLib::alphabetSanityCheck(alphabetName, alphabetMap, rotorName, rotorMap);
 
-// Disable deprecated conversion from string constant to char *
-// when instantiating EnigmaException object
+    return result;
+}
+
+
+int Rotor::getAlphabetSize()
+{
+    return alphabetSize;
+}
+
+
+int Rotor::getMaxRingSetting()
+{
+  return getAlphabetSize();
+}
+
+bool Rotor::isValidPinNo(int pinNo)
+{
+    bool result = true;
+
+    if ((pinNo < 1) || (pinNo > getAlphabetSize()))
+    {
+        result = false;
+    }
+
+    return result;
+}
+
+void Rotor::setRingSetting(int setting)
+{
+    if (! isValidPinNo(setting))
+    {
+        QString msg = QString("Ring setting requested [%1] is outside permitted range [%2...$3]").
+                            arg(setting).
+                            arg(1).
+                            arg(getMaxRingSetting());
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
+#pragma GCC diagnostic pop
+
+    }
+    else
+    {
+        ringSetting = setting;
+    }
+
+}
+
+
+int  Rotor::getRingSetting()
+{
+    return ringSetting;
+}
+
+
+void Rotor::setLetterSetting(QString setting)
+{
+    if ( (setting.count() != 1) || (! alphabetMap.contains(setting, Qt::CaseSensitive)) )
+    {
+        QString msg = QString("Letter setting requested [%1] is not in alphabet [%2]").
+                            arg(setting.toAscii().data()).
+                            arg(alphabetMap.toAscii().data());
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
+#pragma GCC diagnostic pop
+
+    }
+    else
+    {
+        letterSetting = setting;
+        letterOffset  = alphabetMap.indexOf(letterSetting, 0, Qt::CaseSensitive);
+    }
+}
+
+QString Rotor::getLetterSetting()
+{
+    return letterSetting;
+}
+
+
+int Rotor::getLetterOffset()
+{
+    return letterOffset;
+}
+
+
+/*******************
+Assume the right side of the rotor is in alphabet order
+and the left side of the rotor to be in mapping order.
+********************/
+int Rotor::mapRightToLeft(int pinIn)
+{
+    int result = -1;
+    int origPinIn = pinIn;
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
-    if (alphabet.size() != rotor.size())
+    pinIn = calculateOffset(pinIn);
+
+    if (! isValidPinNo(pinIn))
     {
-        QString tmp = QString("Rotor: alphabet lengths do not match alphabet [%1] rotor [%2]").
-                                arg(recAlphabet.value("name").toString()).
-                                arg(recRotor.value("name").toString());
-        result = false;
-        throw EnigmaException(tmp.toAscii().data(), __FILE__ , __LINE__);
+         QString msg = QString("requested pin [%1] not in valid range [%2...%3]").
+                            arg(pinIn).
+                            arg(1).
+                            arg(getAlphabetSize());
+         throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
     }
 
-    for (int i = 0; i < alphabet.count(); i++)
+    QString x = rotorMap.at(pinIn);
+    result = alphabetMap.indexOf(x, 0, Qt::CaseSensitive );
+
+    if (result == -1)
     {
-        if (! rotor.contains(alphabet.at(i), Qt::CaseSensitive))
-        {
-
-            QString tmp = QString("Alphabet character [%1] not found in rotor definition [%2]").
-                                    arg(alphabet.at(i)).
-                                    arg(recRotor.value("name").toString());
-            result = false;
-            throw EnigmaException(tmp.toAscii().data(), __FILE__ , __LINE__);
-        }
-    }
-
-    for (int i = 0; i < rotor.count(); i++)
-    {
-        if (! alphabet.contains(rotor.at(i), Qt::CaseSensitive))
-        {
-
-            QString tmp = QString("Rotor character [%1] not found in Alphabet definition [%2]").
-                                    arg(rotor.at(i)).
-                                    arg(recAlphabet.value("name").toString());
-            result = false;
-            throw EnigmaException(tmp.toAscii().data(), __FILE__ , __LINE__);
-        }
+       QString msg = QString("rotor map right to left pin number [%1] not found").
+                        arg(pinIn);
+       throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
     }
 
 #pragma GCC diagnostic pop
+
+    qDebug("mapRightToLeft origPinIn [%d] calcPinIn [%d] pinOut [%d]",
+           origPinIn, pinIn, result);
+
+    return result;
+}
+
+
+/*******************
+Assume the right side of the rotor is in alphabet order
+and the left side of the rotor to be in mapping order.
+********************/
+int Rotor::mapLeftToRight(int pinIn)
+{
+    int result = -1;
+    int origPinIn = pinIn;
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+
+    pinIn = calculateOffset(pinIn);
+
+    if (! isValidPinNo(pinIn))
+    {
+         QString msg = QString("requested pin [%1] not in valid range [%2...%3]").
+                            arg(pinIn).
+                            arg(1).
+                            arg(getAlphabetSize());
+         throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+    }
+
+    QString x = alphabetMap.at(pinIn);
+    result = rotorMap.indexOf(x, 0, Qt::CaseSensitive );
+
+
+    if (result == -1)
+    {
+       QString msg = QString("rotor map right to left pin number [%1] not found").
+                        arg(pinIn);
+       throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
+    }
+
+#pragma GCC diagnostic pop
+
+    qDebug("mapLeftToRight origPinIn [%d] calcPinIn [%d] pinOut [%d]",
+           origPinIn, pinIn, result);
+
+    return result;
+}
+
+
+int Rotor::calculateOffset(int pinIn)
+{
+    int result = -1;
+
+    result = ( pinIn + (getRingSetting() -1) + (getLetterOffset() - 1) ) % getAlphabetSize();
+    if (result == 0)
+    {
+        result = getAlphabetSize();
+    }
+
+    qDebug("calc "
+           "pinIn [%d] "
+           "ringsetting [%d] "
+           "letterOffset [%d] "
+           "alphabet length [%d] "
+           "result [%d]",
+           pinIn, getRingSetting(),
+           getLetterOffset(), getAlphabetSize(),
+           result);
 
     return result;
 }

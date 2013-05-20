@@ -27,13 +27,13 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QPointer>
 #include <QSqlDatabase>
-
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QString>
 #include <QVariant>
 
-
+#include "enigmaexception.h"
 
 class EnigmaDatabase : public QObject
 {
@@ -41,15 +41,25 @@ class EnigmaDatabase : public QObject
 
 public:
 
+    static const char * WHEEL_ROTOR;
+    static const char * WHEEL_ENTRY;
+    static const char * WHEEL_REFLECTOR;
+
     static EnigmaDatabase *getInstance();
 
     ~EnigmaDatabase();
 
-    QSqlRecord getRotor(const QString &rotorName);
-    QSqlRecord getRotor(int id);
+    virtual QSqlRecord getRotor(int id);
+    virtual QSqlRecord getRotor(const QString &rotorName);
 
-    QSqlRecord getAlphabet(const QString &alphabetName);
-    QSqlRecord getAlphabet(int id);
+    virtual QSqlRecord getEntry(int id);
+    virtual QSqlRecord getEntry(const QString &rotorName);
+
+    virtual QSqlRecord getReflector(int id);
+    virtual QSqlRecord getReflector(const QString &rotorName);
+
+    virtual QSqlRecord getAlphabet(const QString &alphabetName);
+    virtual QSqlRecord getAlphabet(int id);
 
 signals:
 
@@ -60,6 +70,8 @@ protected:
 
     QSqlDatabase db;
 
+    QSqlRecord getWheel(QString type, QString name);
+    QSqlRecord getWheel(int id);
 
 private:
 

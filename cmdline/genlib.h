@@ -22,46 +22,38 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
-#ifndef ENTRYPOINT_H
-#define ENTRYPOINT_H
-
-#include <QCoreApplication>
+#ifndef GENLIB_H
+#define GENLIB_H
 
 #include <QObject>
-#include <QPointer>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QVariant>
+#include <QString>
 
+#include "enigmaexception.h"
 
-#include "enigmadatabase.h"
-#include "rotor.h"
-
-class EntryPoint : public QObject
+class GenLib : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit EntryPoint(QObject *parent = 0);
+    explicit GenLib(QObject *parent = 0);
+    ~GenLib();
 
-    virtual int exec();
-
-    virtual void testMapping();
-
+    static bool alphabetSanityCheck(QString alphabetName, QString alphabet,
+                                    QString mappingName, QString mapping);
 
 signals:
+
 
 public slots:
 
 
 protected:
 
-    QPointer<EnigmaDatabase> edb;
 
 private:
 
 
 };
 
-#endif // ENTRYPOINT_H
+#endif // GENLIB_H

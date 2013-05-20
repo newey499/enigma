@@ -25,13 +25,14 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef ROTOR_H
 #define ROTOR_H
 
-#include <QHash>
+#include <QMap>
 #include <QObject>
 #include <QPointer>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QVariant>
 
+#include "genlib.h"
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
 
@@ -41,9 +42,22 @@ class Rotor : public QObject
 
 public:
 
-    explicit Rotor(QObject *parent = 0);
-
+    explicit Rotor(QString rotorName, QObject *parent = 0);
     ~Rotor();
+
+    virtual void setRingSetting(int setting);
+    virtual int  getRingSetting();
+
+    virtual void setLetterSetting(QString setting);
+    virtual QString  getLetterSetting();
+    virtual int getLetterOffset();
+
+    virtual int mapRightToLeft(int pinIn);
+    virtual int mapLeftToRight(int pinIn);
+
+    virtual int getAlphabetSize();
+
+    virtual int calculateOffset(int pinIn);
 
 signals:
 
@@ -55,9 +69,24 @@ protected:
 
     QSqlRecord recRotor;
     QSqlRecord recAlphabet;
-    QHash<QString, QString> map;
+    QMap<QString, QString> map;
+    QMap<int, int> pinMap;
 
-    bool sanityCheck();
+    int alphabetSize;
+
+    QString alphabetMap;
+    QString alphabetName;
+    QString rotorMap;
+    QString rotorName;
+
+    int getMaxRingSetting();
+    int ringSetting;
+    QString letterSetting;
+    int letterOffset;
+
+    virtual bool sanityCheck();
+    virtual bool isValidPinNo(int pinNo);
+
 
 private:
 

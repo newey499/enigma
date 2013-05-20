@@ -48,14 +48,16 @@ SOURCES += main.cpp \
     entrypoint.cpp \
     enigmadatabase.cpp \
     rotor.cpp \
-    enigmaexception.cpp
+    enigmaexception.cpp \
+    genlib.cpp
 
 HEADERS += \
     globals.h \
     entrypoint.h \
     enigmadatabase.h \
     rotor.h \
-    enigmaexception.h
+    enigmaexception.h \
+    genlib.h
 
 OTHER_FILES += \
     ../README.md \

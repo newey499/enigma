@@ -52,6 +52,10 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 bool EnigmaDatabase::instanceFlag = false;
 QPointer<EnigmaDatabase> EnigmaDatabase::singleton = NULL;
 
+const char * EnigmaDatabase::WHEEL_ROTOR     = "ROTOR";
+const char * EnigmaDatabase::WHEEL_ENTRY     = "ENTRY";
+const char * EnigmaDatabase::WHEEL_REFLECTOR = "REFLECTOR";
+
 
 EnigmaDatabase::EnigmaDatabase(QObject *parent) :
     QObject(parent)
@@ -95,23 +99,7 @@ EnigmaDatabase * EnigmaDatabase::getInstance()
 
 QSqlRecord EnigmaDatabase::getRotor(const QString &rotorName)
 {
-    QSqlQuery qry;
-    QSqlRecord rec;
-
-    qry.prepare("select "
-                "id, name, alphabetid, type, pinright, notches "
-                "from rotor "
-                "where name = :name");
-
-    qry.bindValue(":name", rotorName);
-
-    if (qry.exec())
-    {
-        if (qry.first())
-        {
-            rec = qry.record();
-        }
-    }
+    QSqlRecord rec = getWheel(EnigmaDatabase::WHEEL_ROTOR, rotorName);
 
     return rec;
 }
@@ -119,23 +107,39 @@ QSqlRecord EnigmaDatabase::getRotor(const QString &rotorName)
 
 QSqlRecord EnigmaDatabase::getRotor(int id)
 {
-    QSqlQuery qry;
-    QSqlRecord rec;
+    QSqlRecord rec = getWheel(id);
 
-    qry.prepare("select "
-                "id, name, alphabetid, type, pinright, notches "
-                "from rotor "
-                "where id = :id");
+    return rec;
+}
 
-    qry.bindValue(":id", id);
 
-    if (qry.exec())
-    {
-        if (qry.first())
-        {
-            rec = qry.record();
-        }
-    }
+QSqlRecord EnigmaDatabase::getEntry(const QString &rotorName)
+{
+    QSqlRecord rec = getWheel(EnigmaDatabase::WHEEL_ENTRY, rotorName);
+
+    return rec;
+}
+
+
+QSqlRecord EnigmaDatabase::getEntry(int id)
+{
+    QSqlRecord rec = getWheel(id);
+
+    return rec;
+}
+
+
+QSqlRecord EnigmaDatabase::getReflector(const QString &rotorName)
+{
+    QSqlRecord rec = getWheel(EnigmaDatabase::WHEEL_REFLECTOR, rotorName);
+
+    return rec;
+}
+
+
+QSqlRecord EnigmaDatabase::getReflector(int id)
+{
+    QSqlRecord rec = getWheel(id);
 
     return rec;
 }
@@ -188,3 +192,85 @@ QSqlRecord EnigmaDatabase::getAlphabet(int id)
     return rec;
 }
 
+QSqlRecord EnigmaDatabase::getWheel(QString type, QString name)
+{
+    QSqlQuery qry;
+    QSqlRecord rec;
+    bool result = true;
+
+    qry.prepare("select "
+                "id, name, alphabetid, type, pinright, notches "
+                "from rotor "
+                "where type = :type and name = :name");
+
+    qry.bindValue(":type", type);
+    qry.bindValue(":name", name);
+
+    if (qry.exec())
+    {
+        if (qry.first())
+        {
+            rec = qry.record();
+        }
+        else
+        {
+            result = false;
+        }
+    }
+    else
+    {
+        result = false;
+    }
+
+    if (! result)
+    {
+        QString msg = qry.lastError().text();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+#pragma GCC diagnostic pop
+    }
+
+    return rec;
+}
+
+QSqlRecord EnigmaDatabase::getWheel(int id)
+{
+    QSqlQuery qry;
+    QSqlRecord rec;
+    bool result = true;
+
+    qry.prepare("select "
+                "id, name, alphabetid, type, pinright, notches "
+                "from rotor "
+                "where id = :id");
+
+    qry.bindValue(":id", id);
+
+    if (qry.exec())
+    {
+        if (qry.first())
+        {
+            rec = qry.record();
+        }
+        else
+        {
+            result = false;
+        }
+    }
+    else
+    {
+        result = false;
+    }
+
+    if (! result)
+    {
+        QString msg = qry.lastError().text();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+#pragma GCC diagnostic pop
+    }
+
+    return rec;
+}
