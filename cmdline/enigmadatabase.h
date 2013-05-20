@@ -1,7 +1,7 @@
 /************************************************************************
 Copyright Chris Newey 2013
 
-enigmasim@hotmail.com
+enigmasim@outlook.com
 
 This file is part of enigma.
 

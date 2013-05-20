@@ -22,8 +22,9 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
-#ifndef ROTOR_H
-#define ROTOR_H
+
+#ifndef ENTRY_H
+#define ENTRY_H
 
 #include <QMap>
 #include <QObject>
@@ -36,60 +37,44 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
 
-class Rotor : public QObject
+class Entry : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit Rotor(QString rotorName, QObject *parent = 0);
-    ~Rotor();
+    explicit Entry(QString entryName, QObject *parent = 0);
+    ~Entry();
 
-    virtual void setRingSetting(int setting);
-    virtual int  getRingSetting();
-
-    virtual void setLetterSetting(QString setting);
-    virtual QString  getLetterSetting();
-    virtual int getLetterOffset();
-
-    virtual int mapRightToLeft(int pinIn);
-    virtual int mapLeftToRight(int pinIn);
-
-    virtual int getAlphabetSize();
-
-    virtual int calculateOffset(int pinIn);
+    virtual int map(int pinIn);
 
 signals:
 
 public slots:
 
-    virtual int rotate();
 
 protected:
 
     QPointer<EnigmaDatabase> edb;
 
-    QSqlRecord recRotor;
+    QSqlRecord recEntry;
     QSqlRecord recAlphabet;
 
     int alphabetSize;
 
     QString alphabetMap;
     QString alphabetName;
-    QString rotorMap;
-    QString rotorName;
-
-    int getMaxRingSetting();
-    int ringSetting;
-    QString letterSetting;
-    int letterOffset;
+    QString entryMap;
+    QString entryName;
 
     virtual bool sanityCheck();
     virtual bool isValidPinNo(int pinNo);
-
+    virtual int getAlphabetSize();
 
 private:
 
+
+
 };
 
-#endif // ROTOR_H
+#endif // ENTRY_H

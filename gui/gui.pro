@@ -43,11 +43,22 @@ SOURCES += main.cpp\
            mainwindow.cpp \
            ../cmdline/globals.cpp \
            ../cmdline/enigmadatabase.cpp \
-           ../cmdline/enigmaexception.cpp
+           ../cmdline/enigmaexception.cpp \
+           ../cmdline/rotor.cpp \
+           ../cmdline/reflector.cpp \
+           ../cmdline/genlib.cpp \
+           ../cmdline/entry.cpp
+
 
 HEADERS  += mainwindow.h \
             ../cmdline/globals.h \
            ../cmdline/enigmadatabase.h \
-           ../cmdline/enigmaexception.h
+           ../cmdline/enigmaexception.h \
+           ../cmdline/enigmaexception.h \
+           ../cmdline/rotor.h \
+           ../cmdline/reflector.h \
+           ../cmdline/genlib.h \
+           ../cmdline/entry.h
+
 
 FORMS    += mainwindow.ui

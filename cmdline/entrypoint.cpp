@@ -1,7 +1,7 @@
 /************************************************************************
 Copyright Chris Newey 2013
 
-enigmasim@hotmail.com
+enigmasim@outlook.com
 
 This file is part of enigma.
 
@@ -40,7 +40,9 @@ int EntryPoint::exec()
     {
         edb = EnigmaDatabase::getInstance();
 
-        testMapping();
+        //testMapping();
+        //testReflector();
+        testEntry();
     }
     catch (EnigmaException &e)
     {
@@ -63,10 +65,96 @@ void EntryPoint::testMapping()
     rotor.setRingSetting(1);
     rotor.setLetterSetting("A");
     rotor.mapLeftToRight(pinIn);
-
+    rotor.rotate();
+    rotor.rotate();
+    rotor.rotate();
     pinIn = 1;
     rotor.setRingSetting(1);
-    rotor.setLetterSetting("Z");
+    rotor.setLetterSetting("Y");
     rotor.mapLeftToRight(pinIn);
+    rotor.rotate();
+    rotor.rotate();
+    rotor.rotate();
+    rotor.rotate();
+    rotor.rotate();
+}
 
+
+void EntryPoint::testReflector()
+{
+    qDebug("EntryPoint::testReflector()");
+
+    //Reflector reflector("REFLECTORNOMAP", this);
+    Reflector reflector("REFLECTORREVERSE", this);
+
+    int pinIn;
+    int pinOut;
+
+
+    pinIn = 1;
+    pinOut = reflector.map(pinIn);
+    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+
+    pinIn = 2;
+    pinOut = reflector.map(pinIn);
+    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+
+    pinIn = 25;
+    pinOut = reflector.map(pinIn);
+    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+
+    pinIn = 26;
+    pinOut = reflector.map(pinIn);
+    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+
+    /***************
+    pinIn = 27;
+    pinOut = reflector.map(pinIn);
+    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+    ******************/
+}
+
+
+void EntryPoint::testEntry()
+{
+    qDebug("EntryPoint::testEntry()");
+
+    //Entry entry("ENTRYNOMAP", this);
+    Entry entry("ENTRYREVERSE", this);
+
+    int pinIn;
+    int pinOut;
+
+
+    pinIn = 1;
+    pinOut = entry.map(pinIn);
+    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+
+    pinIn = 2;
+    pinOut = entry.map(pinIn);
+    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+
+    pinIn = 25;
+    pinOut = entry.map(pinIn);
+    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+
+    pinIn = 26;
+    pinOut = entry.map(pinIn);
+    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+
+    /***************
+    pinIn = 27;
+    pinOut = entry.map(pinIn);
+    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
+           pinIn, pinOut);
+    ******************/
 }

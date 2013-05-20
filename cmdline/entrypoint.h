@@ -1,7 +1,7 @@
 /************************************************************************
 Copyright Chris Newey 2013
 
-enigmasim@hotmail.com
+enigmasim@outlook.com
 
 This file is part of enigma.
 
@@ -35,7 +35,9 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include "enigmadatabase.h"
+#include "entry.h"
 #include "rotor.h"
+#include "reflector.h"
 
 class EntryPoint : public QObject
 {
@@ -48,7 +50,8 @@ public:
     virtual int exec();
 
     virtual void testMapping();
-
+    virtual void testReflector();
+    virtual void testEntry();
 
 signals:
 

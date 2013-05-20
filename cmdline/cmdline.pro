@@ -49,7 +49,9 @@ SOURCES += main.cpp \
     enigmadatabase.cpp \
     rotor.cpp \
     enigmaexception.cpp \
-    genlib.cpp
+    genlib.cpp \
+    reflector.cpp \
+    entry.cpp
 
 HEADERS += \
     globals.h \
@@ -57,7 +59,9 @@ HEADERS += \
     enigmadatabase.h \
     rotor.h \
     enigmaexception.h \
-    genlib.h
+    genlib.h \
+    reflector.h \
+    entry.h
 
 OTHER_FILES += \
     ../README.md \

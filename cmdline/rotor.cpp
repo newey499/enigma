@@ -1,7 +1,7 @@
 /************************************************************************
 Copyright Chris Newey 2013
 
-enigmasim@hotmail.com
+enigmasim@outlook.com
 
 This file is part of enigma.
 
@@ -28,8 +28,6 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 Rotor::Rotor(QString rotorName, QObject *parent) :
     QObject(parent)
 {
-    map.clear();
-    edb = EnigmaDatabase::getInstance();
 
     try
     {
@@ -276,4 +274,23 @@ int Rotor::calculateOffset(int pinIn)
            result);
 
     return result;
+}
+
+
+int Rotor::rotate()
+{
+    int oldLetterOffset = getLetterOffset();
+    int newLetterOffset = (getLetterOffset() + 1) %  getAlphabetSize();
+
+    if (newLetterOffset == 0)
+    {
+        newLetterOffset = getAlphabetSize();
+    }
+
+    letterOffset = newLetterOffset;
+
+    qDebug("Rotor::rotate() oldLetterOffset [%d] newLetterOffset [%d]",
+           oldLetterOffset, newLetterOffset);
+
+    return letterOffset;
 }

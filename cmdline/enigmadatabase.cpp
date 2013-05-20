@@ -1,7 +1,7 @@
 /************************************************************************
 Copyright Chris Newey 2013
 
-enigmasim@hotmail.com
+enigmasim@outlook.com
 
 This file is part of enigma.
 
@@ -25,7 +25,7 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 /************************************************************************
 Copyright Chris Newey 2013
 
-enigmasim@hotmail.com
+enigmasim@outlook.com
 
 This file is part of enigma.
 
