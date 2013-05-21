@@ -51,7 +51,9 @@ SOURCES += main.cpp \
     enigmaexception.cpp \
     genlib.cpp \
     reflector.cpp \
-    entry.cpp
+    entry.cpp \
+    keyboard.cpp \
+    steckerboard.cpp
 
 HEADERS += \
     globals.h \
@@ -61,7 +63,9 @@ HEADERS += \
     enigmaexception.h \
     genlib.h \
     reflector.h \
-    entry.h
+    entry.h \
+    keyboard.h \
+    steckerboard.h
 
 OTHER_FILES += \
     ../README.md \

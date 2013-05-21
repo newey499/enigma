@@ -22,9 +22,8 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
-
-#ifndef ENTRY_H
-#define ENTRY_H
+#ifndef STECKERBOARD_H
+#define STECKERBOARD_H
 
 #include <QMap>
 #include <QObject>
@@ -37,48 +36,41 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
 
-class Entry : public QObject
+class Steckerboard : public QObject
 {
     Q_OBJECT
-
 public:
 
-    explicit Entry(QString entryName, QObject *parent = 0);
-    ~Entry();
-
-    virtual int map(int pinIn);
-    virtual int mapCharToPin(QString keyIn);
-    virtual QString mapPinToChar(int pinIn);
+    explicit Steckerboard(QString alphabetName, QObject *parent = 0);
+    ~Steckerboard();
 
 signals:
 
 public slots:
+
+    virtual bool addStecker(QString from, QString to);
+    virtual bool delStecker(QString steckerChar);
+    virtual QString mapStecker(QString charIn);
 
 
 protected:
 
     QPointer<EnigmaDatabase> edb;
 
-    QSqlRecord recEntry;
     QSqlRecord recAlphabet;
 
     int alphabetSize;
 
     QString alphabetMap;
     QString alphabetName;
-    QString entryMap;
-    QString entryName;
 
-    virtual bool sanityCheck();
-    virtual bool isValidPinNo(int pinNo);
-    virtual bool isValidKey(QString keyIn);
+    QMap<QString, QString> map;
 
-    virtual int getAlphabetSize();
+    bool isValidChar(QString keyIn);
+    bool isCharInUse(QString keyIn);
 
 private:
 
-
-
 };
 
-#endif // ENTRY_H
+#endif // STECKERBOARD_H

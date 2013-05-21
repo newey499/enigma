@@ -43,6 +43,8 @@ int EntryPoint::exec()
         //testMapping();
         //testReflector();
         testEntry();
+        //testKeyboard();
+        //testSteckerboard();
     }
     catch (EnigmaException &e)
     {
@@ -124,37 +126,145 @@ void EntryPoint::testEntry()
 {
     qDebug("EntryPoint::testEntry()");
 
-    //Entry entry("ENTRYNOMAP", this);
-    Entry entry("ENTRYREVERSE", this);
+    Entry entry("ENTRYNOMAP", this);
+    //Entry entry("ENTRYREVERSE", this);
 
     int pinIn;
     int pinOut;
+    QString charIn;
+    QString charOut;
 
 
     pinIn = 1;
-    pinOut = entry.map(pinIn);
-    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
+    charOut = entry.mapPinToChar(pinIn);
+    qDebug("Entry::map  pinIn [%d] charOut [%s]",
+           pinIn, charOut.toAscii().data());
 
-    pinIn = 2;
-    pinOut = entry.map(pinIn);
-    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
-
-    pinIn = 25;
-    pinOut = entry.map(pinIn);
-    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
 
     pinIn = 26;
-    pinOut = entry.map(pinIn);
-    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
+    charOut = entry.mapPinToChar(pinIn);
+    qDebug("Entry::map  pinIn [%d] charOut [%s]",
+           pinIn, charOut.toAscii().data());
 
-    /***************
+    /***********
+    // invalid pinNo - produces exception
     pinIn = 27;
-    pinOut = entry.map(pinIn);
-    qDebug("Entry::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
-    ******************/
+    charOut = entry.mapPinToChar(pinIn);
+    qDebug("Entry::map  pinIn [%d] charOut [%s]",
+           pinIn, charOut.toAscii().data());
+    ****************/
+
+    charIn = "A";
+    pinOut = entry.mapCharToPin(charIn);
+    qDebug("Entry::map  charIn [%s] pinOut [%d]",
+           charIn.toAscii().data(),
+           pinOut);
+
+    charIn = "Z";
+    pinOut = entry.mapCharToPin(charIn);
+    qDebug("Entry::map  charIn [%s] pinOut [%d]",
+           charIn.toAscii().data(),
+           pinOut);
+
+    /***********
+    // invalid charIn - produces exception
+    charIn = "a";
+    pinOut = entry.mapCharToPin(charIn);
+    qDebug("Entry::map  charIn [%s] pinOut [%d]",
+           charIn.toAscii().data(),
+           pinOut);
+    ****************/
+
+}
+
+
+void EntryPoint::testKeyboard()
+{
+    qDebug("EntryPoint::testKeyboard()");
+
+    Keyboard keyboard("default", this);
+
+    QString keyPress;
+
+    keyPress = "A";
+    keyboard.keyIn(keyPress);
+    qDebug("key in [%s] valid [%s]",
+           keyPress.toAscii().data(),
+           keyboard.isValidKey(keyPress) ? "Yes" : "No");
+
+    keyPress = "Z";
+    keyboard.keyIn(keyPress);
+    qDebug("key in [%s] valid [%s]",
+           keyPress.toAscii().data(),
+           keyboard.isValidKey(keyPress) ? "Yes" : "No");
+
+    keyPress = "a";
+    keyboard.keyIn(keyPress);
+    qDebug("key in [%s] valid [%s]",
+           keyPress.toAscii().data(),
+           keyboard.isValidKey(keyPress) ? "Yes" : "No");
+
+}
+
+
+void EntryPoint::testSteckerboard()
+{
+    qDebug("EntryPoint::testSteckerboard()");
+
+    Steckerboard stecker("default", this);
+
+    QString from;
+    QString to;
+
+    from = "A";
+    to = "B";
+    qDebug("addStecker [%s, %s] %s",
+           from.toAscii().data(),
+           to.toAscii().data(),
+           stecker.addStecker(from, to) ? "added" : "not added");
+
+    from = "C";
+    to = "D";
+    qDebug("addStecker [%s, %s] %s",
+           from.toAscii().data(),
+           to.toAscii().data(),
+           stecker.addStecker(from, to) ? "added" : "not added");
+
+    from = "E";
+    to = "F";
+    qDebug("addStecker [%s, %s] %s",
+           from.toAscii().data(),
+           to.toAscii().data(),
+           stecker.addStecker(from, to) ? "added" : "not added");
+
+    from = "A";
+    to = stecker.mapStecker(from);
+    qDebug("[%s] mapped to [%s]",
+           from.toAscii().data(),
+           to.toAscii().data());
+
+
+    from = "B";
+    to = stecker.mapStecker(from);
+    qDebug("[%s] mapped to [%s]",
+           from.toAscii().data(),
+           to.toAscii().data());
+
+    from = "W";
+    to = stecker.mapStecker(from);
+    qDebug("[%s] mapped to [%s]",
+           from.toAscii().data(),
+           to.toAscii().data());
+
+    from = "D";
+    //to = stecker.delStecker(from);
+    qDebug("[%s] deleted to [%s]",
+           from.toAscii().data(),
+           stecker.delStecker(from) ? "Yes" : "No");
+
+    qDebug("[%s] deleted to [%s]",
+           from.toAscii().data(),
+           stecker.delStecker(from) ? "Yes" : "No");
+
+    from = from;
 }

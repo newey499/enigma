@@ -36,6 +36,32 @@ GenLib::~GenLib()
 }
 
 
+bool GenLib::alphabetDuplicateCheck(QString alphabetName, QString alphabet)
+{
+    bool result = true;
+
+    // Disable deprecated conversion from string constant to char * warning
+    // when instantiating EnigmaException object
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+
+    for (int i = 0; i < alphabet.count(); i++)
+    {
+        if (alphabet.count(alphabet.at(i), Qt::CaseSensitive ) != 1)
+        {
+            QString tmp = QString("character [%1] found [%2] time(s) in definition [%3] - should only be one").
+                            arg(alphabet.at(i)).
+                            arg(alphabet.count(alphabet.at(i), Qt::CaseSensitive )).
+                            arg(alphabetName);
+            result = false;
+            throw EnigmaException(tmp.toAscii().data(), __FILE__ , __LINE__);
+        }
+    }
+
+#pragma GCC diagnostic pop
+
+    return result;
+}
 
 
 bool GenLib::alphabetSanityCheck(QString alphabetName, QString alphabet,
@@ -44,10 +70,14 @@ bool GenLib::alphabetSanityCheck(QString alphabetName, QString alphabet,
     bool result = true;
 
 
-// Disable deprecated conversion from string constant to char *
+// Disable deprecated conversion from string constant to char * warning
 // when instantiating EnigmaException object
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
+
+    // alphabetDuplicateCheck will throw an exception if a duplate is found
+    GenLib::alphabetDuplicateCheck(alphabetName, alphabet);
+    GenLib::alphabetDuplicateCheck(mappingName, mapping);
 
     if (alphabet.size() != mapping.size())
     {

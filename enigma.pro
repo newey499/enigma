@@ -28,5 +28,6 @@ TEMPLATE = subdirs
 SUBDIRS += \
     cmdline \
     gui \
-    gui
+    gui \
+    test
 

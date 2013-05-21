@@ -32,6 +32,8 @@ using namespace std;
 #include "globals.h"
 #include "entrypoint.h"
 
+// TODO Write unit tests
+
 int main(int argc, char *argv[])
 {
     int result = 0;
@@ -45,11 +47,12 @@ int main(int argc, char *argv[])
 
     result = entryPoint->exec();
 
+    // Clean up heap
     if (entryPoint)
     {
         delete entryPoint;
     }
-
+    // Clean up heap
     if (globals)
     {
         delete globals;

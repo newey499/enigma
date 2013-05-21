@@ -27,7 +27,6 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 Reflector::Reflector(QString reflectorName, QObject *parent) :
     QObject(parent)
 {
-    //map.clear();
     edb = EnigmaDatabase::getInstance();
 
     try

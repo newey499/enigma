@@ -95,6 +95,9 @@ int Rotor::getMaxRingSetting()
   return getAlphabetSize();
 }
 
+
+
+
 bool Rotor::isValidPinNo(int pinNo)
 {
     bool result = true;
@@ -294,3 +297,5 @@ int Rotor::rotate()
 
     return letterOffset;
 }
+
+

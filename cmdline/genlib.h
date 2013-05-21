@@ -42,6 +42,8 @@ public:
     static bool alphabetSanityCheck(QString alphabetName, QString alphabet,
                                     QString mappingName, QString mapping);
 
+    static bool alphabetDuplicateCheck(QString alphabetName, QString alphabet);
+
 signals:
 
 

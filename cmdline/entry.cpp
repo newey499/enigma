@@ -4,7 +4,7 @@
 Entry::Entry(QString entryName, QObject *parent) :
     QObject(parent)
 {
-    //map.clear();
+
     edb = EnigmaDatabase::getInstance();
 
     try
@@ -25,7 +25,7 @@ Entry::Entry(QString entryName, QObject *parent) :
         // Place a space at the start of the string so that pin
         // numbers need not be zero based.
         entryMap.prepend(" ");
-        entryName = recEntry.value("name").toString();
+        this->entryName = recEntry.value("name").toString();
 
 
         qDebug("entry [%s] alphabet [%s]",
@@ -68,6 +68,12 @@ bool Entry::isValidPinNo(int pinNo)
     }
 
     return result;
+}
+
+
+bool Entry::isValidKey(QString keyIn)
+{
+    return alphabetMap.contains(keyIn, Qt::CaseSensitive);
 }
 
 
@@ -117,3 +123,58 @@ int Entry::map(int pinIn)
     return result;
 }
 
+
+
+int Entry::mapCharToPin(QString keyIn)
+{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+
+    if (! isValidKey(keyIn))
+    {
+        QString msg = QString("requested key [%1] not in alphabet [%2] [%3]").
+                           arg(keyIn).
+                           arg(alphabetName).
+                           arg(alphabetMap);
+        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+    }
+
+    int result = entryMap.indexOf(keyIn, 0, Qt::CaseSensitive);
+    qDebug("charIn [%s] pinOut [%d] [%s] [%s]",
+           keyIn.toAscii().data(),
+           result,
+           entryName.toAscii().data(),
+           entryMap.toAscii().data() );
+
+    if (result == -1)
+    {
+        QString msg = QString("requested key [%1] not in entry mapping [%2] [%3]").
+                           arg(keyIn).
+                           arg(entryName).
+                           arg(entryMap);
+        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+    }
+
+    return result;
+
+#pragma GCC diagnostic pop
+}
+
+QString Entry::mapPinToChar(int pinIn)
+{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+
+    if (! isValidPinNo(pinIn))
+    {
+         QString msg = QString("requested pin [%1] not in valid range [%2...%3]").
+                            arg(pinIn).
+                            arg(1).
+                            arg(getAlphabetSize());
+         throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+    }
+
+    return entryMap.at(pinIn);
+
+#pragma GCC diagnostic pop
+}

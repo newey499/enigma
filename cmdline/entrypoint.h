@@ -38,6 +38,8 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 #include "entry.h"
 #include "rotor.h"
 #include "reflector.h"
+#include "keyboard.h"
+#include "steckerboard.h"
 
 class EntryPoint : public QObject
 {
@@ -52,6 +54,8 @@ public:
     virtual void testMapping();
     virtual void testReflector();
     virtual void testEntry();
+    virtual void testKeyboard();
+    virtual void testSteckerboard();
 
 signals:
 

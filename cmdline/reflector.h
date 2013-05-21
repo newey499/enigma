@@ -25,7 +25,7 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef REFLECTOR_H
 #define REFLECTOR_H
 
-#include <QMap>
+
 #include <QObject>
 #include <QPointer>
 #include <QSqlQuery>
