@@ -39,13 +39,10 @@ TARGET = cmdline
 CONFIG   += console
 CONFIG   -= app_bundle
 
-
 TEMPLATE = app
-
 
 SOURCES += main.cpp \
     globals.cpp \
-    entrypoint.cpp \
     enigmadatabase.cpp \
     rotor.cpp \
     enigmaexception.cpp \
@@ -53,11 +50,12 @@ SOURCES += main.cpp \
     reflector.cpp \
     entry.cpp \
     keyboard.cpp \
-    steckerboard.cpp
+    steckerboard.cpp \
+    testharness.cpp \
+    messagehandler.cpp
 
 HEADERS += \
     globals.h \
-    entrypoint.h \
     enigmadatabase.h \
     rotor.h \
     enigmaexception.h \
@@ -65,7 +63,9 @@ HEADERS += \
     reflector.h \
     entry.h \
     keyboard.h \
-    steckerboard.h
+    steckerboard.h \
+    testharness.h \
+    messagehandler.h
 
 OTHER_FILES += \
     ../README.md \

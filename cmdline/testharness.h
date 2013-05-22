@@ -40,22 +40,29 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 #include "reflector.h"
 #include "keyboard.h"
 #include "steckerboard.h"
+#include "enigmaexception.h"
 
-class EntryPoint : public QObject
+class TestHarness : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit EntryPoint(QObject *parent = 0);
+    const static char *MSG_FAIL;
+    const static char *MSG_OK;
+    const static char *MSG_OK_FAIL;
+
+    explicit TestHarness(QObject *parent = 0);
 
     virtual int exec();
 
-    virtual void testMapping();
-    virtual void testReflector();
-    virtual void testEntry();
     virtual void testKeyboard();
     virtual void testSteckerboard();
+    virtual void testEntry();
+    virtual void testRotor();
+    virtual void testReflector();
+
+
 
 signals:
 
@@ -65,6 +72,12 @@ public slots:
 protected:
 
     QPointer<EnigmaDatabase> edb;
+
+    void testRepeatRotate(Rotor &rotor, int repeat, int pinIn, QString letter);
+    int testRepeatMapLeftToRight(Rotor &rotor, int repeat, int pinIn, QString letter);
+    int testRepeatMapRightToLeft(Rotor &rotor, int repeat, int pinIn, QString letter);
+    void testReverseMapping(Rotor &rotor, int keyIn, QString windowChar);
+    void testInvalidRingSetting(Rotor &rotor, int ringSetting);
 
 private:
 

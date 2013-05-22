@@ -114,11 +114,11 @@ QString Keyboard::keyIn(QString keyIn)
         // If validation fails an exception is thrown
         isValidKey(keyIn);
 
-        qDebug("Key input [%s] - validated Ok", keyIn.toAscii().data());
+        //qDebug("Key input [%s] - validated Ok", keyIn.toAscii().data());
     }
     catch (EnigmaException &e)
     {
-        qDebug("Caught %s", e.what().toAscii().data());
+        //qDebug("Caught %s", e.what().toAscii().data());
 
         keyIn = "";
     }

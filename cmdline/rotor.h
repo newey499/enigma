@@ -52,6 +52,8 @@ public:
     virtual QString  getLetterSetting();
     virtual int getLetterOffset();
 
+    virtual QString getRotorName();
+
     virtual int mapRightToLeft(int pinIn);
     virtual int mapLeftToRight(int pinIn);
 
@@ -72,12 +74,13 @@ protected:
     QSqlRecord recRotor;
     QSqlRecord recAlphabet;
 
-    int alphabetSize;
-
     QString alphabetMap;
     QString alphabetName;
+    int alphabetSize;
+
     QString rotorMap;
     QString rotorName;
+    int rotorSize;
 
     int getMaxRingSetting();
     int ringSetting;

@@ -53,7 +53,6 @@ Steckerboard::~Steckerboard()
 
 bool Steckerboard::addStecker(QString from, QString to)
 {
-    qDebug("Steckerboard::addStecker(QString from, QString to)");
     bool result = true;
 
     if (from == to)
@@ -95,8 +94,6 @@ bool Steckerboard::addStecker(QString from, QString to)
 
 bool Steckerboard::delStecker(QString steckerChar)
 {
-    qDebug("Steckerboard::delStecker(QString steckerChar)");
-
     if (! isValidChar(steckerChar))
     {
         return false;
@@ -124,7 +121,6 @@ bool Steckerboard::delStecker(QString steckerChar)
 
 QString Steckerboard::mapStecker(QString charIn)
 {
-    qDebug("Steckerboard::map(QString charIn)");
     QString charOut = QString("[%1] not found - Steckerboard charOut not assigned").
                             arg(charIn);
 
@@ -164,8 +160,6 @@ QString Steckerboard::mapStecker(QString charIn)
 
 bool Steckerboard::isValidChar(QString keyIn)
 {
-    qDebug("Steckerboard::isValidChar(QString char)");
-
     if (keyIn.size() != 1)
     {
         QString msg = QString("Input string must be a single char - passed [%1]").
@@ -197,7 +191,6 @@ bool Steckerboard::isValidChar(QString keyIn)
 
 bool Steckerboard::isCharInUse(QString keyIn)
 {
-    qDebug("Steckerboard::isCharInUse(QString char)");
     bool inUse = false;
 
     if (isValidChar(keyIn))

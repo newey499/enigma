@@ -1,3 +1,28 @@
+/************************************************************************
+Copyright Chris Newey 2013
+
+enigmasim@outlook.com
+
+This file is part of enigma.
+
+Enigma is distributed under the terms of the GNU General Public License
+
+Enigma is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Qiptables is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
+
+***************************************************************************/
+
+
 #include "entry.h"
 
 
@@ -81,48 +106,6 @@ int Entry::getAlphabetSize()
 {
     return alphabetSize;
 }
-
-
-/*******************
-Assume the right side of the entry wheel is in alphabet order
-and the left side of the entry wheel to be in mapping order.
-********************/
-int Entry::map(int pinIn)
-{
-    int result = -1;
-    int origPinIn = pinIn;
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-
-    if (! isValidPinNo(pinIn))
-    {
-         QString msg = QString("requested pin [%1] not in valid range [%2...%3]").
-                            arg(pinIn).
-                            arg(1).
-                            arg(getAlphabetSize());
-         throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
-    }
-
-    QString x = alphabetMap.at(pinIn);
-    result = entryMap.indexOf(x, 0, Qt::CaseSensitive );
-
-
-    if (result == -1)
-    {
-       QString msg = QString("entry map right to left pin number [%1] not found").
-                        arg(pinIn);
-       throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-    }
-
-#pragma GCC diagnostic pop
-
-    qDebug("mapLeftToRight origPinIn [%d] calcPinIn [%d] pinOut [%d]",
-           origPinIn, pinIn, result);
-
-    return result;
-}
-
 
 
 int Entry::mapCharToPin(QString keyIn)

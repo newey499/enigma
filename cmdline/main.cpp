@@ -24,33 +24,46 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QtCore/QCoreApplication>
 
+#include <QtDebug>
+#include <QFile>
+#include <QTextStream>
+
 #include <QPointer>
 
 #include <iostream>
 using namespace std;
 
 #include "globals.h"
-#include "entrypoint.h"
+#include "testharness.h"
+#include "genlib.h"
+
+#include "messagehandler.h"
 
 // TODO Write unit tests
+
 
 int main(int argc, char *argv[])
 {
     int result = 0;
     QCoreApplication a(argc, argv);
 
-    cout << "Hello world" << endl;
+    MessageHandler mh("/home/cdn/dnload/qtlog.txt", true, 0);
+    mh.deleteLogFile();
+
+    //qInstallMsgHandler(GenLib::myMessageHandler);
+    qInstallMsgHandler(MessageHandler::messageHandler);
+
+    qDebug("my message handler");
 
     QPointer<Globals> globals = new Globals();
-    QPointer<EntryPoint> entryPoint = new EntryPoint();
+    QPointer<TestHarness> testHarness = new TestHarness();
 
-
-    result = entryPoint->exec();
+    result = testHarness->exec();
 
     // Clean up heap
-    if (entryPoint)
+    if (testHarness)
     {
-        delete entryPoint;
+        delete testHarness;
     }
     // Clean up heap
     if (globals)
@@ -59,7 +72,7 @@ int main(int argc, char *argv[])
     }
 
     // Don't need an event loop for the command line app
-    // result = a.exec();
+    //result = a.exec();
 
     return result;
 }
