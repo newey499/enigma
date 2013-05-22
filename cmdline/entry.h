@@ -46,7 +46,6 @@ public:
     explicit Entry(QString entryName, QObject *parent = 0);
     ~Entry();
 
-    virtual int map(int pinIn);
     virtual int mapCharToPin(QString keyIn);
     virtual QString mapPinToChar(int pinIn);
 

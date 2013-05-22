@@ -118,3 +118,29 @@ bool GenLib::alphabetSanityCheck(QString alphabetName, QString alphabet,
 
     return result;
 }
+
+
+
+void GenLib::myMessageHandler(QtMsgType type, const char *msg)
+{
+    QString txt;
+    switch (type) {
+    case QtDebugMsg:
+        txt = QString("Debug: %1").arg(msg);
+        break;
+    case QtWarningMsg:
+        txt = QString("Warning: %1").arg(msg);
+    break;
+    case QtCriticalMsg:
+        txt = QString("Critical: %1").arg(msg);
+    break;
+    case QtFatalMsg:
+        txt = QString("Fatal: %1").arg(msg);
+    break;
+    }
+    QFile outFile("Qtlog.txt");
+    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    //ts << txt << endl;
+    fprintf(stdout, txt.append("\n").toAscii().data());
+}

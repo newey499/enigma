@@ -25,6 +25,10 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GENLIB_H
 #define GENLIB_H
 
+#include <QtDebug>
+#include <QFile>
+#include <QTextStream>
+
 #include <QObject>
 #include <QString>
 
@@ -43,6 +47,8 @@ public:
                                     QString mappingName, QString mapping);
 
     static bool alphabetDuplicateCheck(QString alphabetName, QString alphabet);
+
+    static void myMessageHandler(QtMsgType type, const char *msg);
 
 signals:
 

@@ -28,6 +28,7 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 Rotor::Rotor(QString rotorName, QObject *parent) :
     QObject(parent)
 {
+    edb = EnigmaDatabase::getInstance();
 
     try
     {
@@ -47,10 +48,12 @@ Rotor::Rotor(QString rotorName, QObject *parent) :
         setLetterSetting(alphabetMap.at(1));
 
         rotorMap = recRotor.value("pinright").toString();
+        rotorSize = rotorMap.size();
+
         // Place a space at the start of the string so that pin
         // numbers need not be zero based.
         rotorMap.prepend(" ");
-        rotorName = recRotor.value("name").toString();
+        this->rotorName = recRotor.value("name").toString();
 
 
         qDebug("rotor [%s] alphabet [%s]",
@@ -114,7 +117,7 @@ void Rotor::setRingSetting(int setting)
 {
     if (! isValidPinNo(setting))
     {
-        QString msg = QString("Ring setting requested [%1] is outside permitted range [%2...$3]").
+        QString msg = QString("Ring setting requested [%1] is outside permitted range [%2...%3]").
                             arg(setting).
                             arg(1).
                             arg(getMaxRingSetting());
@@ -206,8 +209,8 @@ int Rotor::mapRightToLeft(int pinIn)
 
 #pragma GCC diagnostic pop
 
-    qDebug("mapRightToLeft origPinIn [%d] calcPinIn [%d] pinOut [%d]",
-           origPinIn, pinIn, result);
+    //qDebug("mapRightToLeft origPinIn [%d] calcPinIn [%d] pinOut [%d]",
+    //       origPinIn, pinIn, result);
 
     return result;
 }
@@ -249,8 +252,8 @@ int Rotor::mapLeftToRight(int pinIn)
 
 #pragma GCC diagnostic pop
 
-    qDebug("mapLeftToRight origPinIn [%d] calcPinIn [%d] pinOut [%d]",
-           origPinIn, pinIn, result);
+    //qDebug("mapLeftToRight origPinIn [%d] calcPinIn [%d] pinOut [%d]",
+    //       origPinIn, pinIn, result);
 
     return result;
 }
@@ -266,6 +269,7 @@ int Rotor::calculateOffset(int pinIn)
         result = getAlphabetSize();
     }
 
+    /**********
     qDebug("calc "
            "pinIn [%d] "
            "ringsetting [%d] "
@@ -275,6 +279,7 @@ int Rotor::calculateOffset(int pinIn)
            pinIn, getRingSetting(),
            getLetterOffset(), getAlphabetSize(),
            result);
+    ***************/
 
     return result;
 }
@@ -291,11 +296,16 @@ int Rotor::rotate()
     }
 
     letterOffset = newLetterOffset;
+    setLetterSetting(rotorMap.at(letterOffset));
 
-    qDebug("Rotor::rotate() oldLetterOffset [%d] newLetterOffset [%d]",
-           oldLetterOffset, newLetterOffset);
+    //qDebug("Rotor::rotate() oldLetterOffset [%d] newLetterOffset [%d]",
+    //       oldLetterOffset, newLetterOffset);
 
     return letterOffset;
 }
 
 
+QString Rotor::getRotorName()
+{
+    return rotorName;
+}
