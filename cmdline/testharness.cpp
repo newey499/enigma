@@ -116,6 +116,116 @@ int TestHarness::exec()
         debugFooter(component);
     }
 
+
+    try
+    {
+        qDebug("=======================================================");
+        qDebug("Test Configuration with rotors I, II and III Relector B");
+        qDebug("=======================================================");
+        qDebug("The basic Enigma has been loaded with the rotors I, II, III.");
+        qDebug("The right-hand rotor R is III");
+        qDebug("=======================================================");
+        qDebug("test Rotor III - map right to left input G maps to C");
+
+        Entry entry("ENTRY", this);
+
+        int pinIn;
+        int pinOut;
+        int ringSetting;
+        int oldLetterOffset;
+        QString charIn;
+        QString charOut;
+
+        component = "Machine with rotors I, II, III and reflector B";
+        debugHeader(component);
+
+        QString rotorName;
+        rotorName = "III";
+
+        Rotor r_1("I", this);
+        r_1.setLetterSetting("A");
+        r_1.setRingSetting(1);
+
+        Rotor r_2("II", this);
+        r_2.setLetterSetting("A");
+        r_2.setRingSetting(1);
+
+        Rotor r_3("III", this);
+        r_3.setLetterSetting("A");
+        r_3.setRingSetting(1);
+
+        Reflector reflector("B", this);
+
+        charIn = "G";
+        pinIn = entry.mapCharToPin(charIn);
+        qDebug("Entry maps [%s] to pin [%d] should be 7",
+               charIn.toAscii().data(),
+               pinIn);
+
+        pinOut = r_3.mapRightToLeft(pinIn);
+        qDebug("Rotor III maps right to left [%d] -> [%d] should be 3",
+               pinIn,
+               pinOut);
+
+        pinIn = pinOut;
+        pinOut = r_2.mapRightToLeft(pinIn);
+        qDebug("Rotor II maps right to left [%d] -> [%d] should be 4",
+               pinIn,
+               pinOut);
+
+        pinIn = pinOut;
+        pinOut = r_1.mapRightToLeft(pinIn);
+        qDebug("Rotor I maps right to left [%d] -> [%d] should be 6",
+               pinIn,
+               pinOut);
+
+
+        pinIn = pinOut;
+        pinOut = reflector.map(pinIn);
+        qDebug("Reflector B maps [%d] -> [%d] should be 19",
+               pinIn,
+               pinOut);
+
+
+        pinIn = pinOut;
+        pinOut = r_1.mapLeftToRight(pinIn);
+        qDebug("Rotor I maps left to right [%d] -> [%d] should be 19",
+               pinIn,
+               pinOut);
+
+        pinIn = pinOut;
+        pinOut = r_2.mapLeftToRight(pinIn);
+        qDebug("Rotor II maps left to right [%d] -> [%d] should be 5",
+               pinIn,
+               pinOut);
+
+        pinIn = pinOut;
+        pinOut = r_3.mapLeftToRight(pinIn);
+        qDebug("Rotor III maps left to right [%d] -> [%d] should be 16",
+               pinIn,
+               pinOut);
+
+        pinIn = pinOut;
+        charOut = entry.mapPinToChar(pinIn);
+        qDebug("Entry maps pin [%d] to char [%s] should be P",
+               pinIn,
+               charOut.toAscii().data());
+
+        qDebug("%s [G] maps to [P] Through rotors I, II, III and reflector B",
+               TestHarness::MSG_OK);
+
+        debugFooter(component);
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("Error Testing %s\n%s",
+               component.toAscii().data(),
+               e.what().toAscii().data());
+        debugFooter(component);
+    }
+
+
+
     qDebug("\n");
 
     return result;

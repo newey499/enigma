@@ -112,6 +112,7 @@ int Entry::mapCharToPin(QString keyIn)
 {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
+    int result = -99;
 
     if (! isValidKey(keyIn))
     {
@@ -122,7 +123,7 @@ int Entry::mapCharToPin(QString keyIn)
         throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
     }
 
-    int result = entryMap.indexOf(keyIn, 0, Qt::CaseSensitive);
+    result = entryMap.indexOf(keyIn, 0, Qt::CaseSensitive);
     qDebug("charIn [%s] pinOut [%d] [%s] [%s]",
            keyIn.toAscii().data(),
            result,
