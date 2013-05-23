@@ -14,33 +14,38 @@ MessageHandler::MessageHandler(QString logFileName, bool writeLogFile, QObject *
 
 bool MessageHandler::deleteLogFile()
 {
-    QFile::remove(MessageHandler::logFile);
+    return QFile::remove(MessageHandler::logFile);
 }
 
 
 void MessageHandler::messageHandler(QtMsgType type, const char *msg)
 {
     QString txt;
-    switch (type) {
-    case QtDebugMsg:
-        txt = QString("Debug: %1").arg(msg);
-        break;
-    case QtWarningMsg:
-        txt = QString("Warning: %1").arg(msg);
-    break;
-    case QtCriticalMsg:
-        txt = QString("Critical: %1").arg(msg);
-    break;
-    case QtFatalMsg:
-        txt = QString("Fatal: %1").arg(msg);
-    break;
-    }
-    if (MessageHandler::writeLog)
+    switch (type)
     {
-        QFile outFile(MessageHandler::logFile);
-        outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-        QTextStream ts(&outFile);
-        ts << txt << endl;
+        case QtDebugMsg:
+            txt = QString(msg).isEmpty() ? "" : QString("Debug: %1").arg(msg);
+            break;
+        case QtWarningMsg:
+            txt = QString(msg).isEmpty() ? "" : QString("Warning: %1").arg(msg);
+            break;
+        case QtCriticalMsg:
+            txt = QString(msg).isEmpty() ? "" : QString("Critical: %1").arg(msg);
+            break;
+        case QtFatalMsg:
+            txt = QString(msg).isEmpty() ? "" : QString("Fatal: %1").arg(msg);
+            break;
     }
-    fprintf(stdout, txt.append("\n").toAscii().data());
+
+    if (! txt.isEmpty())
+    {
+        if (MessageHandler::writeLog)
+        {
+            QFile outFile(MessageHandler::logFile);
+            outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+            QTextStream ts(&outFile);
+            ts << txt << endl;
+        }
+        fprintf(stdout, txt.append("\n").toAscii().data());
+    }
 }

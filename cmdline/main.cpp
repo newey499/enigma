@@ -47,13 +47,44 @@ int main(int argc, char *argv[])
     int result = 0;
     QCoreApplication a(argc, argv);
 
-    MessageHandler mh("/home/cdn/dnload/qtlog.txt", true, 0);
-    mh.deleteLogFile();
+    if (argc == 2)
+    {
+        QString arg(argv[1]);
 
-    //qInstallMsgHandler(GenLib::myMessageHandler);
+        arg = arg.toUpper();
+
+        if ( (arg.compare("--HELP") == 0) || (arg.compare("-H") == 0) )
+        {
+            cout << "Usage:" << endl;
+            cout << "\tcmdline <name of log file>" << endl;
+            cout << "\tcmdline -h display this help" << endl;
+            cout << "\tcmdline --help display this help" << endl;
+            exit(0);
+        }
+        else
+        {
+            MessageHandler mh(argv[1], true, 0);
+            mh.deleteLogFile();
+        }
+    }
+    /********
+    else
+    {
+        MessageHandler mh("qtlog.txt", true, 0);
+        mh.deleteLogFile();
+    }
+    ******************/
+
+    // MessageHandler::messageHandler is a public static function
     qInstallMsgHandler(MessageHandler::messageHandler);
 
     qDebug("my message handler");
+
+    qDebug("argc [%d]", argc);
+    for (int i = 0; i < argc; i++)
+    {
+        cout << argv[i] << endl;
+    }
 
     QPointer<Globals> globals = new Globals();
     QPointer<TestHarness> testHarness = new TestHarness();

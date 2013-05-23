@@ -37,26 +37,113 @@ TestHarness::TestHarness(QObject *parent) :
 int TestHarness::exec()
 {
     int result = 0;
-
-    qDebug("EntryPoint::exec()");
+    QString component;
+    qDebug("TestHarness::exec()");
+    edb = EnigmaDatabase::getInstance();
 
     try
     {
-        edb = EnigmaDatabase::getInstance();
-
-        //testKeyboard();
-        //testSteckerboard();
-        //testEntry();
-        testRotor();
-        //testReflector();
-
-
+        component = "Keyboard";
+        debugHeader(component);
+        testKeyboard();
+        debugFooter(component);
     }
     catch (EnigmaException &e)
     {
-        qDebug("\n%s", e.what().toAscii().data());
-        qApp->exit(1); // exit with error exit code
+        qDebug("Error Testing %s\n%s",
+               component.toAscii().data(),
+               e.what().toAscii().data());
+        debugFooter(component);
     }
+
+    try
+    {
+        component = "Steckerboard";
+        debugHeader(component);
+        testSteckerboard();
+        debugFooter(component);
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("Error Testing %s\n%s",
+               component.toAscii().data(),
+               e.what().toAscii().data());
+        debugFooter(component);
+    }
+
+    try
+    {
+        component = "Entry Wheel";
+        debugHeader(component);
+        testEntry();
+        debugFooter(component);
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("Error Testing %s\n%s",
+               component.toAscii().data(),
+               e.what().toAscii().data());
+        debugFooter(component);
+    }
+
+    try
+    {
+        component = "Rotor";
+        debugHeader(component);
+        testRotor();
+        debugFooter(component);
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("Error Testing %s\n%s",
+               component.toAscii().data(),
+               e.what().toAscii().data());
+        debugFooter(component);
+    }
+
+    try
+    {
+        component = "Reflector";
+        debugHeader(component);
+        testReflector();
+        debugFooter(component);
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("Error Testing %s\n%s",
+               component.toAscii().data(),
+               e.what().toAscii().data());
+        debugFooter(component);
+    }
+
+    qDebug("\n");
+
+    return result;
+}
+
+
+QString TestHarness::debugHeader(QString component)
+{
+    QString result("\n");
+
+    result = result.append("======================================================\n");
+    result = result.append("START TEST %1 \n").arg(component.toUpper());
+    result = result.append("======================================================");
+
+    qDebug("%s", result.toAscii().data());
+
+    return result;
+}
+
+QString TestHarness::debugFooter(QString component)
+{
+    QString result("\n");
+
+    result = result.append("======================================================\n");
+    result = result.append("END TEST %1 \n").arg(component.toUpper());
+    result = result.append("======================================================");
+
+    qDebug("%s", result.toAscii().data());
 
     return result;
 }

@@ -73,6 +73,9 @@ protected:
 
     QPointer<EnigmaDatabase> edb;
 
+    QString debugHeader(QString component);
+    QString debugFooter(QString component);
+
     void testRepeatRotate(Rotor &rotor, int repeat, int pinIn, QString letter);
     int testRepeatMapLeftToRight(Rotor &rotor, int repeat, int pinIn, QString letter);
     int testRepeatMapRightToLeft(Rotor &rotor, int repeat, int pinIn, QString letter);

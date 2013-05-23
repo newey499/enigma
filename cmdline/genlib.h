@@ -48,8 +48,6 @@ public:
 
     static bool alphabetDuplicateCheck(QString alphabetName, QString alphabet);
 
-    static void myMessageHandler(QtMsgType type, const char *msg);
-
 signals:
 
 
