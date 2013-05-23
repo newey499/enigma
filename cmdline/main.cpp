@@ -78,14 +78,6 @@ int main(int argc, char *argv[])
     // MessageHandler::messageHandler is a public static function
     qInstallMsgHandler(MessageHandler::messageHandler);
 
-    qDebug("my message handler");
-
-    qDebug("argc [%d]", argc);
-    for (int i = 0; i < argc; i++)
-    {
-        cout << argv[i] << endl;
-    }
-
     QPointer<Globals> globals = new Globals();
     QPointer<TestHarness> testHarness = new TestHarness();
 
