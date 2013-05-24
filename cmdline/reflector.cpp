@@ -12,13 +12,13 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Qiptables is distributed in the hope that it will be useful,
+Enigma is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
+along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
@@ -126,14 +126,14 @@ int Reflector::map(int pinIn)
 
     if (result == -1)
     {
-       QString msg = QString("reflector map right to left pin number [%1] not found").
+       QString msg = QString("reflector map pin number [%1] not found").
                         arg(pinIn);
        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
     }
 
 #pragma GCC diagnostic pop
 
-    qDebug("mapLeftToRight origPinIn [%d] calcPinIn [%d] pinOut [%d]",
+    qDebug("map origPinIn [%d] calcPinIn [%d] pinOut [%d]",
            origPinIn, pinIn, result);
 
     return result;

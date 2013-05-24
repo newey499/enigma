@@ -23,6 +23,10 @@ public:
     virtual bool isValidKey(QString keyIn);
     virtual QString keyIn(QString keyIn);
 
+    virtual QString getAlphabetName();
+    virtual QString getAlphabetMap();
+
+
 signals:
 
 public slots:

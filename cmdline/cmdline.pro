@@ -52,7 +52,9 @@ SOURCES += main.cpp \
     keyboard.cpp \
     steckerboard.cpp \
     testharness.cpp \
-    messagehandler.cpp
+    messagehandler.cpp \
+    lampboard.cpp \
+    machine.cpp
 
 HEADERS += \
     globals.h \
@@ -65,7 +67,9 @@ HEADERS += \
     keyboard.h \
     steckerboard.h \
     testharness.h \
-    messagehandler.h
+    messagehandler.h \
+    lampboard.h \
+    machine.h
 
 OTHER_FILES += \
     ../README.md \

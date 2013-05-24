@@ -125,3 +125,15 @@ QString Keyboard::keyIn(QString keyIn)
 
     return keyIn;
 }
+
+
+QString Keyboard::getAlphabetName()
+{
+    return alphabetName;
+}
+
+
+QString Keyboard::getAlphabetMap()
+{
+    return alphabetMap;
+}

@@ -12,27 +12,45 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Qiptables is distributed in the hope that it will be useful,
+Enigma is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
+along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
 #include "rotor.h"
 
 
-Rotor::Rotor(QString rotorName, QObject *parent) :
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
+Rotor::Rotor(QString name, QObject *parent) :
     QObject(parent)
+{
+    commonConstructor(name);
+}
+
+
+Rotor::Rotor(QString name, int ringSetting,  QString windowChar, QObject *parent) :
+    QObject(parent)
+{
+    commonConstructor(name);
+    setRingSetting(ringSetting);
+    setLetterSetting(windowChar);
+}
+
+
+void Rotor::commonConstructor(QString name)
 {
     edb = EnigmaDatabase::getInstance();
 
     try
     {
-        recRotor = edb->getRotor(rotorName);
+        recRotor = edb->getRotor(name);
         recAlphabet = edb->getAlphabet(recRotor.value("alphabetid").toInt());
 
         alphabetMap = recAlphabet.value("alphabet").toString();
@@ -44,36 +62,45 @@ Rotor::Rotor(QString rotorName, QObject *parent) :
         alphabetMap.prepend(" ");
         alphabetName = recAlphabet.value("name").toString();
 
-        ringSetting = 1;
-        setLetterSetting(alphabetMap.at(1));
-
         rotorMap = recRotor.value("pinright").toString();
         rotorSize = rotorMap.size();
+
+        notches = recRotor.value("notches").toString();
 
         // Place a space at the start of the string so that pin
         // numbers need not be zero based.
         rotorMap.prepend(" ");
-        this->rotorName = recRotor.value("name").toString();
+        rotorName = recRotor.value("name").toString();
+        setObjectName(rotorName);
 
+        setRingSetting(1);
+        setLetterSetting(alphabetMap.at(1));
 
         qDebug("rotor [%s] alphabet [%s]",
                recRotor.value("name").toString().toAscii().data(),
                recAlphabet.value("name").toString().toAscii().data());
 
         sanityCheck();
+
+        connect(this, SIGNAL(rotorTurnover(Rotor *, QString)),
+                this, SLOT(slotTurnover(Rotor *, QString)));
     }
     catch (EnigmaException &e)
     {
         throw e;
     }
-
-
 }
 
 
 Rotor::~Rotor()
 {
 
+}
+
+
+QString Rotor::getRotorName()
+{
+    return objectName();
 }
 
 
@@ -99,8 +126,6 @@ int Rotor::getMaxRingSetting()
 }
 
 
-
-
 bool Rotor::isValidPinNo(int pinNo)
 {
     bool result = true;
@@ -111,6 +136,12 @@ bool Rotor::isValidPinNo(int pinNo)
     }
 
     return result;
+}
+
+
+bool Rotor::isValidChar(QString charIn)
+{
+    return (! (alphabetMap.indexOf(charIn, Qt::CaseSensitive) == -1));
 }
 
 void Rotor::setRingSetting(int setting)
@@ -130,8 +161,35 @@ void Rotor::setRingSetting(int setting)
     else
     {
         ringSetting = setting;
+        ringSettingChar = alphabetMap.at(ringSetting);
     }
 
+}
+
+QString Rotor::getRingSettingChar()
+{
+    return ringSettingChar;
+}
+
+void Rotor::setRingSetting(QString setting)
+{
+    if (! isValidChar(setting))
+    {
+        QString msg = QString("Ring setting requested [%1] is not in alphabet [%2] [%3]").
+                            arg(setting).
+                            arg(alphabetName).
+                            arg(alphabetMap);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
+#pragma GCC diagnostic pop
+
+    }
+    else
+    {
+        ringSettingChar = setting;
+        ringSetting = alphabetMap.indexOf(ringSettingChar, Qt::CaseSensitive);
+    }
 }
 
 
@@ -290,6 +348,8 @@ int Rotor::rotate()
     int oldLetterOffset = getLetterOffset();
     int newLetterOffset = (getLetterOffset() + 1) %  getAlphabetSize();
 
+    checkForTurnover();
+
     if (newLetterOffset == 0)
     {
         newLetterOffset = getAlphabetSize();
@@ -305,7 +365,48 @@ int Rotor::rotate()
 }
 
 
-QString Rotor::getRotorName()
+bool Rotor::checkForTurnover()
 {
-    return rotorName;
+    bool result = false;
+
+    qDebug("Rotor::checkForTurnover() Letter [%s]", getRingSettingChar().toAscii().data());
+    if (isNotch(getRingSettingChar()))
+    {
+        qDebug("\t EMIT SIGNAL Letter [%s]", getRingSettingChar().toAscii().data());
+        emit rotorTurnover(this, getRingSettingChar());
+    }
+
+
+    return result;
 }
+
+
+void Rotor::slotTurnover(Rotor *rotor, QString windowChar)
+{
+    qDebug("slotTurnover(rotor *) %s Window Char [%s]",
+           rotor->getRotorName().toAscii().data(),
+           windowChar.toAscii().data());
+}
+
+
+QString Rotor::getNotches()
+{
+    return notches;
+}
+
+bool Rotor::isNotch(QString charIn)
+{
+    bool result = true;
+
+    result = getNotches().contains(charIn, Qt::CaseSensitive);
+
+    qDebug("Rotor::isNotch charIn [%s] Notches [%s] Result [%s]",
+           charIn.toAscii().data(),
+           getNotches().toAscii().data(),
+           result ? "true" : "false");
+
+    return result;
+}
+
+
+#pragma GCC diagnostic pop

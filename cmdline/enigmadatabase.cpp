@@ -12,13 +12,13 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Qiptables is distributed in the hope that it will be useful,
+Enigma is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
+along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
@@ -36,13 +36,13 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Qiptables is distributed in the hope that it will be useful,
+Enigma is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
+along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
@@ -246,6 +246,103 @@ QSqlRecord EnigmaDatabase::getWheel(int id)
                 "where id = :id");
 
     qry.bindValue(":id", id);
+
+    if (qry.exec())
+    {
+        if (qry.first())
+        {
+            rec = qry.record();
+        }
+        else
+        {
+            result = false;
+        }
+    }
+    else
+    {
+        result = false;
+    }
+
+    if (! result)
+    {
+        QString msg = qry.lastError().text();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+#pragma GCC diagnostic pop
+    }
+
+    return rec;
+}
+
+
+
+QSqlRecord EnigmaDatabase::getMachine(const QString &machineName)
+{
+    QSqlQuery qry;
+    QSqlRecord rec;
+
+    try
+    {
+        qry.prepare("SELECT id, name, steckerboard, "
+                    "       rotorcount, entrylist, rotorlist, "
+                    "       reflectorlist, alphabetid "
+                    "FROM machine "
+                    "WHERE name = :name");
+
+        qry.bindValue(":name", machineName);
+
+        rec = _getMachine(qry);
+
+    }
+    catch (EnigmaException &e)
+    {
+        QString msg = qry.lastError().text();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+#pragma GCC diagnostic pop
+    }
+
+    return rec;
+}
+
+QSqlRecord EnigmaDatabase::getMachine(int id)
+{
+    QSqlQuery qry;
+    QSqlRecord rec;
+
+    try
+    {
+        qry.prepare("SELECT id, name, steckerboard, "
+                    "       rotorcount, entrylist, rotorlist, "
+                    "       reflectorlist, alphabetid "
+                    "FROM machine "
+                    "WHERE id = :id");
+
+        qry.bindValue(":id", id);
+
+        rec = _getMachine(qry);
+
+    }
+    catch (EnigmaException &e)
+    {
+        QString msg = qry.lastError().text();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+#pragma GCC diagnostic pop
+    }
+
+    return rec;
+}
+
+
+
+QSqlRecord EnigmaDatabase::_getMachine(QSqlQuery qry)
+{
+    bool result = true;
+    QSqlRecord rec;
 
     if (qry.exec())
     {

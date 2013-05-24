@@ -12,13 +12,13 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Qiptables is distributed in the hope that it will be useful,
+Enigma is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
+along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
@@ -27,6 +27,7 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QCoreApplication>
 
+#include <QHash>
 #include <QObject>
 #include <QPointer>
 #include <QSqlQuery>
@@ -41,12 +42,27 @@ along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
 #include "keyboard.h"
 #include "steckerboard.h"
 #include "enigmaexception.h"
+#include "machine.h"
 
 class TestHarness : public QObject
 {
     Q_OBJECT
 
 public:
+
+
+    typedef enum
+    {
+       TEST_KEYBOARD,
+       TEST_STECKERBOARD,
+       TEST_ENTRY,
+       TEST_ROTOR,
+       TEST_RINGSETTING,
+       TEST_REFLECTOR,
+       TEST_LAMPBOARD,
+       TEST_TURNOVER,
+       TEST_MACHINE
+    } TESTS;
 
     const static char *MSG_FAIL;
     const static char *MSG_OK;
@@ -61,6 +77,8 @@ public:
     virtual void testEntry();
     virtual void testRotor();
     virtual void testReflector();
+    virtual void testMachine();
+    virtual void testTurnover();
 
 
 
@@ -71,16 +89,20 @@ public slots:
 
 protected:
 
+    QHash<TESTS, bool> perform;
+
     QPointer<EnigmaDatabase> edb;
 
     QString debugHeader(QString component);
     QString debugFooter(QString component);
 
-    void testRepeatRotate(Rotor &rotor, int repeat, int pinIn, QString letter);
-    int testRepeatMapLeftToRight(Rotor &rotor, int repeat, int pinIn, QString letter);
-    int testRepeatMapRightToLeft(Rotor &rotor, int repeat, int pinIn, QString letter);
-    void testReverseMapping(Rotor &rotor, int keyIn, QString windowChar);
-    void testInvalidRingSetting(Rotor &rotor, int ringSetting);
+    virtual void testRepeatRotate(Rotor &rotor, int repeat, int pinIn, QString letter);
+    virtual int testRepeatMapLeftToRight(Rotor &rotor, int repeat, int pinIn, QString letter);
+    virtual int testRepeatMapRightToLeft(Rotor &rotor, int repeat, int pinIn, QString letter);
+    virtual void testReverseMapping(Rotor &rotor, int keyIn, QString windowChar);
+    virtual void testInvalidRingSetting(Rotor &rotor, int ringSetting);
+
+    virtual void createTestHash();
 
 private:
 

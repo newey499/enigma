@@ -1,3 +1,6 @@
+#ifndef LAMPBOARD_H
+#define LAMPBOARD_H
+
 /************************************************************************
 Copyright Chris Newey 2013
 
@@ -22,44 +25,47 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
-#ifndef GENLIB_H
-#define GENLIB_H
-
-#include <QtDebug>
-#include <QFile>
-#include <QTextStream>
-
+#include <QMap>
 #include <QObject>
-#include <QString>
+#include <QPointer>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QVariant>
 
+#include "genlib.h"
 #include "enigmaexception.h"
+#include "enigmadatabase.h"
 
-class GenLib : public QObject
+
+class Lampboard : public QObject
 {
     Q_OBJECT
-
 public:
 
-    explicit GenLib(QObject *parent = 0);
-    ~GenLib();
+    explicit Lampboard(QString alphabetName, QObject *parent = 0);
+    explicit Lampboard(int alphabetId, QObject *parent = 0);
+    ~Lampboard();
 
-    static bool alphabetSanityCheck(QString alphabetName, QString alphabet,
-                                    QString mappingName, QString mapping);
 
-    static bool alphabetDuplicateCheck(QString alphabetName, QString alphabet);
+    virtual void illuminate(QString charIn);
 
 signals:
-
 
 public slots:
 
 
 protected:
 
+    QPointer<EnigmaDatabase> edb;
+
+    QSqlRecord recAlphabet;
+
+    QString alphabetMap;
+    QString alphabetName;
+    int alphabetSize;
 
 private:
 
-
 };
 
-#endif // GENLIB_H
+#endif // LAMPBOARD_H

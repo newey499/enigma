@@ -12,13 +12,13 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Qiptables is distributed in the hope that it will be useful,
+Enigma is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
+along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
@@ -42,11 +42,15 @@ class Rotor : public QObject
 
 public:
 
-    explicit Rotor(QString rotorName, QObject *parent = 0);
+    explicit Rotor(QString name, QObject *parent = 0);
+    explicit Rotor(QString name, int ringSetting,  QString windowChar, QObject *parent = 0);
+
     ~Rotor();
 
     virtual void setRingSetting(int setting);
+    virtual void setRingSetting(QString setting);
     virtual int  getRingSetting();
+    virtual QString getRingSettingChar();
 
     virtual void setLetterSetting(QString setting);
     virtual QString  getLetterSetting();
@@ -61,13 +65,23 @@ public:
 
     virtual int calculateOffset(int pinIn);
 
+    virtual bool checkForTurnover();
+    virtual QString getNotches();
+    virtual bool isNotch(QString charIn);
+
+
 signals:
+
+    void rotorTurnover(Rotor *, QString);
 
 public slots:
 
     virtual int rotate();
+    virtual void slotTurnover(Rotor *, QString);
 
 protected:
+
+    void commonConstructor(QString name);
 
     QPointer<EnigmaDatabase> edb;
 
@@ -82,14 +96,18 @@ protected:
     QString rotorName;
     int rotorSize;
 
+    QString notches;
+
     int getMaxRingSetting();
     int ringSetting;
+    QString ringSettingChar;
+
     QString letterSetting;
     int letterOffset;
 
     virtual bool sanityCheck();
     virtual bool isValidPinNo(int pinNo);
-
+    virtual bool isValidChar(QString charIn);
 
 private:
 

@@ -12,17 +12,20 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Qiptables is distributed in the hope that it will be useful,
+Enigma is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
+along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
 #include "testharness.h"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
 
 const char *TestHarness::MSG_FAIL = "FAIL:: Should throw exception :: ";
 const char *TestHarness::MSG_OK   = "SUCCESS:: ";
@@ -31,6 +34,7 @@ const char *TestHarness::MSG_OK_FAIL = "SUCCESS:: Should throw exception :: ";
 TestHarness::TestHarness(QObject *parent) :
     QObject(parent)
 {
+    createTestHash();
 }
 
 
@@ -40,6 +44,11 @@ int TestHarness::exec()
     QString component;
     qDebug("TestHarness::exec()");
     edb = EnigmaDatabase::getInstance();
+
+    qDebug("=======================================");
+    qDebug("grep this output for the string \"FAIL\"");
+    qDebug("to find any test that failed.");
+    qDebug("=======================================");
 
     try
     {
@@ -116,115 +125,17 @@ int TestHarness::exec()
         debugFooter(component);
     }
 
-
-    try
-    {
-        qDebug("=======================================================");
-        qDebug("Test Configuration with rotors I, II and III Relector B");
-        qDebug("=======================================================");
-        qDebug("The basic Enigma has been loaded with the rotors I, II, III.");
-        qDebug("The right-hand rotor R is III");
-        qDebug("=======================================================");
-        qDebug("test Rotor III - map right to left input G maps to C");
-
-        Entry entry("ENTRY", this);
-
-        int pinIn;
-        int pinOut;
-        int ringSetting;
-        int oldLetterOffset;
-        QString charIn;
-        QString charOut;
-
-        component = "Machine with rotors I, II, III and reflector B";
-        debugHeader(component);
-
-        QString rotorName;
-        rotorName = "III";
-
-        Rotor r_1("I", this);
-        r_1.setLetterSetting("A");
-        r_1.setRingSetting(1);
-
-        Rotor r_2("II", this);
-        r_2.setLetterSetting("A");
-        r_2.setRingSetting(1);
-
-        Rotor r_3("III", this);
-        r_3.setLetterSetting("A");
-        r_3.setRingSetting(1);
-
-        Reflector reflector("B", this);
-
-        charIn = "G";
-        pinIn = entry.mapCharToPin(charIn);
-        qDebug("Entry maps [%s] to pin [%d] should be 7",
-               charIn.toAscii().data(),
-               pinIn);
-
-        pinOut = r_3.mapRightToLeft(pinIn);
-        qDebug("Rotor III maps right to left [%d] -> [%d] should be 3",
-               pinIn,
-               pinOut);
-
-        pinIn = pinOut;
-        pinOut = r_2.mapRightToLeft(pinIn);
-        qDebug("Rotor II maps right to left [%d] -> [%d] should be 4",
-               pinIn,
-               pinOut);
-
-        pinIn = pinOut;
-        pinOut = r_1.mapRightToLeft(pinIn);
-        qDebug("Rotor I maps right to left [%d] -> [%d] should be 6",
-               pinIn,
-               pinOut);
+    component = "Test Turnover";
+    debugHeader(component);
+    testTurnover();
+    debugFooter(component);
 
 
-        pinIn = pinOut;
-        pinOut = reflector.map(pinIn);
-        qDebug("Reflector B maps [%d] -> [%d] should be 19",
-               pinIn,
-               pinOut);
-
-
-        pinIn = pinOut;
-        pinOut = r_1.mapLeftToRight(pinIn);
-        qDebug("Rotor I maps left to right [%d] -> [%d] should be 19",
-               pinIn,
-               pinOut);
-
-        pinIn = pinOut;
-        pinOut = r_2.mapLeftToRight(pinIn);
-        qDebug("Rotor II maps left to right [%d] -> [%d] should be 5",
-               pinIn,
-               pinOut);
-
-        pinIn = pinOut;
-        pinOut = r_3.mapLeftToRight(pinIn);
-        qDebug("Rotor III maps left to right [%d] -> [%d] should be 16",
-               pinIn,
-               pinOut);
-
-        pinIn = pinOut;
-        charOut = entry.mapPinToChar(pinIn);
-        qDebug("Entry maps pin [%d] to char [%s] should be P",
-               pinIn,
-               charOut.toAscii().data());
-
-        qDebug("%s [G] maps to [P] Through rotors I, II, III and reflector B",
-               TestHarness::MSG_OK);
-
-        debugFooter(component);
-    }
-    catch (EnigmaException &e)
-    {
-        qDebug("Error Testing %s\n%s",
-               component.toAscii().data(),
-               e.what().toAscii().data());
-        debugFooter(component);
-    }
-
-
+    component = "MACHINE with rotors I, II, III and reflector B\n"
+            "all rotors are set to ring setting 1 and window char \"A\"";
+    debugHeader(component);
+    testMachine();
+    debugFooter(component);
 
     qDebug("\n");
 
@@ -262,6 +173,12 @@ QString TestHarness::debugFooter(QString component)
 void TestHarness::testKeyboard()
 {
     qDebug("TestHarness::testKeyboard()");
+    if (! perform.value(TEST_KEYBOARD))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return;
+    }
 
     Keyboard keyboard("default", this);
 
@@ -305,6 +222,12 @@ void TestHarness::testKeyboard()
 void TestHarness::testSteckerboard()
 {
     qDebug("TestHarness::testSteckerboard()");
+    if (! perform.value(TEST_STECKERBOARD))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return;
+    }
 
     Steckerboard stecker("default", this);
 
@@ -386,6 +309,13 @@ void TestHarness::testSteckerboard()
 void TestHarness::testEntry()
 {
     qDebug("TestHarness::testEntry()");
+    if (! perform.value(TEST_ENTRY))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return;
+    }
+
 
     Entry entry("ENTRYNOMAP", this);
     //Entry entry("ENTRYREVERSE", this);
@@ -459,6 +389,12 @@ void TestHarness::testEntry()
 void TestHarness::testRotor()
 {
     qDebug("TestHarness::testRotor()");
+    if (! perform.value(TEST_ROTOR))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return;
+    }
 
     QString rotorName;
     rotorName = "NOMAP";
@@ -508,6 +444,14 @@ void TestHarness::testRotor()
 
 void TestHarness::testInvalidRingSetting(Rotor &rotor, int ringSetting)
 {
+    qDebug("TestHarness::testInvalidRingSetting(Rotor &rotor, int ringSetting)");
+    if (! perform.value(TEST_RINGSETTING))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return;
+    }
+
     try
     {
         rotor.setRingSetting(ringSetting);
@@ -614,9 +558,15 @@ int TestHarness::testRepeatMapRightToLeft(Rotor &rotor, int repeat, int pinIn, Q
 void TestHarness::testReflector()
 {
     qDebug("TestHarness::testReflector()");
+    if (! perform.value(TEST_REFLECTOR))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return;
+    }
 
-    //Reflector reflector("REFLECTORNOMAP", this);
-    Reflector reflector("REFLECTORREVERSE", this);
+    Reflector reflector("REFLECTORNOMAP", this);
+    //Reflector reflector("REFLECTORREVERSE", this);
 
     int pinIn;
     int pinOut;
@@ -624,30 +574,57 @@ void TestHarness::testReflector()
 
     pinIn = 1;
     pinOut = reflector.map(pinIn);
-    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
+    qDebug("%s Reflector::map  pinIn [%d] pinOut [%d]",
+           MSG_OK, pinIn, pinOut);
 
     pinIn = 2;
     pinOut = reflector.map(pinIn);
-    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
+    qDebug("%s Reflector::map  pinIn [%d] pinOut [%d]",
+           MSG_OK, pinIn, pinOut);
 
     pinIn = 25;
     pinOut = reflector.map(pinIn);
-    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
+    qDebug("%s Reflector::map  pinIn [%d] pinOut [%d]",
+           MSG_OK, pinIn, pinOut);
 
     pinIn = 26;
     pinOut = reflector.map(pinIn);
-    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
+    qDebug("%s Reflector::map  pinIn [%d] pinOut [%d]",
+           MSG_OK,pinIn, pinOut);
 
-    /***************
-    pinIn = 27;
-    pinOut = reflector.map(pinIn);
-    qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
-           pinIn, pinOut);
-    ******************/
+    try
+    {
+        pinIn = 0;
+        pinOut = reflector.map(pinIn);
+        qDebug("%s Reflector::map  pinIn [%d] pinOut [%d]",
+               MSG_OK, pinIn, pinOut);
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("%s Keyboard::keyIn pinIn [%d] pinOut [%s] [%s]",
+               MSG_OK_FAIL,
+               pinIn,
+               "*",
+               e.what().toAscii().data());
+
+    }
+
+    try
+    {
+        pinIn = 27;
+        pinOut = reflector.map(pinIn);
+        qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
+               pinIn, pinOut);
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("%s Keyboard::keyIn pinIn [%d] pinOut [%s] [%s]",
+               MSG_OK_FAIL,
+               pinIn,
+               "*",
+               e.what().toAscii().data());
+
+    }
 }
 
 
@@ -763,3 +740,99 @@ void TestHarness::testReflector()
 
 ***********************************************************
 ***********************************************************/
+
+
+void TestHarness::testTurnover()
+{
+    if (! perform.value(TEST_TURNOVER))
+    {
+        qDebug("TestHarness::testTurnover() disabled");
+    }
+    else
+    {
+        qDebug("TestHarness::testTurnover()");
+        Rotor r_1("I", this);
+        r_1.setLetterSetting("A");
+        r_1.setRingSetting(1);
+
+        for (int i = 1; i <= r_1.getAlphabetSize(); i++)
+        {
+            r_1.setRingSetting(i);
+            r_1.rotate();
+        }
+    }
+
+}
+
+
+void TestHarness::createTestHash()
+{
+    perform.clear();
+
+    perform.insert(TEST_KEYBOARD, true);
+    perform.insert(TEST_STECKERBOARD, true);
+    perform.insert(TEST_ENTRY, true);
+    perform.insert(TEST_ROTOR, true);
+    perform.insert(TEST_REFLECTOR, true);
+    perform.insert(TEST_LAMPBOARD, true);
+    perform.insert(TEST_RINGSETTING, true);
+    perform.insert(TEST_TURNOVER, true);
+    perform.insert(TEST_MACHINE, true);
+}
+
+
+
+void TestHarness::testMachine()
+{
+    qDebug("TestHarness::testMachine()");
+
+    if (! perform.value(TEST_MACHINE))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return;
+    }
+
+    Machine machine("Wermacht", this);
+    QMap<int, Rotor *> rotors;
+
+    try
+    {
+        rotors.insert(1, machine.rotorFactory("I", 1, "A"));
+        rotors.insert(2, machine.rotorFactory("II", 1, "A"));
+        rotors.insert(3, machine.rotorFactory("III", 1, "A"));
+        machine.addRotors(rotors);
+
+        QString keyIn = "G";
+        QString keyOut;
+
+        keyOut = machine.keyPress(keyIn);
+
+        if (keyIn == "G" && keyOut == "P")
+        {
+            qDebug("%s [G] maps to [P] Through rotors I, II, III and reflector B",
+                   TestHarness::MSG_OK);
+        }
+        else
+        {
+
+            qDebug("%s [G] should map to [P] Through rotors I, II, III and reflector B",
+                   "FAIL:: ");
+            qDebug("%s [G] mapped to [%s]",
+                   "FAIL:: ",
+                   keyOut.toAscii().data());
+        }
+
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("Error Testing %s\n%s",
+               "Test Machine",
+               e.what().toAscii().data());
+    }
+
+}
+
+
+
+#pragma GCC diagnostic pop
