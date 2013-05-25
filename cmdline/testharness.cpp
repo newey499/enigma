@@ -28,6 +28,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
 const char *TestHarness::MSG_FAIL = "FAIL:: Should throw exception :: ";
+const char *TestHarness::MSG_FAIL_NO_EXCEPTION = "FAIL:: ";
 const char *TestHarness::MSG_OK   = "SUCCESS:: ";
 const char *TestHarness::MSG_OK_FAIL = "SUCCESS:: Should throw exception :: ";
 
@@ -136,6 +137,14 @@ int TestHarness::exec()
     debugHeader(component);
     testMachine();
     debugFooter(component);
+
+
+    component = "Double Step rotor turnover";
+    debugHeader(component);
+    testDoubleStep();
+    debugFooter(component);
+
+
 
     qDebug("\n");
 
@@ -769,15 +778,17 @@ void TestHarness::createTestHash()
 {
     perform.clear();
 
-    perform.insert(TEST_KEYBOARD, true);
-    perform.insert(TEST_STECKERBOARD, true);
-    perform.insert(TEST_ENTRY, true);
-    perform.insert(TEST_ROTOR, true);
-    perform.insert(TEST_REFLECTOR, true);
-    perform.insert(TEST_LAMPBOARD, true);
-    perform.insert(TEST_RINGSETTING, true);
-    perform.insert(TEST_TURNOVER, true);
-    perform.insert(TEST_MACHINE, true);
+    perform.insert(TEST_KEYBOARD, false);
+    perform.insert(TEST_STECKERBOARD, false);
+    perform.insert(TEST_ENTRY, false);
+    perform.insert(TEST_ROTOR, false);
+    perform.insert(TEST_REFLECTOR, false);
+    perform.insert(TEST_LAMPBOARD, false);
+    perform.insert(TEST_RINGSETTING, false);
+    perform.insert(TEST_TURNOVER, false);
+    perform.insert(TEST_MACHINE, false);
+    perform.insert(TEST_DOUBLE_STEP, true);
+
 }
 
 
@@ -833,6 +844,64 @@ void TestHarness::testMachine()
 
 }
 
+
+void TestHarness::testDoubleStep()
+{
+    qDebug("TestHarness::testDoubleStep()");
+    QString expected;
+
+    if (! perform.value(TEST_DOUBLE_STEP))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return;
+    }
+
+    qDebug("========================");
+    qDebug("Initial set up");
+    qDebug("------------------------");
+    qDebug("Rotors III, II, I");
+    qDebug("Ring   1,   1,  1");
+    qDebug("Letter K    D   O");
+    qDebug("========================");
+    expected = "KDP";
+    qDebug("%s Expected [%s] [__*] Actual [%s]",
+           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+           expected.toAscii().data(),
+           "QQQ");
+
+    expected = "KDQ";
+    qDebug("%s Expected [%s] [__*] Actual [%s]",
+           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+           expected.toAscii().data(),
+           "QQQ");
+
+    expected = "KER";
+    qDebug("%s Expected [%s] [__*] Actual [%s]",
+           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+           expected.toAscii().data(),
+           "QQQ");
+
+    expected = "LFS";
+    qDebug("%s Expected [%s] [__*] Actual [%s]",
+           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+           expected.toAscii().data(),
+           "QQQ");
+
+    expected = "LFT";
+    qDebug("%s Expected [%s] [__*] Actual [%s]",
+           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+           expected.toAscii().data(),
+           "QQQ");
+
+    expected = "LFU";
+    qDebug("%s Expected [%s] [__*] Actual [%s]",
+           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+           expected.toAscii().data(),
+           "QQQ");
+
+
+}
 
 
 #pragma GCC diagnostic pop

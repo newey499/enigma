@@ -61,10 +61,12 @@ public:
        TEST_REFLECTOR,
        TEST_LAMPBOARD,
        TEST_TURNOVER,
-       TEST_MACHINE
+       TEST_MACHINE,
+       TEST_DOUBLE_STEP
     } TESTS;
 
     const static char *MSG_FAIL;
+    const static char *MSG_FAIL_NO_EXCEPTION;
     const static char *MSG_OK;
     const static char *MSG_OK_FAIL;
 
@@ -79,6 +81,7 @@ public:
     virtual void testReflector();
     virtual void testMachine();
     virtual void testTurnover();
+    virtual void testDoubleStep();
 
 
 
