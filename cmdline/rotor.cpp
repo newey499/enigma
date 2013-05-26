@@ -348,7 +348,7 @@ int Rotor::rotate()
     int oldLetterOffset = getLetterOffset();
     int newLetterOffset = (getLetterOffset() + 1) %  getAlphabetSize();
 
-    checkForTurnover();
+    //checkForTurnover();
 
     if (newLetterOffset == 0)
     {
@@ -356,10 +356,12 @@ int Rotor::rotate()
     }
 
     letterOffset = newLetterOffset;
-    setLetterSetting(rotorMap.at(letterOffset));
+    //setLetterSetting(rotorMap.at(letterOffset));
+    setLetterSetting(alphabetMap.at(letterOffset));
 
-    //qDebug("Rotor::rotate() oldLetterOffset [%d] newLetterOffset [%d]",
-    //       oldLetterOffset, newLetterOffset);
+    qDebug("Rotor::rotate() Rotating rotor name [%s] oldLetterOffset [%d] newLetterOffset [%d]",
+           getRotorName().toAscii().data(),
+           oldLetterOffset, newLetterOffset);
 
     return letterOffset;
 }
@@ -369,13 +371,13 @@ bool Rotor::checkForTurnover()
 {
     bool result = false;
 
-    qDebug("Rotor::checkForTurnover() Letter [%s]", getRingSettingChar().toAscii().data());
-    if (isNotch(getRingSettingChar()))
+    qDebug("Rotor::checkForTurnover() Letter [%s]", getLetterSetting().toAscii().data());
+    if (isNotch(getLetterSetting()))
     {
-        qDebug("\t EMIT SIGNAL Letter [%s]", getRingSettingChar().toAscii().data());
-        emit rotorTurnover(this, getRingSettingChar());
+        //qDebug("\t EMIT SIGNAL Letter [%s]", getLetterSetting().toAscii().data());
+        //emit rotorTurnover(this, getLetterSetting());
+        result = true;
     }
-
 
     return result;
 }

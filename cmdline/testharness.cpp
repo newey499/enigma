@@ -786,7 +786,7 @@ void TestHarness::createTestHash()
     perform.insert(TEST_LAMPBOARD, false);
     perform.insert(TEST_RINGSETTING, false);
     perform.insert(TEST_TURNOVER, false);
-    perform.insert(TEST_MACHINE, false);
+    perform.insert(TEST_MACHINE, true);
     perform.insert(TEST_DOUBLE_STEP, true);
 
 }
@@ -805,14 +805,19 @@ void TestHarness::testMachine()
     }
 
     Machine machine("Wermacht", this);
-    QMap<int, Rotor *> rotors;
+    QMap<int, QPointer<Rotor> > rotors;
 
     try
     {
-        rotors.insert(1, machine.rotorFactory("I", 1, "A"));
-        rotors.insert(2, machine.rotorFactory("II", 1, "A"));
+        rotors.insert(1, machine.rotorFactory("I",   1, "A"));
+        rotors.insert(2, machine.rotorFactory("II",  1, "A"));
         rotors.insert(3, machine.rotorFactory("III", 1, "A"));
+
         machine.addRotors(rotors);
+
+        qDebug("=========================");
+        qDebug("G is expected to map to P");
+        qDebug("=========================");
 
         QString keyIn = "G";
         QString keyOut;
@@ -849,6 +854,7 @@ void TestHarness::testDoubleStep()
 {
     qDebug("TestHarness::testDoubleStep()");
     QString expected;
+    QString winStr;
 
     if (! perform.value(TEST_DOUBLE_STEP))
     {
@@ -857,49 +863,97 @@ void TestHarness::testDoubleStep()
         return;
     }
 
-    qDebug("========================");
-    qDebug("Initial set up");
-    qDebug("------------------------");
-    qDebug("Rotors III, II, I");
-    qDebug("Ring   1,   1,  1");
-    qDebug("Letter K    D   O");
-    qDebug("========================");
-    expected = "KDP";
-    qDebug("%s Expected [%s] [__*] Actual [%s]",
-           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-           expected.toAscii().data(),
-           "QQQ");
+    Machine machine("Wermacht", this);
+    QMap<int, QPointer<Rotor> > rotors;
 
-    expected = "KDQ";
-    qDebug("%s Expected [%s] [__*] Actual [%s]",
-           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-           expected.toAscii().data(),
-           "QQQ");
 
-    expected = "KER";
-    qDebug("%s Expected [%s] [__*] Actual [%s]",
-           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-           expected.toAscii().data(),
-           "QQQ");
+    try
+    {
+        qDebug("========================");
+        qDebug("Initial set up");
+        qDebug("------------------------");
+        qDebug("Rotors III, II, I");
+        qDebug("Ring   1,   1,  1");
+        qDebug("Letter K    D   N");
+        qDebug("\"_\" = Unchanged :: \"*\" = changed");
+        qDebug("========================");
 
-    expected = "LFS";
-    qDebug("%s Expected [%s] [__*] Actual [%s]",
-           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-           expected.toAscii().data(),
-           "QQQ");
+        rotors.insert(1, machine.rotorFactory("III", 1, "K"));
+        rotors.insert(2, machine.rotorFactory("II",  1, "D"));
+        rotors.insert(3, machine.rotorFactory("I",   1, "N"));
+        machine.addRotors(rotors);
 
-    expected = "LFT";
-    qDebug("%s Expected [%s] [__*] Actual [%s]",
-           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-           expected.toAscii().data(),
-           "QQQ");
 
-    expected = "LFU";
-    qDebug("%s Expected [%s] [__*] Actual [%s]",
-           QString(expected).compare("QQQ") == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-           expected.toAscii().data(),
-           "QQQ");
+        expected = "KDO";
+        machine.performTurnover();
+        winStr = machine.getWindowChars();
+        qDebug("%s Expected [%s] [___] Actual [%s]",
+               QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+               expected.toAscii().data(),
+               winStr.toAscii().data());
 
+
+
+        expected = "KDP";
+        machine.performTurnover();
+        winStr = machine.getWindowChars();
+        qDebug("%s Expected [%s] [__*] Actual [%s]",
+               QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+               expected.toAscii().data(),
+               winStr.toAscii().data());
+
+
+        expected = "KDQ";
+        machine.performTurnover();
+        winStr = machine.getWindowChars();
+        qDebug("%s Expected [%s] [__*] Actual [%s]",
+               QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+               expected.toAscii().data(),
+               winStr.toAscii().data());
+
+
+        expected = "KER";
+        machine.performTurnover();
+        winStr = machine.getWindowChars();
+        qDebug("%s Expected [%s] [_**] Actual [%s]",
+               QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+               expected.toAscii().data(),
+               winStr.toAscii().data());
+
+
+        expected = "LFS";
+        machine.performTurnover();
+        winStr = machine.getWindowChars();
+        qDebug("%s Expected [%s] [***] Actual [%s]",
+               QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+               expected.toAscii().data(),
+               winStr.toAscii().data());
+
+
+        expected = "LFT";
+        machine.performTurnover();
+        winStr = machine.getWindowChars();
+        qDebug("%s Expected [%s] [__*] Actual [%s]",
+               QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+               expected.toAscii().data(),
+               winStr.toAscii().data());
+
+
+        expected = "LFU";
+        machine.performTurnover();
+        winStr = machine.getWindowChars();
+        qDebug("%s Expected [%s] [__*] Actual [%s]",
+               QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
+               expected.toAscii().data(),
+               winStr.toAscii().data());
+
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("Error Testing %s\n%s",
+               "Test Machine",
+               e.what().toAscii().data());
+    }
 
 }
 

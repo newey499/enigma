@@ -1,6 +1,7 @@
 #ifndef MACHINE_H
 #define MACHINE_H
 
+#include <QList>
 #include <QMap>
 #include <QMapIterator>
 #include <QObject>
@@ -32,14 +33,24 @@ public:
 
     ~Machine();
 
-
-    virtual Rotor *rotorFactory(QString name, int ringSetting,  QString windowChar);
-    virtual void addRotors(QMap<int, Rotor *> rotorArray);
+    virtual QPointer<Rotor> rotorFactory(QString name, int ringSetting,  QString windowChar);
+    virtual void addRotors(QMap<int, QPointer<Rotor> > rotorArray);
     virtual bool delRotor(QString Name);
 
     virtual int getRotorCount();
+    virtual QString getWindowChars();
 
     virtual QString keyPress(QString keyIn);
+
+    virtual QMap<int, QPointer<Rotor> > getRotorArray();
+
+    virtual void performTurnover();
+
+    virtual void clearCounters();
+    virtual void incCounter(int rotorId);
+    virtual void displayCounters();
+    virtual void executeTurnovers();
+
 
 signals:
 
@@ -66,10 +77,12 @@ protected:
     QPointer<Steckerboard> oSteckerboard;
     QPointer<Entry>        oEntry;
     // Rotors
-    QMap<int, Rotor *> rotorArray;
+    QMap<int, QPointer<Rotor> > rotorArray;
 
     QPointer<Reflector>    oReflector;
     QPointer<Lampboard>    oLampboard;
+
+    QMap<int, int> turnoverCounters;
 
 
 
