@@ -43,7 +43,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "steckerboard.h"
 #include "enigmaexception.h"
 #include "machine.h"
-#include "turnover.h"
+
 
 class TestHarness : public QObject
 {
