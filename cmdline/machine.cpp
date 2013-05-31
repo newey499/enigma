@@ -211,8 +211,6 @@ void Machine::performTurnover()
 
     // rotor double steps if its on its turnover position and
     // its not the first or last rotor.
-    qDebug("for (int i = 2; i < %d; i++)",
-           rotorArray.count() -1);
     for (int i = 2; i < rotorArray.count(); i++)
     {
         qDebug("\t\t Double Step rotor [%d] name [%s]",
@@ -228,11 +226,11 @@ void Machine::performTurnover()
     qDebug("3 - rotor name [%s] number [%d] turnover YES",
            rotorArray.value(rotorArray.count())->getRotorName().toAscii().data(),
            rotorArray.count());
-    incCounter(rotorArray.count());
+    incCounter(rotorArray.count()); // force a turnover on the right most rotor
 
-    displayCounters();
+    displayCounters(); // display debug information
 
-    executeTurnovers();
+    executeTurnovers(); // use the accumulated information to turnover the rotor(s)
 }
 
 

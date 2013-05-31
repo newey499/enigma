@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         else
         {
             MessageHandler mh(argv[1], true, 0);
-            mh.deleteLogFile();
+            mh.deleteLogFile(); // Start a fresh log file each time the application runs
         }
     }
     /********

@@ -44,11 +44,14 @@ public:
 
     virtual QMap<int, QPointer<Rotor> > getRotorArray();
 
+    // performTurnover() relies upon the below service methods to
+    // correctly perform turnovers including the dreaded
+    // "double step".
     virtual void performTurnover();
 
     virtual void clearCounters();
     virtual void incCounter(int rotorId);
-    virtual void displayCounters();
+    virtual void displayCounters(); // debug info - displays result of turnover algorithm
     virtual void executeTurnovers();
 
 

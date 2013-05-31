@@ -18,6 +18,7 @@ public:
     static bool delLog;
     static bool writeLog;
 
+    // The message handler has to be static to provide an address that QT can work with
     static void messageHandler(QtMsgType type, const char *msg);
 
     explicit MessageHandler(QString logFile, bool writeLogFile = true, QObject *parent = 0);

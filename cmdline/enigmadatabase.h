@@ -31,6 +31,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QString>
+#include <QStringList>
 #include <QVariant>
 
 #include "enigmaexception.h"
@@ -40,6 +41,12 @@ class EnigmaDatabase : public QObject
     Q_OBJECT
 
 public:
+
+    typedef enum
+    {
+        ROW_ADD, ROW_EDIT, ROW_DEL
+    }
+    EDIT_MODE;
 
     static const char * WHEEL_ROTOR;
     static const char * WHEEL_ENTRY;
@@ -51,18 +58,25 @@ public:
 
     virtual QSqlRecord getRotor(int id);
     virtual QSqlRecord getRotor(const QString &rotorName);
+    virtual bool validateRotor(EDIT_MODE mode, QSqlRecord rec);
 
     virtual QSqlRecord getEntry(int id);
     virtual QSqlRecord getEntry(const QString &rotorName);
+    virtual bool validateEntry(EDIT_MODE mode, QSqlRecord rec);
 
     virtual QSqlRecord getReflector(int id);
     virtual QSqlRecord getReflector(const QString &rotorName);
+    virtual bool validateReflector(EDIT_MODE mode, QSqlRecord rec);
 
     virtual QSqlRecord getAlphabet(const QString &alphabetName);
     virtual QSqlRecord getAlphabet(int id);
+    virtual bool validateAlphabet(EDIT_MODE mode, QSqlRecord rec);
 
     virtual QSqlRecord getMachine(const QString &machineName);
     virtual QSqlRecord getMachine(int id);
+    virtual bool validateMachine(EDIT_MODE mode, QSqlRecord rec);
+
+    virtual QStringList lastValidationError();
 
 signals:
 
@@ -72,11 +86,15 @@ public slots:
 protected:
 
     QSqlDatabase db;
+    QStringList validErrorList;
 
     QSqlRecord getWheel(QString type, QString name);
     QSqlRecord getWheel(int id);
 
     virtual QSqlRecord _getMachine(QSqlQuery qry);
+
+    virtual void addValidationError(QString err);
+    virtual void addValidationError(QStringList err);
 
 private:
 
