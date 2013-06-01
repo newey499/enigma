@@ -28,6 +28,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPointer>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QSqlField>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QString>
@@ -91,10 +92,15 @@ protected:
     QSqlRecord getWheel(QString type, QString name);
     QSqlRecord getWheel(int id);
 
+    virtual bool hasDuplicateChars(QString str);
+
     virtual QSqlRecord _getMachine(QSqlQuery qry);
 
     virtual void addValidationError(QString err);
     virtual void addValidationError(QStringList err);
+
+
+    bool validateAlphabetName(QSqlQuery &qry, QString name, QString msg);
 
 private:
 

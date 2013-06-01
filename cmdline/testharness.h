@@ -44,6 +44,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "enigmaexception.h"
 #include "machine.h"
 
+#include "testdatabasevalidation.h"
 
 class TestHarness : public QObject
 {
@@ -74,6 +75,7 @@ public:
     explicit TestHarness(QObject *parent = 0);
 
     virtual int exec();
+    virtual int execValidationTest();
 
     virtual void testKeyboard();
     virtual void testSteckerboard();
@@ -96,6 +98,7 @@ protected:
     QHash<TESTS, bool> perform;
 
     QPointer<EnigmaDatabase> edb;
+    QPointer<TestDatabaseValidation> tdv;
 
     QString debugHeader(QString component);
     QString debugFooter(QString component);

@@ -54,7 +54,8 @@ SOURCES += main.cpp \
     testharness.cpp \
     messagehandler.cpp \
     lampboard.cpp \
-    machine.cpp
+    machine.cpp \
+    testdatabasevalidation.cpp
 
 HEADERS += \
     globals.h \
@@ -69,7 +70,8 @@ HEADERS += \
     testharness.h \
     messagehandler.h \
     lampboard.h \
-    machine.h
+    machine.h \
+    testdatabasevalidation.h
 
 OTHER_FILES += \
     ../README.md \

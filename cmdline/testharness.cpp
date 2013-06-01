@@ -45,6 +45,7 @@ int TestHarness::exec()
     QString component;
     qDebug("TestHarness::exec()");
     edb = EnigmaDatabase::getInstance();
+    tdv = new TestDatabaseValidation(this);
 
     qDebug("=======================================");
     qDebug("grep this output for the string \"FAIL\"");
@@ -955,6 +956,19 @@ void TestHarness::testDoubleStep()
                e.what().toAscii().data());
     }
 
+}
+
+
+
+int TestHarness::execValidationTest()
+{
+    qDebug("int TestHarness::execValidationTest()");
+    edb = EnigmaDatabase::getInstance();
+    tdv = new TestDatabaseValidation(this);
+
+    tdv->testAlphabetValidation();
+
+    return 0;
 }
 
 
