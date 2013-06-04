@@ -50,8 +50,8 @@ void Rotor::commonConstructor(QString name)
 
     try
     {
-        recRotor = edb->getRotor(name);
-        recAlphabet = edb->getAlphabet(recRotor.value("alphabetid").toInt());
+        recRotor = RotorData().getRotor(name);
+        recAlphabet = Alphabet().getAlphabet(recRotor.value("alphabetid").toInt());
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended

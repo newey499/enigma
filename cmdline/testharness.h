@@ -34,7 +34,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSqlRecord>
 #include <QVariant>
 
-
+#include "globals.h"
 #include "enigmadatabase.h"
 #include "entry.h"
 #include "rotor.h"

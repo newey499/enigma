@@ -31,7 +31,7 @@ Steckerboard::Steckerboard(QString alphabetName, QObject *parent) :
 
     map.clear();
 
-    recAlphabet = edb->getAlphabet(alphabetName);
+    recAlphabet = Alphabet().getAlphabet(alphabetName);
 
     alphabetMap = recAlphabet.value("alphabet").toString();
     // This has to be set before a space is prepended

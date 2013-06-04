@@ -22,40 +22,41 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
-#ifndef GLOBALS_H
-#define GLOBALS_H
+
+#ifndef COMPONENTBASE_H
+#define COMPONENTBASE_H
 
 #include <QObject>
 #include <QString>
+#include <QStringList>
 
-
-typedef enum
-{
-    ROW_ADD, ROW_EDIT, ROW_DEL
-}
-EDIT_MODE;
-
-class Globals : public QObject
+class ComponentBase : public QObject
 {
     Q_OBJECT
+
 public:
 
-    static const QString ORGANIZATION_NAME;
-    static const QString APPLICATION_NAME;
-    static const QString APPLICATION_VERSION;
+    explicit ComponentBase(QObject *parent = 0);
+    ~ComponentBase();
 
-    static const QString DB_DRIVER;
-    static const QString DB_HOSTNAME;
-    static const QString DB_DATABASENAME;
-    static const QString DB_USERNAME;
-    static const QString DB_PASSWORD;
-
-    explicit Globals(QObject *parent = 0);
+    virtual QStringList lastError();
+    virtual QString lastError(QString seperator = " ");
+    virtual void addError(QString err);
+    virtual void addError(QStringList err);
+    virtual void clearError();
 
 signals:
 
 public slots:
 
+
+protected:
+
+    QStringList errorList;
+
+private:
+
+
 };
 
-#endif // GLOBALS_H
+#endif // COMPONENTBASE_H

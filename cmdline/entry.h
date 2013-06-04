@@ -33,11 +33,15 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSqlRecord>
 #include <QVariant>
 
+#include "componentbase.h"
+#include "globals.h"
 #include "genlib.h"
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
+#include "alphabet.h"
+#include "entrydata.h"
 
-class Entry : public QObject
+class Entry : public ComponentBase
 {
     Q_OBJECT
 

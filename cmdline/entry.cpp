@@ -27,15 +27,15 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 
 Entry::Entry(QString entryName, QObject *parent) :
-    QObject(parent)
+    ComponentBase(parent)
 {
 
     edb = EnigmaDatabase::getInstance();
 
     try
     {
-        recEntry = edb->getEntry(entryName);
-        recAlphabet = edb->getAlphabet(recEntry.value("alphabetid").toInt());
+        recEntry = EntryData().getEntry(entryName);
+        recAlphabet = Alphabet().getAlphabet(recEntry.value("alphabetid").toInt());
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended

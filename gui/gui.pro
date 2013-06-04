@@ -48,7 +48,12 @@ SOURCES += main.cpp\
            ../cmdline/reflector.cpp \
            ../cmdline/genlib.cpp \
            ../cmdline/entry.cpp \
-    ../cmdline/steckerboard.cpp
+    ../cmdline/steckerboard.cpp \
+    ../cmdline/alphabet.cpp \
+    ../cmdline/componentbase.cpp \
+    ../cmdline/entrydata.cpp \
+    ../cmdline/reflectordata.cpp \
+    ../cmdline/rotordata.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -60,7 +65,12 @@ HEADERS  += mainwindow.h \
            ../cmdline/reflector.h \
            ../cmdline/genlib.h \
            ../cmdline/entry.h \
-    ../cmdline/steckerboard.h
+    ../cmdline/steckerboard.h \
+    ../cmdline/alphabet.h \
+    ../cmdline/componentbase.h \
+    ../cmdline/entrydata.h \
+    ../cmdline/reflectordata.h \
+    ../cmdline/rotordata.h
 
 
 FORMS    += mainwindow.ui

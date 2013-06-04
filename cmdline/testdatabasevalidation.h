@@ -1,7 +1,9 @@
 #ifndef TESTDATABASEVALIDATION_H
 #define TESTDATABASEVALIDATION_H
 
+#include "globals.h"
 #include "enigmadatabase.h"
+#include "alphabet.h"
 
 class TestDatabaseValidation : public QObject
 {

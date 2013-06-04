@@ -12,6 +12,7 @@
 #include <QStringList>
 #include <QVariant>
 
+#include "globals.h"
 #include "genlib.h"
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
@@ -23,6 +24,7 @@
 #include "rotor.h"
 #include "reflector.h"
 #include "lampboard.h"
+#include "machinedata.h"
 
 class Machine : public QObject
 {

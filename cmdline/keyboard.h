@@ -7,9 +7,12 @@
 #include <QSqlRecord>
 #include <QVariant>
 
+
+#include "globals.h"
 #include "genlib.h"
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
+#include "alphabet.h"
 
 class Keyboard : public QObject
 {

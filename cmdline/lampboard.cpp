@@ -35,7 +35,7 @@ Lampboard::Lampboard(QString alphabetName, QObject *parent) :
 
     try
     {
-        recAlphabet = edb->getAlphabet(alphabetName);
+        recAlphabet = Alphabet().getAlphabet(alphabetName);
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended
@@ -65,7 +65,7 @@ Lampboard::Lampboard(int alphabetId, QObject *parent) :
 
     try
     {
-        recAlphabet = edb->getAlphabet(alphabetId);
+        recAlphabet = Alphabet().getAlphabet(alphabetId);
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended

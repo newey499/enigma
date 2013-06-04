@@ -55,7 +55,13 @@ SOURCES += main.cpp \
     messagehandler.cpp \
     lampboard.cpp \
     machine.cpp \
-    testdatabasevalidation.cpp
+    testdatabasevalidation.cpp \
+    alphabet.cpp \
+    componentbase.cpp \
+    entrydata.cpp \
+    reflectordata.cpp \
+    rotordata.cpp \
+    machinedata.cpp
 
 HEADERS += \
     globals.h \
@@ -71,7 +77,13 @@ HEADERS += \
     messagehandler.h \
     lampboard.h \
     machine.h \
-    testdatabasevalidation.h
+    testdatabasevalidation.h \
+    alphabet.h \
+    componentbase.h \
+    entrydata.h \
+    reflectordata.h \
+    rotordata.h \
+    machinedata.h
 
 OTHER_FILES += \
     ../README.md \

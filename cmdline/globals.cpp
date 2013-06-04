@@ -39,3 +39,5 @@ Globals::Globals(QObject *parent) :
     QObject(parent)
 {
 }
+
+

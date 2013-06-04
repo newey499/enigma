@@ -36,48 +36,25 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QVariant>
 
 #include "enigmaexception.h"
+#include "globals.h"
+#include "componentbase.h"
 
-class EnigmaDatabase : public QObject
+class EnigmaDatabase : public ComponentBase
 {
     Q_OBJECT
 
 public:
-
-    typedef enum
-    {
-        ROW_ADD, ROW_EDIT, ROW_DEL
-    }
-    EDIT_MODE;
 
     static const char * WHEEL_ROTOR;
     static const char * WHEEL_ENTRY;
     static const char * WHEEL_REFLECTOR;
 
     static EnigmaDatabase *getInstance();
-
     ~EnigmaDatabase();
 
-    virtual QSqlRecord getRotor(int id);
-    virtual QSqlRecord getRotor(const QString &rotorName);
-    virtual bool validateRotor(EDIT_MODE mode, QSqlRecord rec);
+    static QSqlRecord getWheel(QString type, QString name);
+    static QSqlRecord getWheel(int id);
 
-    virtual QSqlRecord getEntry(int id);
-    virtual QSqlRecord getEntry(const QString &rotorName);
-    virtual bool validateEntry(EDIT_MODE mode, QSqlRecord rec);
-
-    virtual QSqlRecord getReflector(int id);
-    virtual QSqlRecord getReflector(const QString &rotorName);
-    virtual bool validateReflector(EDIT_MODE mode, QSqlRecord rec);
-
-    virtual QSqlRecord getAlphabet(const QString &alphabetName);
-    virtual QSqlRecord getAlphabet(int id);
-    virtual bool validateAlphabet(EDIT_MODE mode, QSqlRecord rec);
-
-    virtual QSqlRecord getMachine(const QString &machineName);
-    virtual QSqlRecord getMachine(int id);
-    virtual bool validateMachine(EDIT_MODE mode, QSqlRecord rec);
-
-    virtual QStringList lastValidationError();
 
 signals:
 
@@ -87,20 +64,7 @@ public slots:
 protected:
 
     QSqlDatabase db;
-    QStringList validErrorList;
 
-    QSqlRecord getWheel(QString type, QString name);
-    QSqlRecord getWheel(int id);
-
-    virtual bool hasDuplicateChars(QString str);
-
-    virtual QSqlRecord _getMachine(QSqlQuery qry);
-
-    virtual void addValidationError(QString err);
-    virtual void addValidationError(QStringList err);
-
-
-    bool validateAlphabetName(QSqlQuery &qry, QString name, QString msg);
 
 private:
 

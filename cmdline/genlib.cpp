@@ -75,17 +75,23 @@ bool GenLib::alphabetSanityCheck(QString alphabetName, QString alphabet,
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
-    // alphabetDuplicateCheck will throw an exception if a duplate is found
-    GenLib::alphabetDuplicateCheck(alphabetName, alphabet);
-    GenLib::alphabetDuplicateCheck(mappingName, mapping);
+    // alphabetDuplicateCheck will throw an exception if a duplicate is found
+    try
+    {
+        GenLib::alphabetDuplicateCheck(alphabetName, alphabet);
+        GenLib::alphabetDuplicateCheck(mappingName, mapping);
+    }
+    catch (EnigmaException &e)
+    {
+        return false;
+    }
 
     if (alphabet.size() != mapping.size())
     {
         QString tmp = QString("mapping: alphabet lengths do not match alphabet [%1] mapping [%2]").
                                 arg(alphabetName).
                                 arg(mappingName);
-        result = false;
-        throw EnigmaException(tmp.toAscii().data(), __FILE__ , __LINE__);
+        return false;
     }
 
     for (int i = 0; i < alphabet.count(); i++)
@@ -96,8 +102,7 @@ bool GenLib::alphabetSanityCheck(QString alphabetName, QString alphabet,
             QString tmp = QString("Alphabet character [%1] not found in mapping definition [%2]").
                                     arg(alphabet.at(i)).
                                     arg(mappingName);
-            result = false;
-            throw EnigmaException(tmp.toAscii().data(), __FILE__ , __LINE__);
+            return false;
         }
     }
 
@@ -109,8 +114,7 @@ bool GenLib::alphabetSanityCheck(QString alphabetName, QString alphabet,
             QString tmp = QString("mapping character [%1] not found in Alphabet definition [%2]").
                                     arg(mapping.at(i)).
                                     arg(alphabetName);
-            result = false;
-            throw EnigmaException(tmp.toAscii().data(), __FILE__ , __LINE__);
+            return false;
         }
     }
 
@@ -120,3 +124,20 @@ bool GenLib::alphabetSanityCheck(QString alphabetName, QString alphabet,
 }
 
 
+bool GenLib::hasDuplicateChars(QString str)
+{
+    bool result = false;
+
+    str = str.trimmed();
+    for (int i = 0; i < str.length(); i++)
+    {
+        if (str.count(str.at(i)) > 1)
+        {
+            result = true;
+            return result;
+        }
+    }
+
+
+    return result;
+}

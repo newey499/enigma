@@ -8,7 +8,7 @@ Keyboard::Keyboard(QString name, QObject *parent) :
 
     try
     {
-        recAlphabet = edb->getAlphabet(name);
+        recAlphabet = Alphabet().getAlphabet(name);
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended
@@ -39,7 +39,7 @@ Keyboard::Keyboard(int alphabetId, QObject *parent) :
 
     try
     {
-        recAlphabet = edb->getAlphabet(alphabetId);
+        recAlphabet = Alphabet().getAlphabet(alphabetId);
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended
@@ -104,7 +104,6 @@ bool Keyboard::isValidKey(QString keyIn)
 
     return result;
 }
-
 
 
 QString Keyboard::keyIn(QString keyIn)

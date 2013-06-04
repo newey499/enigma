@@ -32,6 +32,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QObject>
 #include <QString>
 
+#include "globals.h"
 #include "enigmaexception.h"
 
 class GenLib : public QObject
@@ -47,6 +48,8 @@ public:
                                     QString mappingName, QString mapping);
 
     static bool alphabetDuplicateCheck(QString alphabetName, QString alphabet);
+
+    static bool hasDuplicateChars(QString str);
 
 signals:
 

@@ -6,7 +6,7 @@ Machine::Machine(QString machineName, QObject *parent) :
 
     edb = EnigmaDatabase::getInstance();
 
-    recMachine = edb->getMachine(machineName);
+    recMachine = MachineData().getMachine(machineName);
 
     id            = recMachine.value("id").toInt();
     name          = recMachine.value("name").toString();

@@ -32,9 +32,13 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSqlRecord>
 #include <QVariant>
 
+#include "globals.h"
 #include "genlib.h"
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
+#include "alphabet.h"
+#include "rotordata.h"
+
 
 class Rotor : public QObject
 {

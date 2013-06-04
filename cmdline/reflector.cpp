@@ -31,8 +31,8 @@ Reflector::Reflector(QString reflectorName, QObject *parent) :
 
     try
     {
-        recReflector = edb->getReflector(reflectorName);
-        recAlphabet = edb->getAlphabet(recReflector.value("alphabetid").toInt());
+        recReflector = ReflectorData().getReflector(reflectorName);
+        recAlphabet = Alphabet().getAlphabet(recReflector.value("alphabetid").toInt());
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended

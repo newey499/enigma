@@ -45,24 +45,24 @@ void TestDatabaseValidation::testAlphabetValidation()
     rec.setValue("alphabet", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
     displayTestRec("SUCCESS: Expected fail Add alphabet Rec name exists", rec);
-    edb->validateAlphabet(EnigmaDatabase::ROW_ADD, rec);
+    Alphabet().validateAlphabet(ROW_ADD, rec);
 
     rec.setValue("alphabet", "AABCDEFGHIJKLMNOPQRSTUVWXYZ");
     displayTestRec("SUCCESS: Expected fail Add alphabet duplicate char(s) in alphabet", rec);
-    edb->validateAlphabet(EnigmaDatabase::ROW_ADD, rec);
+    Alphabet().validateAlphabet(ROW_ADD, rec);
 
     rec.setValue("alphabet", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     displayTestRec("SUCCESS: Expected validation pass Edit alphabet ", rec);
-    edb->validateAlphabet(EnigmaDatabase::ROW_EDIT, rec);
+    Alphabet().validateAlphabet(ROW_EDIT, rec);
 
     rec.setValue("id", 3);
     displayTestRec("SUCCESS: Expected fail Edit alphabet alphabet name already exists", rec);
-    edb->validateAlphabet(EnigmaDatabase::ROW_EDIT, rec);
+    Alphabet().validateAlphabet(ROW_EDIT, rec);
 
 
     rec.setValue("id", 1);
     displayTestRec("SUCCESS: Expected fail Delete alphabet alphabet in use", rec);
-    edb->validateAlphabet(EnigmaDatabase::ROW_DEL, rec);
+    Alphabet().validateAlphabet(ROW_DEL, rec);
 
 }
 
