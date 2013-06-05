@@ -28,6 +28,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 const int AlphabetData::MIN_ALPHABET_LENGTH = 4;
+const int AlphabetData::MIN_ALPHABET_NAME_LENGTH = 2;
 
 AlphabetData::AlphabetData(QObject *parent) :
     ComponentBase(parent)
@@ -39,6 +40,21 @@ AlphabetData::~AlphabetData()
 {
 }
 
+
+QSqlRecord AlphabetData::getEmptyAlphabet()
+{
+    QSqlRecord rec;
+    rec.clear();
+    rec.insert(0, QSqlField("id", QVariant::Int));
+    rec.insert(1, QSqlField("name", QVariant::String));
+    rec.insert(2, QSqlField("alphabet", QVariant::String));
+
+    rec.setValue("id", Globals::NEW_ID);
+    rec.setValue("name", "");
+    rec.setValue("alphabet", "");
+
+    return rec;
+}
 
 
 QSqlRecord AlphabetData::getAlphabet(QString alphabetName)
@@ -132,6 +148,26 @@ bool AlphabetData::isAlphabetMinLengthOk(QString alphabet)
 }
 
 
+bool AlphabetData::isAlphabetNameMinLengthOk(QString name)
+{
+    bool result = true;
+
+
+    if (name.length() < AlphabetData::MIN_ALPHABET_NAME_LENGTH)
+    {
+        QString msg = QString("Alphabet Name must contain at least %1 characters").
+                        arg(AlphabetData::MIN_ALPHABET_NAME_LENGTH);
+        qDebug("alphabet name [%s] len %d min len %d",
+               name.toAscii().data(),
+               name.length(),
+               AlphabetData::MIN_ALPHABET_NAME_LENGTH);
+        addError(msg);
+        result = false;
+    }
+
+    return result;
+}
+
 bool AlphabetData::hasDuplicateChars(QString alphabet)
 {
     bool result = true;
@@ -216,6 +252,13 @@ bool AlphabetData::isAlphabetInUse(QSqlRecord rec)
 }
 
 
+void AlphabetData::displayRec(QSqlRecord rec)
+{
+    qDebug("id [%d]\nname [%s]\nalphabet [%s]",
+           rec.value("id").toInt(),
+           rec.value("name").toString().toAscii().data(),
+           rec.value("alphabet").toString().toAscii().data());
+}
 
 
 bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
@@ -228,6 +271,16 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
     switch (mode)
     {
     case Globals::ROW_ADD :
+
+        // Must have a magic id indicating new row
+        if (rec.value("id").toInt() != Globals::NEW_ID)
+        {
+            QString msg = QString("Attempt to Insert an existing row id [%1]").
+                                arg(rec.value("id").toInt());
+            addError(msg);
+            result = false;
+        }
+
         // name must be unique
         qry.prepare("select count(*) AS recCount "
                     "from alphabet "
@@ -235,6 +288,11 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
         qry.bindValue(":name", rec.value("name").toString());
         errMsg = QString("Alphabet Name [%1] already exists").arg(rec.value("name").toString());
         result = isUniqueAlphabetName(qry, errMsg);
+
+        if (! isAlphabetNameMinLengthOk(rec.value("name").toString()))
+        {
+            result = false;
+        }
 
         if (! isAlphabetMinLengthOk(rec.value("alphabet").toString()))
         {
@@ -248,6 +306,16 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
         break;
 
     case Globals::ROW_EDIT :
+
+        // Must not have a magic id indicating new row
+        if (rec.value("id").toInt() == Globals::NEW_ID)
+        {
+            QString msg = QString("Attempt to Update a row id which has a marker for a new row[%1]").
+                                arg(rec.value("id").toInt());
+            addError(msg);
+            result = false;
+        }
+
         // name must be unique - for an edit this means the row can exist but not
         //                       with a different id primary key
         qry.prepare("select count(*) AS recCount "
@@ -257,6 +325,11 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
         qry.bindValue(":id", rec.value("id").toInt());
         errMsg = QString("Alphabet Name [%1] already exists").arg(rec.value("name").toString());
         result = isUniqueAlphabetName(qry, errMsg);
+
+        if (! isAlphabetNameMinLengthOk(rec.value("name").toString()))
+        {
+            result = false;
+        }
 
         if (! isAlphabetMinLengthOk(rec.value("alphabet").toString()))
         {
@@ -268,12 +341,40 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
             result = false;
         }
 
+        // Cannot change the alphabet if it is in use
+        qry.prepare("select alphabet from alphabet where id = :id");
+        qry.bindValue(":id", rec.value("id").toInt());
+        if (GenLib::execQry(qry, true))
+        {
+            QString currentAlphabet = qry.record().value("alphabet").toString();
+            QString newAlphabet = rec.value("alphabet").toString();
+            bool alphabetChange = currentAlphabet.compare(newAlphabet, Qt::CaseSensitive) == 0;
+            if (isAlphabetInUse(rec) && alphabetChange)
+            {
+                QString msg = QString("Cannot change alphabet because it is in use");
+                addError(msg);
+                result = false;
+            }
+        }
+
+
+
 
         break;
 
     case Globals::ROW_DEL :
+
         // can't delete if the alphabet is in use
-        result = isAlphabetInUse(rec);
+        result = (! isAlphabetInUse(rec));
+
+        // Must not have a magic id indicating new row
+        if (rec.value("id").toInt() == Globals::NEW_ID)
+        {
+            QString msg = QString("Attempt to Delete a row which has a marker for a new row[%1]").
+                                arg(rec.value("id").toInt());
+            addError(msg);
+            result = false;
+        }
 
         break;
 
@@ -295,5 +396,79 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
 
     return result;
 }
+
+
+bool AlphabetData::writeRec(Globals::EDIT_MODE mode, QSqlRecord &rec)
+{
+    qDebug("AlphabetData::writeRec");
+    bool result = false;
+    QSqlQuery qry;
+
+    displayRec(rec);
+
+    if (! validateAlphabet(mode, rec))
+    {
+        // Don't touch the database if the validation fails
+        return false;
+    }
+
+    switch (mode)
+    {
+    case Globals::ROW_ADD :
+        qry.prepare("insert into alphabet(name, alphabet) "
+                    "VALUES "
+                    "(:name, :alphabet)");
+
+        qry.bindValue(":name", rec.value("name").toString());
+        qry.bindValue(":alphabet", rec.value("alphabet").toString());
+        result = GenLib::execQry(qry, false);
+        if (result)
+        {
+            qry.prepare("select LAST_INSERT_ID() as new_id");
+            result = GenLib::execQry(qry, true);
+            if (result)
+            {
+                rec.setValue("id", qry.record().value("new_id").toInt());
+            }
+        }
+        break;
+
+    case Globals::ROW_EDIT :
+        qry.prepare("update alphabet "
+                    "SET "
+                    "name = :name, "
+                    "alphabet = :alphabet "
+                    "WHERE id = :id");
+        qry.bindValue(":id", rec.value("id"));
+        qry.bindValue(":name", rec.value("name"));
+        qry.bindValue(":alphabet", rec.value("alphabet"));
+        result = GenLib::execQry(qry, false);
+        break;
+
+
+    case Globals::ROW_DEL :
+        qry.prepare("delete from alphabet "
+                    "where id = :id");
+        qry.bindValue(":id", rec.value("id"));
+        result = GenLib::execQry(qry, false);
+        break;
+
+    default :
+        result = false;
+        QString msg = QString("");
+        addError(msg);
+        qDebug("[%d] is not an expected edit mode %s %d",
+               mode,
+               __FILE__,
+               __LINE__);
+        break;
+
+    }
+
+    this->displayRec(rec);
+
+    return result;
+}
+
 
 #pragma GCC diagnostic pop

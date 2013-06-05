@@ -972,4 +972,46 @@ int TestHarness::execValidationTest()
 }
 
 
+int TestHarness::execAddAmendDelTest()
+{
+    qDebug("int TestHarness::execAddAmendDelTest()");
+    edb = EnigmaDatabase::getInstance();
+
+
+    AlphabetData ad(this);
+
+    // Add
+    /*********
+    Alphabet a(this);
+    QSqlRecord rec = a.getAlphabetRec();
+    rec.setValue("name", "ABCDEF");
+    rec.setValue("alphabet", "1234567890");
+    ad.displayRec(rec);
+    ad.writeRec(Globals::ROW_ADD, rec);
+    ******************/
+
+
+    // Edit
+    /******************
+    Alphabet a("ABCDEF", this);
+    QSqlRecord rec = a.getAlphabetRec();
+    rec.setValue("name", "ABCDEFXYZ");
+    rec.setValue("alphabet", "1234567890ABC");
+    ad.displayRec(rec);
+    ad.writeRec(Globals::ROW_EDIT, rec);
+    ************************/
+
+    // Delete
+    // /**********************
+    Alphabet a("ABCDEFXYZ", this);
+    QSqlRecord rec = a.getAlphabetRec();
+    ad.displayRec(rec);
+    ad.writeRec(Globals::ROW_DEL, rec);
+    // ************************/
+    ad.displayRec(rec);
+
+    return 0;
+}
+
+
 #pragma GCC diagnostic pop

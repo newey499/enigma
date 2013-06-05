@@ -27,19 +27,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 Alphabet::Alphabet(QObject *parent) :
     ComponentBase(parent)
 {
-    recAlphabet.clear();
-    recAlphabet.insert(0, QSqlField("id", QVariant::Int));
-    recAlphabet.insert(1, QSqlField("name", QVariant::String));
-    recAlphabet.insert(2, QSqlField("alphabet", QVariant::String));
-
-    id = Globals::NULL_ID;
-    alphabetName = "";
-    alphabetMap = "";
-    alphabetSize = 0;
-
-    recAlphabet.setValue("id", id);
-    recAlphabet.setValue("name", alphabetName);
-    recAlphabet.setValue("alphabet", alphabetMap);
+    commonConstructor(AlphabetData(this).getEmptyAlphabet());
 }
 
 
@@ -69,6 +57,7 @@ void Alphabet::commonConstructor(QSqlRecord recAlphabet)
     alphabetName = recAlphabet.value("name").toString();
     alphabetMap = recAlphabet.value("alphabet").toString();
     alphabetSize = alphabetMap.size();
+    this->recAlphabet = recAlphabet;
 }
 
 int Alphabet::getId()
@@ -89,4 +78,9 @@ QString Alphabet::getAlphabetMap()
 int Alphabet::getAlphabetSize()
 {
     return alphabetSize;
+}
+
+QSqlRecord Alphabet::getAlphabetRec()
+{
+    return recAlphabet;
 }

@@ -36,6 +36,8 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "globals.h"
 #include "enigmadatabase.h"
+#include "alphabet.h"
+#include "alphabetdata.h"
 #include "entry.h"
 #include "rotor.h"
 #include "reflector.h"
@@ -76,6 +78,7 @@ public:
 
     virtual int exec();
     virtual int execValidationTest();
+    virtual int execAddAmendDelTest();
 
     virtual void testKeyboard();
     virtual void testSteckerboard();

@@ -38,9 +38,10 @@ public:
         ROW_ADD, ROW_EDIT, ROW_DEL
     }
     EDIT_MODE;
+
     typedef int UNWRITTEN_ID;
 
-    static const UNWRITTEN_ID NULL_ID;
+    static const UNWRITTEN_ID NEW_ID;
 
     static const QString ORGANIZATION_NAME;
     static const QString APPLICATION_NAME;

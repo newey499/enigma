@@ -58,6 +58,7 @@ public:
     virtual QString getAlphabetName();
     virtual QString getAlphabetMap();
     virtual int getAlphabetSize();
+    virtual QSqlRecord getAlphabetRec();
 
 signals:
 
