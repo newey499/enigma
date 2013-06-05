@@ -53,7 +53,8 @@ SOURCES += main.cpp\
     ../cmdline/componentbase.cpp \
     ../cmdline/entrydata.cpp \
     ../cmdline/reflectordata.cpp \
-    ../cmdline/rotordata.cpp
+    ../cmdline/rotordata.cpp \
+    ../cmdline/alphabetdata.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -70,7 +71,8 @@ HEADERS  += mainwindow.h \
     ../cmdline/componentbase.h \
     ../cmdline/entrydata.h \
     ../cmdline/reflectordata.h \
-    ../cmdline/rotordata.h
+    ../cmdline/rotordata.h \
+    ../cmdline/alphabetdata.h
 
 
 FORMS    += mainwindow.ui

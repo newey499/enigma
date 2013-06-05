@@ -31,6 +31,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QObject>
 #include <QString>
+#include <QSqlQuery>
 
 #include "globals.h"
 #include "enigmaexception.h"
@@ -50,6 +51,8 @@ public:
     static bool alphabetDuplicateCheck(QString alphabetName, QString alphabet);
 
     static bool hasDuplicateChars(QString str);
+
+    static bool execQry(QSqlQuery &qry, bool moveFirst = false);
 
 signals:
 

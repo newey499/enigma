@@ -32,7 +32,7 @@ Reflector::Reflector(QString reflectorName, QObject *parent) :
     try
     {
         recReflector = ReflectorData().getReflector(reflectorName);
-        recAlphabet = Alphabet().getAlphabet(recReflector.value("alphabetid").toInt());
+        recAlphabet = AlphabetData().getAlphabet(recReflector.value("alphabetid").toInt());
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended

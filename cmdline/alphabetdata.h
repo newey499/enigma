@@ -22,37 +22,39 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
+#ifndef ALPHABETDATA_H
+#define ALPHABETDATA_H
 
-#ifndef ENTRY_H
-#define ENTRY_H
-
-#include <QMap>
-#include <QObject>
-#include <QPointer>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QSqlField>
 #include <QVariant>
 
-#include "componentbase.h"
-#include "globals.h"
 #include "genlib.h"
-#include "enigmaexception.h"
+#include "globals.h"
+#include "componentbase.h"
 #include "enigmadatabase.h"
-#include "alphabet.h"
-#include "alphabetdata.h"
-#include "entrydata.h"
+#include "enigmaexception.h"
 
-class Entry : public ComponentBase
+class AlphabetData : public ComponentBase
 {
     Q_OBJECT
 
 public:
 
-    explicit Entry(QString entryName, QObject *parent = 0);
-    ~Entry();
+    const static int MIN_ALPHABET_LENGTH;
 
-    virtual int mapCharToPin(QString keyIn);
-    virtual QString mapPinToChar(int pinIn);
+    explicit AlphabetData(QObject *parent = 0);
+    ~AlphabetData();
+
+    virtual QSqlRecord getAlphabet(QString alphabetName);
+    virtual QSqlRecord getAlphabet(int id);
+    virtual bool validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec);
+
+    virtual bool isUniqueAlphabetName(QSqlQuery qry, QString errMsg);
+    virtual bool isAlphabetMinLengthOk(QString alphabet);
+    virtual bool isAlphabetInUse(QSqlRecord rec);
+    virtual bool hasDuplicateChars(QString alphabet);
 
 signals:
 
@@ -61,28 +63,9 @@ public slots:
 
 protected:
 
-    QPointer<EnigmaDatabase> edb;
-
-    QSqlRecord recEntry;
-    QSqlRecord recAlphabet;
-
-    int alphabetSize;
-
-    QString alphabetMap;
-    QString alphabetName;
-    QString entryMap;
-    QString entryName;
-
-    virtual bool sanityCheck();
-    virtual bool isValidPinNo(int pinNo);
-    virtual bool isValidKey(QString keyIn);
-
-    virtual int getAlphabetSize();
 
 private:
 
-
-
 };
 
-#endif // ENTRY_H
+#endif // ALPHABETDATA_H

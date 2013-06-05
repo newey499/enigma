@@ -37,6 +37,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
 #include "alphabet.h"
+#include "alphabetdata.h"
 
 class Steckerboard : public QObject
 {

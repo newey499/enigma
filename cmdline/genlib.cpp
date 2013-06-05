@@ -141,3 +141,26 @@ bool GenLib::hasDuplicateChars(QString str)
 
     return result;
 }
+
+
+bool GenLib::execQry(QSqlQuery &qry, bool moveFirst)
+{
+    bool result = true;
+
+    if (qry.exec())
+    {
+        if (moveFirst)
+        {
+            if (! qry.first())
+            {
+                result = false;
+            }
+        }
+    }
+    else
+    {
+        result = false;
+    }
+
+    return result;
+}

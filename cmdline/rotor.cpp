@@ -51,7 +51,7 @@ void Rotor::commonConstructor(QString name)
     try
     {
         recRotor = RotorData().getRotor(name);
-        recAlphabet = Alphabet().getAlphabet(recRotor.value("alphabetid").toInt());
+        recAlphabet = AlphabetData().getAlphabet(recRotor.value("alphabetid").toInt());
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended

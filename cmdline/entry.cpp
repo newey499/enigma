@@ -35,7 +35,7 @@ Entry::Entry(QString entryName, QObject *parent) :
     try
     {
         recEntry = EntryData().getEntry(entryName);
-        recAlphabet = Alphabet().getAlphabet(recEntry.value("alphabetid").toInt());
+        recAlphabet = AlphabetData().getAlphabet(recEntry.value("alphabetid").toInt());
 
         alphabetMap = recAlphabet.value("alphabet").toString();
         // This has to be set before a space is prepended

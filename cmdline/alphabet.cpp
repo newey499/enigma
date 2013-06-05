@@ -1,11 +1,59 @@
-#include "alphabet.h"
+/************************************************************************
+Copyright Chris Newey 2013
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+enigmasim@outlook.com
+
+This file is part of enigma.
+
+Enigma is distributed under the terms of the GNU General Public License
+
+Enigma is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Enigma is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
+
+***************************************************************************/
+
+#include "alphabet.h"
 
 Alphabet::Alphabet(QObject *parent) :
     ComponentBase(parent)
 {
+    recAlphabet.clear();
+    recAlphabet.insert(0, QSqlField("id", QVariant::Int));
+    recAlphabet.insert(1, QSqlField("name", QVariant::String));
+    recAlphabet.insert(2, QSqlField("alphabet", QVariant::String));
+
+    id = Globals::NULL_ID;
+    alphabetName = "";
+    alphabetMap = "";
+    alphabetSize = 0;
+
+    recAlphabet.setValue("id", id);
+    recAlphabet.setValue("name", alphabetName);
+    recAlphabet.setValue("alphabet", alphabetMap);
+}
+
+
+Alphabet::Alphabet(QString alphabetName, QObject *parent) :
+    ComponentBase(parent)
+{
+    commonConstructor(AlphabetData(this).getAlphabet(alphabetName));
+}
+
+
+Alphabet::Alphabet(int id, QObject *parent) :
+    ComponentBase(parent)
+{
+    commonConstructor(AlphabetData(this).getAlphabet(id));
 }
 
 
@@ -15,257 +63,30 @@ Alphabet::~Alphabet()
 }
 
 
-QSqlRecord Alphabet::getAlphabet(const QString &alphabetName)
+void Alphabet::commonConstructor(QSqlRecord recAlphabet)
 {
-    QSqlQuery qry;
-    QSqlRecord rec;
-
-    qry.prepare("select "
-                "id, name, alphabet "
-                "from alphabet "
-                "where name = :name");
-
-    qry.bindValue(":name", alphabetName);
-
-    if (qry.exec())
-    {
-        if (qry.first())
-        {
-            rec = qry.record();
-        }
-    }
-
-    return rec;
+    id = recAlphabet.value("id").toInt();
+    alphabetName = recAlphabet.value("name").toString();
+    alphabetMap = recAlphabet.value("alphabet").toString();
+    alphabetSize = alphabetMap.size();
 }
 
-
-QSqlRecord Alphabet::getAlphabet(int id)
+int Alphabet::getId()
 {
-    QSqlQuery qry;
-    QSqlRecord rec;
-
-    qry.prepare("select "
-                "id, name, alphabet "
-                "from alphabet "
-                "where id = :id");
-
-    qry.bindValue(":id", id);
-
-    if (qry.exec())
-    {
-        if (qry.first())
-        {
-            rec = qry.record();
-        }
-    }
-
-    return rec;
+    return id;
 }
 
-
-bool Alphabet::validateAlphabetName(QSqlQuery &qry, QString name, QString msg)
+QString Alphabet::getAlphabetName()
 {
-    bool result = true;
-
-    if (qry.exec())
-    {
-        if (qry.first())
-        {
-            if (qry.record().value("recCount").toInt() == 0)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-                addError(
-                    QString("Alphabet [%1] already exists").arg(name));
-            }
-
-        }
-        else
-        {
-            result = false;
-            addError(qry.lastError().text());
-        }
-    }
-    else
-    {
-        result = false;
-        addError(qry.lastError().text());
-    }
-
-    return result;
+    return alphabetName;
 }
 
-
-
-bool Alphabet::validateAlphabet(EDIT_MODE mode, QSqlRecord rec)
+QString Alphabet::getAlphabetMap()
 {
-    bool result = true;
-    QSqlQuery qry;
-    clearError();
-
-    switch (mode)
-    {
-    case ROW_ADD :
-        // name must be unique
-        qry.prepare("select count(*) AS recCount "
-                    "from alphabet "
-                    "where upper(name) = upper(:name)");
-        qry.bindValue(":name", rec.value("name").toString());
-        result = validateAlphabetName(qry,
-                                      rec.value("name").toString(),
-                                      "Name already exists");
-
-        // alphabet must contain at least three characters
-        if (rec.value("alphabet").toString().length() <= 3)
-        {
-            addError("Alphabet must contain at least three characters");
-            result = false;
-        }
-        // the same character may not appear more than once in the alphabet
-        if (GenLib::hasDuplicateChars(rec.value("alphabet").toString()))
-        {
-            addError("Alphabet has duplicate characters");
-            result = false;
-        }
-
-        break;
-
-    case ROW_EDIT :
-        // name must be unique
-        qry.prepare("select count(*) AS recCount "
-                    "from alphabet "
-                    "where upper(name) = upper(:name) and id <> :id");
-        qry.bindValue(":name", rec.value("name").toString());
-        qry.bindValue(":id", rec.value("id").toInt());
-        result = validateAlphabetName(qry,
-                                      rec.value("name").toString(),
-                                      "Name already exists");
-        // alphabet must contain at least three characters
-        if (rec.value("alphabet").toString().length() <= 3)
-        {
-            addError("Alphabet must contain at least three characters");
-            result = false;
-        }
-
-        // the same character may not appear more than once in the alphabet
-        if (GenLib::hasDuplicateChars(rec.value("alphabet").toString()))
-        {
-            addError("Alphabet has duplicate characters");
-            result = false;
-        }
-
-        break;
-
-    case ROW_DEL :
-        // can't delete if the alphabet is in use
-
-        // Check machine table
-        qry.prepare("select count(*) as recCount "
-                    "from machine "
-                    "where alphabetid = :alphabetid");
-        qry.bindValue(":alphabetid", rec.value("id").toInt());
-        if (qry.exec())
-        {
-            if (qry.first())
-            {
-                if (qry.record().value("recCount").toInt() > 0)
-                {
-                    addError("Alphabet in use on machine table");
-                    result = false;
-                }
-
-            }
-            else
-            {
-                addError(qry.lastError().text());
-                result = false;
-            }
-        }
-        else
-        {
-            addError(qry.lastError().text());
-            result = false;
-        }
-
-        // Check rotor table
-        qry.prepare("select count(*) as recCount "
-                    "from rotor "
-                    "where alphabetid = :alphabetid");
-        qry.bindValue(":alphabetid", rec.value("id").toInt());
-        if (qry.exec())
-        {
-            if (qry.first())
-            {
-                if (qry.record().value("recCount").toInt() > 0)
-                {
-                    addError("Alphabet in use on rotor table");
-                    result = false;
-                }
-
-            }
-            else
-            {
-                addError(qry.lastError().text());
-                result = false;
-            }
-        }
-        else
-        {
-            addError(qry.lastError().text());
-            result = false;
-        }
-
-
-        // Can't delete the record if it doesn't exist
-        qry.prepare("select count(*) as recCount "
-                    "from alphabet "
-                    "where id = :id");
-        qry.bindValue(":id", rec.value("id").toInt());
-        if (qry.exec())
-        {
-            if (qry.first())
-            {
-                if (qry.record().value("recCount").toInt() <= 0)
-                {
-                    addError("Alphabet row does not exist");
-                    result = false;
-                }
-
-            }
-            else
-            {
-                addError(qry.lastError().text());
-                result = false;
-            }
-        }
-        else
-        {
-            addError(qry.lastError().text());
-            result = false;
-        }
-
-        break;
-
-    default :
-        result = false;
-        QString msg = QString("");
-        addError(msg);
-        qDebug("[%d] is not an expected edit mode %s %d",
-               mode,
-               __FILE__,
-               __LINE__);
-        break;
-    }
-
-    QString msg = lastError("\n");
-    qDebug("Validation result [%s]\n%s",
-           result ? "TRUE" : "FALSE",
-           msg.toAscii().data());
-
-    return result;
+    return alphabetMap;
 }
 
-#pragma GCC diagnostic pop
+int Alphabet::getAlphabetSize()
+{
+    return alphabetSize;
+}

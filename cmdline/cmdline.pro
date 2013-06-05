@@ -61,7 +61,8 @@ SOURCES += main.cpp \
     entrydata.cpp \
     reflectordata.cpp \
     rotordata.cpp \
-    machinedata.cpp
+    machinedata.cpp \
+    alphabetdata.cpp
 
 HEADERS += \
     globals.h \
@@ -83,7 +84,8 @@ HEADERS += \
     entrydata.h \
     reflectordata.h \
     rotordata.h \
-    machinedata.h
+    machinedata.h \
+    alphabetdata.h
 
 OTHER_FILES += \
     ../README.md \
