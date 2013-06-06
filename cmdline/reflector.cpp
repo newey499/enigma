@@ -27,21 +27,21 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 Reflector::Reflector(QString reflectorName, QObject *parent) :
     QObject(parent)
 {
-    edb = EnigmaDatabase::getInstance();
 
     try
     {
         recReflector = ReflectorData().getReflector(reflectorName);
-        recAlphabet = AlphabetData().getAlphabet(recReflector.value("alphabetid").toInt());
+        oAlphabet = new Alphabet(recReflector.value("alphabetid").toInt(), this);
+        recAlphabet = oAlphabet->getAlphabetRec();
 
-        alphabetMap = recAlphabet.value("alphabet").toString();
+        alphabetMap = oAlphabet->getAlphabetMap();
         // This has to be set before a space is prepended
         alphabetSize = alphabetMap.size();
 
         // Place a space at the start of the string so that pin
         // numbers need not be zero based.
         alphabetMap.prepend(" ");
-        alphabetName = recAlphabet.value("name").toString();
+        alphabetName = oAlphabet->getAlphabetName();
 
         reflectorMap = recReflector.value("pinright").toString();
         // Place a space at the start of the string so that pin
@@ -105,19 +105,18 @@ and the left side of the reflector to be in mapping order.
 ********************/
 int Reflector::map(int pinIn)
 {
-    int result = -1;
+    int result = Globals::INVALID_PIN;
     int origPinIn = pinIn;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
 
     if (! isValidPinNo(pinIn))
     {
-         QString msg = QString("requested pin [%1] not in valid range [%2...%3]").
-                            arg(pinIn).
-                            arg(1).
-                            arg(getAlphabetSize());
-         throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+        result = Globals::INVALID_PIN;
+        qDebug("requested pin [%d] not in valid range [%d...%d]",
+               pinIn,
+               1,
+               getAlphabetSize());
+        return result;
     }
 
     QString x = alphabetMap.at(pinIn);
@@ -126,12 +125,11 @@ int Reflector::map(int pinIn)
 
     if (result == -1)
     {
-       QString msg = QString("reflector map pin number [%1] not found").
-                        arg(pinIn);
-       throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
+        result = Globals::INVALID_PIN;
+        qDebug("reflector map pin number [%d] not found",
+                pinIn);
+        return result;
     }
-
-#pragma GCC diagnostic pop
 
     qDebug("map origPinIn [%d] calcPinIn [%d] pinOut [%d]",
            origPinIn, pinIn, result);

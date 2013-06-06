@@ -37,7 +37,6 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
 #include "alphabet.h"
-#include "alphabetdata.h"
 #include "reflectordata.h"
 
 class Reflector : public QObject
@@ -60,7 +59,7 @@ public slots:
 
 protected:
 
-    QPointer<EnigmaDatabase> edb;
+    QPointer<Alphabet> oAlphabet;
 
     QSqlRecord recReflector;
     QSqlRecord recAlphabet;

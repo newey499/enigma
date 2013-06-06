@@ -615,39 +615,24 @@ void TestHarness::testReflector()
     qDebug("%s Reflector::map  pinIn [%d] pinOut [%d]",
            MSG_OK,pinIn, pinOut);
 
-    try
-    {
-        pinIn = 0;
-        pinOut = reflector.map(pinIn);
-        qDebug("%s Reflector::map  pinIn [%d] pinOut [%d]",
-               MSG_OK, pinIn, pinOut);
-    }
-    catch (EnigmaException &e)
-    {
-        qDebug("%s Keyboard::keyIn pinIn [%d] pinOut [%s] [%s]",
-               MSG_OK_FAIL,
-               pinIn,
-               "*",
-               e.what().toAscii().data());
 
-    }
+    pinIn = 0;
+    pinOut = reflector.map(pinIn);
+    qDebug("%s Reflector::map Expected Failure pin returned [%d] returned pinIn [%d] pinOut [%d]",
+           MSG_OK,
+           Globals::INVALID_PIN,
+           pinIn,
+           pinOut);
 
-    try
-    {
-        pinIn = 27;
-        pinOut = reflector.map(pinIn);
-        qDebug("Reflector::map  pinIn [%d] pinOut [%d]",
-               pinIn, pinOut);
-    }
-    catch (EnigmaException &e)
-    {
-        qDebug("%s Keyboard::keyIn pinIn [%d] pinOut [%s] [%s]",
-               MSG_OK_FAIL,
-               pinIn,
-               "*",
-               e.what().toAscii().data());
 
-    }
+    pinIn = 27;
+    pinOut = reflector.map(pinIn);
+    qDebug("%s Reflector::map Expected Failure pin returned [%d] pinIn [%d] pinOut [%d]",
+           MSG_OK,
+           Globals::INVALID_PIN,
+           pinIn,
+           pinOut);
+
 }
 
 
@@ -796,7 +781,7 @@ void TestHarness::createTestHash()
     perform.insert(TEST_STECKERBOARD, true);
     perform.insert(TEST_ENTRY, true);
     perform.insert(TEST_ROTOR, false);
-    perform.insert(TEST_REFLECTOR, false);
+    perform.insert(TEST_REFLECTOR, true);
     perform.insert(TEST_LAMPBOARD, true);
     perform.insert(TEST_RINGSETTING, false);
     perform.insert(TEST_TURNOVER, false);
