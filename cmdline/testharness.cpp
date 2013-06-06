@@ -778,15 +778,15 @@ void TestHarness::createTestHash()
     perform.clear();
 
     perform.insert(TEST_KEYBOARD, false);
-    perform.insert(TEST_STECKERBOARD, true);
-    perform.insert(TEST_ENTRY, true);
+    perform.insert(TEST_STECKERBOARD, false);
+    perform.insert(TEST_ENTRY, false);
     perform.insert(TEST_ROTOR, false);
     perform.insert(TEST_REFLECTOR, true);
-    perform.insert(TEST_LAMPBOARD, true);
+    perform.insert(TEST_LAMPBOARD, false);
     perform.insert(TEST_RINGSETTING, false);
     perform.insert(TEST_TURNOVER, false);
     perform.insert(TEST_MACHINE, false);
-    perform.insert(TEST_DOUBLE_STEP, false);
+    perform.insert(TEST_DOUBLE_STEP, true);
     perform.insert(TEST_VALIDATION, false);
     perform.insert(TEST_ADD_AMEND_DEL, false);
 

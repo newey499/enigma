@@ -29,14 +29,15 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
 Rotor::Rotor(QString name, QObject *parent) :
-    QObject(parent)
+    ComponentBase(parent)
 {
     commonConstructor(name);
+    // Ring and Window Letter settings are set by in commonconstructor()
 }
 
 
 Rotor::Rotor(QString name, int ringSetting,  QString windowChar, QObject *parent) :
-    QObject(parent)
+    ComponentBase(parent)
 {
     commonConstructor(name);
     setRingSetting(ringSetting);
@@ -46,49 +47,40 @@ Rotor::Rotor(QString name, int ringSetting,  QString windowChar, QObject *parent
 
 void Rotor::commonConstructor(QString name)
 {
-    edb = EnigmaDatabase::getInstance();
 
-    try
-    {
-        recRotor = RotorData().getRotor(name);
-        recAlphabet = AlphabetData().getAlphabet(recRotor.value("alphabetid").toInt());
+    recRotor = RotorData().getRotor(name);
+    oAlphabet = new Alphabet(recRotor.value("alphabetid").toInt(), this);
+    recAlphabet = oAlphabet->getAlphabetRec();
 
-        alphabetMap = recAlphabet.value("alphabet").toString();
-        // This has to be set before a space is prepended
-        alphabetSize = alphabetMap.size();
+    alphabetMap = oAlphabet->getAlphabetMap();
+    // This has to be set before a space is prepended
+    alphabetSize = alphabetMap.size();
 
-        // Place a space at the start of the string so that pin
-        // numbers need not be zero based.
-        alphabetMap.prepend(" ");
-        alphabetName = recAlphabet.value("name").toString();
+    // Place a space at the start of the string so that pin
+    // numbers need not be zero based.
+    alphabetMap.prepend(" ");
+    alphabetName = oAlphabet->getAlphabetName();
 
-        rotorMap = recRotor.value("pinright").toString();
-        rotorSize = rotorMap.size();
+    rotorMap = recRotor.value("pinright").toString();
+    rotorSize = rotorMap.size();
 
-        notches = recRotor.value("notches").toString();
+    notches = recRotor.value("notches").toString();
 
-        // Place a space at the start of the string so that pin
-        // numbers need not be zero based.
-        rotorMap.prepend(" ");
-        rotorName = recRotor.value("name").toString();
-        setObjectName(rotorName);
+    // Place a space at the start of the string so that pin
+    // numbers need not be zero based.
+    rotorMap.prepend(" ");
+    rotorName = recRotor.value("name").toString();
+    setObjectName(rotorName);
 
-        setRingSetting(1);
-        setLetterSetting(alphabetMap.at(1));
+    setRingSetting(1);
+    setLetterSetting(alphabetMap.at(1));
 
-        qDebug("rotor [%s] alphabet [%s]",
-               recRotor.value("name").toString().toAscii().data(),
-               recAlphabet.value("name").toString().toAscii().data());
+    qDebug("rotor [%s] alphabet [%s]",
+           recRotor.value("name").toString().toAscii().data(),
+           recAlphabet.value("name").toString().toAscii().data());
 
-        sanityCheck();
+    sanityCheck();
 
-        connect(this, SIGNAL(rotorTurnover(Rotor *, QString)),
-                this, SLOT(slotTurnover(Rotor *, QString)));
-    }
-    catch (EnigmaException &e)
-    {
-        throw e;
-    }
 }
 
 
@@ -148,15 +140,10 @@ void Rotor::setRingSetting(int setting)
 {
     if (! isValidPinNo(setting))
     {
-        QString msg = QString("Ring setting requested [%1] is outside permitted range [%2...%3]").
-                            arg(setting).
-                            arg(1).
-                            arg(getMaxRingSetting());
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-#pragma GCC diagnostic pop
-
+        qDebug("1) Ring setting requested [%d] is outside permitted range [%d...%d]",
+                setting,
+                1,
+                getMaxRingSetting());
     }
     else
     {
@@ -175,15 +162,10 @@ void Rotor::setRingSetting(QString setting)
 {
     if (! isValidChar(setting))
     {
-        QString msg = QString("Ring setting requested [%1] is not in alphabet [%2] [%3]").
-                            arg(setting).
-                            arg(alphabetName).
-                            arg(alphabetMap);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-#pragma GCC diagnostic pop
-
+        qDebug("2) Ring setting requested [%s] is not in alphabet [%s] [%s]",
+                setting.toAscii().data(),
+                alphabetName.toAscii().data(),
+                alphabetMap.toAscii().data());
     }
     else
     {
@@ -203,15 +185,9 @@ void Rotor::setLetterSetting(QString setting)
 {
     if ( (setting.count() != 1) || (! alphabetMap.contains(setting, Qt::CaseSensitive)) )
     {
-        QString msg = QString("Letter setting requested [%1] is not in alphabet [%2]").
-                            arg(setting.toAscii().data()).
-                            arg(alphabetMap.toAscii().data());
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-#pragma GCC diagnostic pop
-
+        qDebug("Letter setting requested [%s] is not in alphabet [%s]",
+                setting.toAscii().data(),
+                alphabetMap.toAscii().data());
     }
     else
     {
@@ -241,18 +217,15 @@ int Rotor::mapRightToLeft(int pinIn)
     int result = -1;
     int origPinIn = pinIn;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
 
     pinIn = calculateOffset(pinIn);
 
     if (! isValidPinNo(pinIn))
     {
-         QString msg = QString("requested pin [%1] not in valid range [%2...%3]").
-                            arg(pinIn).
-                            arg(1).
-                            arg(getAlphabetSize());
-         throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+         qDebug("requested pin [%d] not in valid range [%d...%d]",
+                pinIn,
+                1,
+                getAlphabetSize());
     }
 
     QString x = rotorMap.at(pinIn);
@@ -260,12 +233,9 @@ int Rotor::mapRightToLeft(int pinIn)
 
     if (result == -1)
     {
-       QString msg = QString("rotor map right to left pin number [%1] not found").
-                        arg(pinIn);
-       throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
+       qDebug("rotor map right to left pin number [%d] not found",
+              pinIn);
     }
-
-#pragma GCC diagnostic pop
 
     //qDebug("mapRightToLeft origPinIn [%d] calcPinIn [%d] pinOut [%d]",
     //       origPinIn, pinIn, result);
@@ -283,32 +253,24 @@ int Rotor::mapLeftToRight(int pinIn)
     int result = -1;
     int origPinIn = pinIn;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-
     pinIn = calculateOffset(pinIn);
 
     if (! isValidPinNo(pinIn))
     {
-         QString msg = QString("requested pin [%1] not in valid range [%2...%3]").
-                            arg(pinIn).
-                            arg(1).
-                            arg(getAlphabetSize());
-         throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+         qDebug("requested pin [%d] not in valid range [%d...%d]",
+                pinIn,
+                1,
+                getAlphabetSize());
     }
 
     QString x = alphabetMap.at(pinIn);
     result = rotorMap.indexOf(x, 0, Qt::CaseSensitive );
 
-
     if (result == -1)
     {
-       QString msg = QString("rotor map right to left pin number [%1] not found").
-                        arg(pinIn);
-       throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
+       qDebug("rotor map right to left pin number [%d] not found",
+                pinIn);
     }
-
-#pragma GCC diagnostic pop
 
     //qDebug("mapLeftToRight origPinIn [%d] calcPinIn [%d] pinOut [%d]",
     //       origPinIn, pinIn, result);
@@ -348,15 +310,12 @@ int Rotor::rotate()
     int oldLetterOffset = getLetterOffset();
     int newLetterOffset = (getLetterOffset() + 1) %  getAlphabetSize();
 
-    //checkForTurnover();
-
     if (newLetterOffset == 0)
     {
         newLetterOffset = getAlphabetSize();
     }
 
     letterOffset = newLetterOffset;
-    //setLetterSetting(rotorMap.at(letterOffset));
     setLetterSetting(alphabetMap.at(letterOffset));
 
     qDebug("Rotor::rotate() Rotating rotor name [%s] oldLetterOffset [%d] newLetterOffset [%d]",
@@ -374,20 +333,10 @@ bool Rotor::checkForTurnover()
     qDebug("Rotor::checkForTurnover() Letter [%s]", getLetterSetting().toAscii().data());
     if (isNotch(getLetterSetting()))
     {
-        //qDebug("\t EMIT SIGNAL Letter [%s]", getLetterSetting().toAscii().data());
-        //emit rotorTurnover(this, getLetterSetting());
         result = true;
     }
 
     return result;
-}
-
-
-void Rotor::slotTurnover(Rotor *rotor, QString windowChar)
-{
-    qDebug("slotTurnover(rotor *) %s Window Char [%s]",
-           rotor->getRotorName().toAscii().data(),
-           windowChar.toAscii().data());
 }
 
 

@@ -32,16 +32,16 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSqlRecord>
 #include <QVariant>
 
+#include "componentbase.h"
 #include "globals.h"
 #include "genlib.h"
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
 #include "alphabet.h"
-#include "alphabetdata.h"
 #include "rotordata.h"
 
 
-class Rotor : public QObject
+class Rotor : public ComponentBase
 {
     Q_OBJECT
 
@@ -77,18 +77,16 @@ public:
 
 signals:
 
-    void rotorTurnover(Rotor *, QString);
 
 public slots:
 
     virtual int rotate();
-    virtual void slotTurnover(Rotor *, QString);
 
 protected:
 
     void commonConstructor(QString name);
 
-    QPointer<EnigmaDatabase> edb;
+    QPointer<Alphabet> oAlphabet;
 
     QSqlRecord recRotor;
     QSqlRecord recAlphabet;
