@@ -127,6 +127,23 @@ int TestHarness::exec()
         debugFooter(component);
     }
 
+
+    try
+    {
+        component = "Lampboard";
+        debugHeader(component);
+        testLampboard();
+        debugFooter(component);
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("Error Testing %s\n%s",
+               component.toAscii().data(),
+               e.what().toAscii().data());
+        debugFooter(component);
+    }
+
+
     component = "Test Turnover";
     debugHeader(component);
     testTurnover();
@@ -144,7 +161,6 @@ int TestHarness::exec()
     debugHeader(component);
     testDoubleStep();
     debugFooter(component);
-
 
 
     qDebug("\n");
@@ -794,14 +810,19 @@ void TestHarness::createTestHash()
     perform.insert(TEST_ENTRY, false);
     perform.insert(TEST_ROTOR, false);
     perform.insert(TEST_REFLECTOR, false);
-    perform.insert(TEST_LAMPBOARD, false);
+    perform.insert(TEST_LAMPBOARD, true);
     perform.insert(TEST_RINGSETTING, false);
     perform.insert(TEST_TURNOVER, false);
     perform.insert(TEST_MACHINE, false);
     perform.insert(TEST_DOUBLE_STEP, false);
+<<<<<<< HEAD
     perform.insert(TEST_ADD_AMEND_DEL, false);
     perform.insert(TEST_VALIDATION, false);
 
+=======
+    perform.insert(TEST_VALIDATION, false);
+    perform.insert(TEST_ADD_AMEND_DELETE, false);
+>>>>>>> dev
 
 }
 
@@ -977,7 +998,10 @@ int TestHarness::execValidationTest()
 {
     qDebug("int TestHarness::execValidationTest()");
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
     if (! perform.value(TEST_VALIDATION))
     {
         qDebug("Test Disabled");
@@ -998,7 +1022,11 @@ int TestHarness::execAddAmendDelTest()
 {
     qDebug("int TestHarness::execAddAmendDelTest()");
 
+<<<<<<< HEAD
     if (! perform.value(TEST_ADD_AMEND_DEL))
+=======
+    if (! perform.value(TEST_ADD_AMEND_DELETE))
+>>>>>>> dev
     {
         qDebug("Test Disabled");
         qDebug("=============\n");
@@ -1043,5 +1071,33 @@ int TestHarness::execAddAmendDelTest()
     return 0;
 }
 
+
+void TestHarness::testLampboard()
+{
+    qDebug("TestHarness::testLampboard()");
+    if (! perform.value(TEST_LAMPBOARD))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return;
+    }
+    Lampboard lb("default", this);
+
+    QString keyIn;
+
+    keyIn = "A";
+    lb.illuminate(keyIn);
+
+    keyIn = "z";
+    lb.illuminate(keyIn);
+
+    keyIn = "DE";
+    lb.illuminate(keyIn);
+
+    keyIn = "L";
+    lb.illuminate(keyIn);
+
+    qDebug("No test defined for Lampboard");
+}
 
 #pragma GCC diagnostic pop

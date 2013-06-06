@@ -67,8 +67,13 @@ public:
        TEST_TURNOVER,
        TEST_MACHINE,
        TEST_DOUBLE_STEP,
+<<<<<<< HEAD
        TEST_ADD_AMEND_DEL,
        TEST_VALIDATION
+=======
+       TEST_VALIDATION,
+       TEST_ADD_AMEND_DELETE
+>>>>>>> dev
     } TESTS;
 
     const static char *MSG_FAIL;
@@ -90,6 +95,7 @@ public:
     virtual void testMachine();
     virtual void testTurnover();
     virtual void testDoubleStep();
+    virtual void testLampboard();
 
 
 
