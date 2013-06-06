@@ -26,76 +26,42 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 
 Keyboard::Keyboard(QString name, QObject *parent) :
-    QObject(parent)
+    ComponentBase(parent)
 {
-    edb = EnigmaDatabase::getInstance();
-
-    try
-    {
-        recAlphabet = AlphabetData().getAlphabet(name);
-
-        alphabetMap = recAlphabet.value("alphabet").toString();
-        // This has to be set before a space is prepended
-        alphabetSize = alphabetMap.size();
-
-        // Place a space at the start of the string so that pin
-        // numbers need not be zero based.
-        alphabetMap.prepend(" ");
-        alphabetName = recAlphabet.value("name").toString();
-
-        qDebug("keyboard alphabet [%s]",
-               alphabetName.toAscii().data());
-
-        sanityCheck();
-    }
-    catch (EnigmaException &e)
-    {
-        throw e;
-    }
-
+    oAlphabet = new Alphabet(name, this);
+    commonConstructor();
 }
 
 
 Keyboard::Keyboard(int alphabetId, QObject *parent) :
-    QObject(parent)
+    ComponentBase(parent)
 {
-    edb = EnigmaDatabase::getInstance();
-
-    try
-    {
-        recAlphabet = AlphabetData().getAlphabet(alphabetId);
-
-        alphabetMap = recAlphabet.value("alphabet").toString();
-        // This has to be set before a space is prepended
-        alphabetSize = alphabetMap.size();
-
-        // Place a space at the start of the string so that pin
-        // numbers need not be zero based.
-        alphabetMap.prepend(" ");
-        alphabetName = recAlphabet.value("name").toString();
-
-        qDebug("keyboard alphabet [%s]",
-               alphabetName.toAscii().data());
-
-        sanityCheck();
-    }
-    catch (EnigmaException &e)
-    {
-        throw e;
-    }
+    oAlphabet = new Alphabet(alphabetId, this);
+    commonConstructor();
 }
 
 
-bool Keyboard::sanityCheck()
+void Keyboard::commonConstructor()
 {
-    qDebug("Keyboard::sanityCheck()");
+    recAlphabet = oAlphabet->getAlphabetRec();
+    alphabetMap = oAlphabet->getAlphabetMap();
 
-    bool result = true;
+    // This has to be set before a space is prepended
+    alphabetSize = alphabetMap.size();
 
-    result = GenLib::alphabetDuplicateCheck(alphabetName, alphabetMap);
-    //result = GenLib::alphabetSanityCheck(alphabetName, alphabetMap, rotorName, rotorMap);
+    // Place a space at the start of the string so that pin
+    // numbers need not be zero based.
+    alphabetMap.prepend(" ");
+    alphabetName = oAlphabet->getAlphabetName();
 
-    return result;
+    qDebug("keyboard alphabet [%s]",
+           alphabetName.toAscii().data());
+}
+
+
+Keyboard::~Keyboard()
+{
+
 }
 
 
@@ -109,18 +75,16 @@ bool Keyboard::isValidKey(QString keyIn)
     if (keyIn.size() != 1)
     {
         result = false;
-        QString msg = QString("Keyboard - input key must be one character key passed [%1]").
-                      arg(keyIn);
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
+        qDebug("Keyboard - input key must be one character key passed [%s]",
+                keyIn.toAscii().data());
     }
 
-    if (! alphabetMap.contains(keyIn, Qt::CaseSensitive ))
+    if (! alphabetMap.contains(keyIn, Qt::CaseSensitive))
     {
         result = false;
-        QString msg = QString("Keyboard - input key [%1] is not in alphabet [%2]").
-                      arg(keyIn).
-                      arg(alphabetMap.trimmed());
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
+        qDebug("Keyboard - input key [%s] is not in alphabet [%s]",
+                 keyIn.toAscii().data(),
+                 alphabetMap.trimmed().toAscii().data());
     }
 
 
@@ -132,31 +96,16 @@ bool Keyboard::isValidKey(QString keyIn)
 
 QString Keyboard::keyIn(QString keyIn)
 {
-    try
+    if (! isValidKey(keyIn))
     {
-        // If validation fails an exception is thrown
-        isValidKey(keyIn);
-
-        //qDebug("Key input [%s] - validated Ok", keyIn.toAscii().data());
-    }
-    catch (EnigmaException &e)
-    {
-        //qDebug("Caught %s", e.what().toAscii().data());
-
         keyIn = "";
     }
 
     return keyIn;
 }
 
-
-QString Keyboard::getAlphabetName()
+QPointer<Alphabet> Keyboard::getAlphabetObj()
 {
-    return alphabetName;
+    return oAlphabet;
 }
 
-
-QString Keyboard::getAlphabetMap()
-{
-    return alphabetMap;
-}

@@ -42,11 +42,11 @@ Machine::Machine(QString machineName, QObject *parent) :
     alphabetId    = recMachine.value("alphabetid").toInt();
 
     oKeyboard = new Keyboard(alphabetId, this);
-    oSteckerboard = new Steckerboard(oKeyboard->getAlphabetName(), this);
+    oSteckerboard = new Steckerboard(oKeyboard->getAlphabetObj()->getAlphabetName(), this);
     oEntry = new Entry("ENTRY", this);
     // Rotors
     oReflector = new Reflector("B", this);
-    oLampboard = new Lampboard(oKeyboard->getAlphabetName(), this);
+    oLampboard = new Lampboard(oKeyboard->getAlphabetObj()->getAlphabetName(), this);
 }
 
 

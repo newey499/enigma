@@ -32,6 +32,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QVariant>
 
 
+#include "componentbase.h"
 #include "globals.h"
 #include "genlib.h"
 #include "enigmaexception.h"
@@ -39,7 +40,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "alphabet.h"
 #include "alphabetdata.h"
 
-class Keyboard : public QObject
+class Keyboard : public ComponentBase
 {
     Q_OBJECT
 
@@ -47,13 +48,12 @@ public:
 
     explicit Keyboard(QString name, QObject *parent = 0);
     explicit Keyboard(int alphabetId, QObject *parent = 0);
+    ~Keyboard();
 
     virtual bool isValidKey(QString keyIn);
     virtual QString keyIn(QString keyIn);
 
-    virtual QString getAlphabetName();
-    virtual QString getAlphabetMap();
-
+    virtual QPointer<Alphabet> getAlphabetObj();
 
 signals:
 
@@ -61,6 +61,8 @@ public slots:
 
 
 protected:
+
+    QPointer<Alphabet> oAlphabet;
 
     QPointer<EnigmaDatabase> edb;
 
@@ -71,8 +73,7 @@ protected:
     QString alphabetMap;
     QString alphabetName;
 
-    virtual bool sanityCheck();
-
+    virtual void commonConstructor();
 
 private:
 

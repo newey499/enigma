@@ -25,22 +25,21 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "steckerboard.h"
 
 Steckerboard::Steckerboard(QString alphabetName, QObject *parent) :
-    QObject(parent)
+    ComponentBase(parent)
 {
-    edb = EnigmaDatabase::getInstance();
-
     map.clear();
+    oAlphabet = new Alphabet(alphabetName, this);
 
-    recAlphabet = AlphabetData().getAlphabet(alphabetName);
+    recAlphabet = oAlphabet->getAlphabetRec();
 
-    alphabetMap = recAlphabet.value("alphabet").toString();
+    alphabetMap = oAlphabet->getAlphabetMap();
     // This has to be set before a space is prepended
     alphabetSize = alphabetMap.size();
 
     // Place a space at the start of the string so that pin
     // numbers need not be zero based.
     alphabetMap.prepend(" ");
-    alphabetName = recAlphabet.value("name").toString();
+    alphabetName = oAlphabet->getAlphabetName();
 
 }
 
@@ -58,13 +57,9 @@ bool Steckerboard::addStecker(QString from, QString to)
     if (from == to)
     {
         result = false;
-        QString msg = QString("Cannot add stecker [%1, %2] - Characters are the same").
-                        arg(from).
-                        arg(to);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-#pragma GCC diagnostic pop
+        qDebug("Cannot add stecker [%s, %s] - Characters are the same",
+                from.toAscii().data(),
+                to.toAscii().data());
     }
 
     bool fromInUse = isCharInUse(from);
@@ -73,15 +68,11 @@ bool Steckerboard::addStecker(QString from, QString to)
     if (fromInUse || toInUse)
     {
         result = false;
-        QString msg = QString("Cannot add stecker [%1, %2] %3 %4").
-                        arg(from).
-                        arg(to).
-                        arg(fromInUse ? QString("[%1] in use").arg(from) : "").
-                        arg(toInUse ? QString("[%1] in use").arg(to) : "");
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-#pragma GCC diagnostic pop
+        qDebug("Cannot add stecker [%s, %s] %s %s",
+                from.toAscii().data(),
+                to.toAscii().data(),
+                fromInUse ? QString("[%1] in use").arg(from).toAscii().data() : "",
+                toInUse ? QString("[%1] in use").arg(to).toAscii().data() : "");
     }
     else
     {
@@ -127,13 +118,9 @@ QString Steckerboard::mapStecker(QString charIn)
 
     if (! isValidChar(charIn))
     {
-        QString msg = QString("[%1] is not in alphabet [%2]").
-                        arg(charIn).
-                        arg(alphabetName);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-#pragma GCC diagnostic pop
+        qDebug("[%s] is not in alphabet [%s]",
+                charIn.toAscii().data(),
+                alphabetName.toAscii().data());
 
         return "";
     }
@@ -162,26 +149,17 @@ bool Steckerboard::isValidChar(QString keyIn)
 {
     if (keyIn.size() != 1)
     {
-        QString msg = QString("Input string must be a single char - passed [%1]").
-                arg(keyIn);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-#pragma GCC diagnostic pop
+        qDebug("Input string must be a single char - passed [%s]",
+                keyIn.toAscii().data());
 
         return false;
     }
 
     if (alphabetMap.indexOf(keyIn, 0, Qt::CaseSensitive) == -1)
     {
-        QString msg = QString("Input key [%1] not found in alphabet [%2]").
-                arg(keyIn).
-                arg(alphabetName);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-#pragma GCC diagnostic pop
-
+        qDebug("Input key [%s] not found in alphabet [%s]",
+                keyIn.toAscii().data(),
+                alphabetName.toAscii().data());
         return false;
     }
 

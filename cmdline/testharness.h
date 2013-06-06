@@ -66,7 +66,9 @@ public:
        TEST_LAMPBOARD,
        TEST_TURNOVER,
        TEST_MACHINE,
-       TEST_DOUBLE_STEP
+       TEST_DOUBLE_STEP,
+       TEST_ADD_AMEND_DEL,
+       TEST_VALIDATION
     } TESTS;
 
     const static char *MSG_FAIL;

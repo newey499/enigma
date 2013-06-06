@@ -208,23 +208,25 @@ void TestHarness::testKeyboard()
            keyPress.toAscii().data(),
            keyboard.isValidKey(keyPress) ? "Yes" : "No");
 
-    try
+
+    keyPress = "a";
+    QString keyOut = keyboard.keyIn(keyPress);
+    if (keyOut.isEmpty())
     {
-        keyPress = "a";
-        keyboard.keyIn(keyPress);
-        qDebug("%s key in [%s] valid [%s]",
-               MSG_FAIL,
+        qDebug("%s key in [%s] valid %s - returned empty string",
+               MSG_OK,
                keyPress.toAscii().data(),
                keyboard.isValidKey(keyPress) ? "Yes" : "No");
     }
-    catch (EnigmaException &e)
+    else
     {
-        qDebug("%s Keyboard::keyIn keyPress [%s] charOut [%s]",
-               MSG_OK_FAIL,
+        qDebug("%s key in [%s] valid %s - returned [%s] - should have returned empty string",
+               MSG_FAIL,
                keyPress.toAscii().data(),
-               "*");
-
+               keyboard.isValidKey(keyPress) ? "Yes" : "No",
+               keyOut.toAscii().data());
     }
+
 
 }
 
@@ -263,6 +265,14 @@ void TestHarness::testSteckerboard()
     from = "E";
     to = "F";
     qDebug("%s addStecker [%s, %s] %s",
+           MSG_OK,
+           from.toAscii().data(),
+           to.toAscii().data(),
+           stecker.addStecker(from, to) ? "added" : "not added");
+
+    from = "A";
+    to = "W";
+    qDebug("%s addStecker failed A already steckered [%s, %s] %s",
            MSG_OK,
            from.toAscii().data(),
            to.toAscii().data(),
@@ -757,20 +767,20 @@ void TestHarness::testTurnover()
     if (! perform.value(TEST_TURNOVER))
     {
         qDebug("TestHarness::testTurnover() disabled");
+        return;
     }
-    else
-    {
-        qDebug("TestHarness::testTurnover()");
-        Rotor r_1("I", this);
-        r_1.setLetterSetting("A");
-        r_1.setRingSetting(1);
 
-        for (int i = 1; i <= r_1.getAlphabetSize(); i++)
-        {
-            r_1.setRingSetting(i);
-            r_1.rotate();
-        }
+    qDebug("TestHarness::testTurnover()");
+    Rotor r_1("I", this);
+    r_1.setLetterSetting("A");
+    r_1.setRingSetting(1);
+
+    for (int i = 1; i <= r_1.getAlphabetSize(); i++)
+    {
+        r_1.setRingSetting(i);
+        r_1.rotate();
     }
+
 
 }
 
@@ -780,15 +790,18 @@ void TestHarness::createTestHash()
     perform.clear();
 
     perform.insert(TEST_KEYBOARD, false);
-    perform.insert(TEST_STECKERBOARD, false);
+    perform.insert(TEST_STECKERBOARD, true);
     perform.insert(TEST_ENTRY, false);
     perform.insert(TEST_ROTOR, false);
     perform.insert(TEST_REFLECTOR, false);
     perform.insert(TEST_LAMPBOARD, false);
     perform.insert(TEST_RINGSETTING, false);
     perform.insert(TEST_TURNOVER, false);
-    perform.insert(TEST_MACHINE, true);
-    perform.insert(TEST_DOUBLE_STEP, true);
+    perform.insert(TEST_MACHINE, false);
+    perform.insert(TEST_DOUBLE_STEP, false);
+    perform.insert(TEST_ADD_AMEND_DEL, false);
+    perform.insert(TEST_VALIDATION, false);
+
 
 }
 
@@ -963,6 +976,15 @@ void TestHarness::testDoubleStep()
 int TestHarness::execValidationTest()
 {
     qDebug("int TestHarness::execValidationTest()");
+
+
+    if (! perform.value(TEST_VALIDATION))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return 1;
+    }
+
     edb = EnigmaDatabase::getInstance();
     tdv = new TestDatabaseValidation(this);
 
@@ -975,6 +997,14 @@ int TestHarness::execValidationTest()
 int TestHarness::execAddAmendDelTest()
 {
     qDebug("int TestHarness::execAddAmendDelTest()");
+
+    if (! perform.value(TEST_ADD_AMEND_DEL))
+    {
+        qDebug("Test Disabled");
+        qDebug("=============\n");
+        return 1;
+    }
+
     edb = EnigmaDatabase::getInstance();
 
 
