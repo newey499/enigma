@@ -375,19 +375,11 @@ void TestHarness::testEntry()
 
 
     // invalid pinNo - produces exception
-    try
-    {
-        pinIn = 27;
-        charOut = entry.mapPinToChar(pinIn);
-        qDebug("%s Should throw exception :: Entry::mapPinToChar pinIn [%d] charOut [%s]",
-               MSG_FAIL, pinIn, charOut.toAscii().data());
-    }
-    catch (EnigmaException &e)
-    {
-        qDebug("%s Expected exception: Entry::mapPinToChar pinIn [%d] charOut [%s]",
-               MSG_OK_FAIL, pinIn,
-               "*");
-    }
+    pinIn = 27;
+    charOut = entry.mapPinToChar(pinIn);
+    qDebug("%s Fails - Should return empty string :: Entry::mapPinToChar pinIn [%d] charOut [%s]",
+           MSG_OK, pinIn, charOut.toAscii().data());
+
 
 
     charIn = "A";
@@ -404,20 +396,15 @@ void TestHarness::testEntry()
 
 
     // invalid charIn - produces exception
-    try
-    {
-        charIn = "a";
-        pinOut = entry.mapCharToPin(charIn);
-        qDebug("%s Should throw exception Entry::mapCharToPin  charIn [%s] pinOut [%d]",
-               MSG_FAIL, charIn.toAscii().data(),
-               pinOut);
-    }
-    catch (EnigmaException &e)
-    {
-        qDebug("%s Expected exception: Entry::mapCharToPin charIn [%s] pinOut [%s]",
-               MSG_OK_FAIL, charIn.toAscii().data(),
-               "*");
-    }
+    charIn = "a";
+    pinOut = entry.mapCharToPin(charIn);
+    qDebug("%s Fails Should return invalid pin no [%d] :: mapCharToPin  charIn [%s] pinOut [%d]",
+           MSG_OK,
+           Globals::INVALID_PIN,
+           charIn.toAscii().data(),
+           pinOut);
+
+
 
 }
 
@@ -807,7 +794,7 @@ void TestHarness::createTestHash()
 
     perform.insert(TEST_KEYBOARD, false);
     perform.insert(TEST_STECKERBOARD, true);
-    perform.insert(TEST_ENTRY, false);
+    perform.insert(TEST_ENTRY, true);
     perform.insert(TEST_ROTOR, false);
     perform.insert(TEST_REFLECTOR, false);
     perform.insert(TEST_LAMPBOARD, true);
@@ -1083,7 +1070,6 @@ void TestHarness::testLampboard()
     keyIn = "L";
     lb.illuminate(keyIn);
 
-    qDebug("No test defined for Lampboard");
 }
 
 #pragma GCC diagnostic pop

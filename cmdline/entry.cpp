@@ -30,21 +30,21 @@ Entry::Entry(QString entryName, QObject *parent) :
     ComponentBase(parent)
 {
 
-    edb = EnigmaDatabase::getInstance();
-
     try
     {
-        recEntry = EntryData().getEntry(entryName);
-        recAlphabet = AlphabetData().getAlphabet(recEntry.value("alphabetid").toInt());
 
-        alphabetMap = recAlphabet.value("alphabet").toString();
+        recEntry = EntryData().getEntry(entryName);
+        oAlphabet = new Alphabet(recEntry.value("alphabetid").toInt(), this);
+        recAlphabet = oAlphabet->getAlphabetRec();
+
+        alphabetMap = oAlphabet->getAlphabetMap();
         // This has to be set before a space is prepended
         alphabetSize = alphabetMap.size();
 
         // Place a space at the start of the string so that pin
         // numbers need not be zero based.
         alphabetMap.prepend(" ");
-        alphabetName = recAlphabet.value("name").toString();
+        alphabetName = oAlphabet->getAlphabetName();
 
         entryMap = recEntry.value("pinright").toString();
         // Place a space at the start of the string so that pin
@@ -110,55 +110,48 @@ int Entry::getAlphabetSize()
 
 int Entry::mapCharToPin(QString keyIn)
 {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-    int result = -99;
+    int result = Globals::INVALID_PIN;
 
     if (! isValidKey(keyIn))
     {
-        QString msg = QString("requested key [%1] not in alphabet [%2] [%3]").
-                           arg(keyIn).
-                           arg(alphabetName).
-                           arg(alphabetMap);
-        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+        result = Globals::INVALID_PIN;
+        qDebug("requested key [%s] not in alphabet [%s] [%s]",
+               keyIn.toAscii().data(),
+               alphabetName.toAscii().data(),
+               alphabetMap.toAscii().data());
     }
 
     result = entryMap.indexOf(keyIn, 0, Qt::CaseSensitive);
+    /*******************
     qDebug("charIn [%s] pinOut [%d] [%s] [%s]",
            keyIn.toAscii().data(),
            result,
            entryName.toAscii().data(),
            entryMap.toAscii().data() );
+    ***********************/
 
     if (result == -1)
     {
-        QString msg = QString("requested key [%1] not in entry mapping [%2] [%3]").
-                           arg(keyIn).
-                           arg(entryName).
-                           arg(entryMap);
-        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+        result = Globals::INVALID_PIN;
+        qDebug("requested key [%s] not in entry mapping [%s] [%s]",
+               keyIn.toAscii().data(),
+               entryName.toAscii().data(),
+               entryMap.toAscii().data());
     }
 
     return result;
-
-#pragma GCC diagnostic pop
 }
 
 QString Entry::mapPinToChar(int pinIn)
 {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
-
     if (! isValidPinNo(pinIn))
     {
-         QString msg = QString("requested pin [%1] not in valid range [%2...%3]").
-                            arg(pinIn).
-                            arg(1).
-                            arg(getAlphabetSize());
-         throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+         qDebug("requested pin [%d] not in valid range [%d...%d]",
+                pinIn,
+                1,
+                getAlphabetSize());
+         return "";
     }
 
     return entryMap.at(pinIn);
-
-#pragma GCC diagnostic pop
 }

@@ -39,7 +39,6 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
 #include "alphabet.h"
-#include "alphabetdata.h"
 #include "entrydata.h"
 
 class Entry : public ComponentBase
@@ -61,7 +60,7 @@ public slots:
 
 protected:
 
-    QPointer<EnigmaDatabase> edb;
+    QPointer<Alphabet> oAlphabet;
 
     QSqlRecord recEntry;
     QSqlRecord recAlphabet;

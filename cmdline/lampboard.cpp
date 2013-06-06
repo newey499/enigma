@@ -70,8 +70,7 @@ Lampboard::~Lampboard()
 
 void Lampboard::illuminate(QString charIn)
 {
-    qDebug("Lampboard::illuminate(QString charIn)\n"
-           "does nothing apart from validate <charIn>");
+    qDebug("Lampboard::illuminate(QString charIn)");
 
     if (charIn.length() != 1)
     {
