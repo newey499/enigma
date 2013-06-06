@@ -815,14 +815,8 @@ void TestHarness::createTestHash()
     perform.insert(TEST_TURNOVER, false);
     perform.insert(TEST_MACHINE, false);
     perform.insert(TEST_DOUBLE_STEP, false);
-<<<<<<< HEAD
+    perform.insert(TEST_VALIDATION, false);
     perform.insert(TEST_ADD_AMEND_DEL, false);
-    perform.insert(TEST_VALIDATION, false);
-
-=======
-    perform.insert(TEST_VALIDATION, false);
-    perform.insert(TEST_ADD_AMEND_DELETE, false);
->>>>>>> dev
 
 }
 
@@ -998,10 +992,6 @@ int TestHarness::execValidationTest()
 {
     qDebug("int TestHarness::execValidationTest()");
 
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
     if (! perform.value(TEST_VALIDATION))
     {
         qDebug("Test Disabled");
@@ -1022,11 +1012,7 @@ int TestHarness::execAddAmendDelTest()
 {
     qDebug("int TestHarness::execAddAmendDelTest()");
 
-<<<<<<< HEAD
     if (! perform.value(TEST_ADD_AMEND_DEL))
-=======
-    if (! perform.value(TEST_ADD_AMEND_DELETE))
->>>>>>> dev
     {
         qDebug("Test Disabled");
         qDebug("=============\n");
