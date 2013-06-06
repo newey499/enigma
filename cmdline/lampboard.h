@@ -32,6 +32,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSqlRecord>
 #include <QVariant>
 
+#include "componentbase.h"
 #include "globals.h"
 #include "genlib.h"
 #include "enigmaexception.h"
@@ -39,7 +40,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "alphabet.h"
 #include "alphabetdata.h"
 
-class Lampboard : public QObject
+class Lampboard : public ComponentBase
 {
     Q_OBJECT
 public:
@@ -58,13 +59,15 @@ public slots:
 
 protected:
 
-    QPointer<EnigmaDatabase> edb;
+    QPointer<Alphabet> oAlphabet;
 
     QSqlRecord recAlphabet;
 
     QString alphabetMap;
     QString alphabetName;
     int alphabetSize;
+
+    void commonConstructor();
 
 private:
 

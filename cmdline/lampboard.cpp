@@ -28,63 +28,37 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
 Lampboard::Lampboard(QString alphabetName, QObject *parent) :
-    QObject(parent)
+    ComponentBase(parent)
 {
-    edb = EnigmaDatabase::getInstance();
-
-
-    try
-    {
-        recAlphabet = AlphabetData().getAlphabet(alphabetName);
-
-        alphabetMap = recAlphabet.value("alphabet").toString();
-        // This has to be set before a space is prepended
-        alphabetSize = alphabetMap.size();
-
-        // Place a space at the start of the string so that pin
-        // numbers need not be zero based.
-        alphabetMap.prepend(" ");
-        this->alphabetName = recAlphabet.value("name").toString();
-
-        qDebug("alphabet [%s]",
-               recAlphabet.value("name").toString().toAscii().data());
-
-    }
-    catch (EnigmaException &e)
-    {
-        throw e;
-    }
-
+    oAlphabet = new Alphabet(alphabetName, this);
+    commonConstructor();
 }
 
 
 Lampboard::Lampboard(int alphabetId, QObject *parent) :
-    QObject(parent)
+    ComponentBase(parent)
 {
-    edb = EnigmaDatabase::getInstance();
+    oAlphabet = new Alphabet(alphabetId, this);
+    commonConstructor();
+}
 
-    try
-    {
-        recAlphabet = AlphabetData().getAlphabet(alphabetId);
 
-        alphabetMap = recAlphabet.value("alphabet").toString();
-        // This has to be set before a space is prepended
-        alphabetSize = alphabetMap.size();
+void Lampboard::commonConstructor()
+{
 
-        // Place a space at the start of the string so that pin
-        // numbers need not be zero based.
-        alphabetMap.prepend(" ");
-        this->alphabetName = recAlphabet.value("name").toString();
+    recAlphabet = oAlphabet->getAlphabetRec();
 
-        qDebug("alphabet [%s]",
-               recAlphabet.value("name").toString().toAscii().data());
+    alphabetMap = oAlphabet->getAlphabetMap();
+    // This has to be set before a space is prepended
+    alphabetSize = alphabetMap.size();
 
-    }
-    catch (EnigmaException &e)
-    {
-        throw e;
-    }
+    // Place a space at the start of the string so that pin
+    // numbers need not be zero based.
+    alphabetMap.prepend(" ");
+    alphabetName = oAlphabet->getAlphabetName();
 
+    qDebug("alphabet [%s]",
+           recAlphabet.value("name").toString().toAscii().data());
 }
 
 
@@ -99,23 +73,27 @@ void Lampboard::illuminate(QString charIn)
     qDebug("Lampboard::illuminate(QString charIn)\n"
            "does nothing apart from validate <charIn>");
 
-    try
+    if (charIn.length() != 1)
     {
-        if (alphabetMap.indexOf(charIn, Qt::CaseSensitive) == -1)
-        {
-            QString msg = QString("Lampboard::illuminate - [%1] not in alphabet [%2] [%3]").
-                                    arg(charIn.toAscii().data()).
-                                    arg(alphabetName.toAscii().data()).
-                                    arg(alphabetMap.toAscii().data());
-
-            throw EnigmaException(msg.toAscii().data(), __FILE__, __LINE__);
-        }
-
+        qDebug("Length of input char [%s] should be 1 not %d",
+               charIn.toAscii().data(),
+               charIn.length());
+        return;
     }
-    catch (EnigmaException &e)
+
+    if (oAlphabet->getAlphabetMap().contains(charIn))
     {
-        throw e;
+        qDebug("%s is a valid char", charIn.toAscii().data());
     }
+    else
+    {
+        qDebug("%s is not a valid char - not in alphabet [%s]",
+               charIn.toAscii().data(),
+               oAlphabet->getAlphabetMap().toAscii().data());
+        return;
+    }
+
+
 }
 
 #pragma GCC diagnostic pop

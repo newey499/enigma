@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
     QPointer<Globals> globals = new Globals();
     QPointer<TestHarness> testHarness = new TestHarness();
 
-    //result = testHarness->exec();
-    //result = testHarness->execValidationTest();
+    result = testHarness->exec();
+    result = testHarness->execValidationTest();
     result = testHarness->execAddAmendDelTest();
 
     // Clean up heap
