@@ -27,6 +27,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 RotorData::RotorData(QObject *parent) :
     ComponentBase(parent)
 {
+    WheelBaseData::WHEEL_TYPE = "ROTOR";
 }
 
 

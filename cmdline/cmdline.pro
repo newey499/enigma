@@ -62,7 +62,10 @@ SOURCES += main.cpp \
     reflectordata.cpp \
     rotordata.cpp \
     machinedata.cpp \
-    alphabetdata.cpp
+    alphabetdata.cpp \
+    wheellist.cpp \
+    mysql.cpp \
+    wheelbasedata.cpp
 
 HEADERS += \
     globals.h \
@@ -85,7 +88,10 @@ HEADERS += \
     reflectordata.h \
     rotordata.h \
     machinedata.h \
-    alphabetdata.h
+    alphabetdata.h \
+    wheellist.h \
+    mysql.h \
+    wheelbasedata.h
 
 OTHER_FILES += \
     ../README.md \

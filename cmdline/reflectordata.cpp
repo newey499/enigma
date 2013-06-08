@@ -24,9 +24,12 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "reflectordata.h"
 
+
+
 ReflectorData::ReflectorData(QObject *parent) :
     ComponentBase(parent)
 {
+    WheelBaseData::WHEEL_TYPE = "REFLECTOR";
 }
 
 ReflectorData::~ReflectorData()

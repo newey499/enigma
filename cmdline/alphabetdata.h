@@ -48,20 +48,25 @@ public:
     explicit AlphabetData(QObject *parent = 0);
     ~AlphabetData();
 
+    virtual bool setId(int id);
+    virtual bool setName(QString name);
+    virtual bool setAlphabet(QString alphabet);
+
     virtual QSqlRecord getEmptyAlphabet();
+    virtual QSqlRecord getAlphabet();
     virtual QSqlRecord getAlphabet(QString alphabetName);
     virtual QSqlRecord getAlphabet(int id);
-    virtual bool validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec);
+    virtual bool validateAlphabet(Globals::EDIT_MODE mode);
 
     virtual bool isUniqueAlphabetName(QSqlQuery qry, QString errMsg);
     virtual bool isAlphabetNameMinLengthOk(QString name);
     virtual bool isAlphabetMinLengthOk(QString alphabet);
-    virtual bool isAlphabetInUse(QSqlRecord rec);
+    virtual bool isAlphabetInUse();
     virtual bool hasDuplicateChars(QString alphabet);
 
-    virtual void displayRec(QSqlRecord rec);
+    virtual void displayRec();
 
-    virtual bool writeRec(Globals::EDIT_MODE mode, QSqlRecord &rec);
+    virtual bool writeRec(Globals::EDIT_MODE mode);
 
 signals:
 
@@ -70,7 +75,7 @@ public slots:
 
 protected:
 
-
+    QSqlRecord rec;
 
 
 private:

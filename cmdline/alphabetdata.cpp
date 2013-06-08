@@ -27,12 +27,13 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-const int AlphabetData::MIN_ALPHABET_LENGTH = 4;
-const int AlphabetData::MIN_ALPHABET_NAME_LENGTH = 2;
+const int AlphabetData::MIN_ALPHABET_LENGTH = 3;  // Encrypt Morse ?? dot dash and a space <g>
+const int AlphabetData::MIN_ALPHABET_NAME_LENGTH = 4;
 
 AlphabetData::AlphabetData(QObject *parent) :
     ComponentBase(parent)
 {
+    getEmptyAlphabet();
 }
 
 
@@ -43,7 +44,6 @@ AlphabetData::~AlphabetData()
 
 QSqlRecord AlphabetData::getEmptyAlphabet()
 {
-    QSqlRecord rec;
     rec.clear();
     rec.insert(0, QSqlField("id", QVariant::Int));
     rec.insert(1, QSqlField("name", QVariant::String));
@@ -56,11 +56,14 @@ QSqlRecord AlphabetData::getEmptyAlphabet()
     return rec;
 }
 
+QSqlRecord  AlphabetData::getAlphabet()
+{
+    return rec;
+}
 
 QSqlRecord AlphabetData::getAlphabet(QString alphabetName)
 {
     QSqlQuery qry;
-    QSqlRecord rec;
 
     qry.prepare("select "
                 "id, name, alphabet "
@@ -84,7 +87,6 @@ QSqlRecord AlphabetData::getAlphabet(QString alphabetName)
 QSqlRecord AlphabetData::getAlphabet(int id)
 {
     QSqlQuery qry;
-    QSqlRecord rec;
 
     qry.prepare("select "
                 "id, name, alphabet "
@@ -183,7 +185,7 @@ bool AlphabetData::hasDuplicateChars(QString alphabet)
 }
 
 
-bool AlphabetData::isAlphabetInUse(QSqlRecord rec)
+bool AlphabetData::isAlphabetInUse()
 {
     bool result = false;
     QSqlQuery qry;
@@ -252,7 +254,7 @@ bool AlphabetData::isAlphabetInUse(QSqlRecord rec)
 }
 
 
-void AlphabetData::displayRec(QSqlRecord rec)
+void AlphabetData::displayRec()
 {
     qDebug("id [%d]\nname [%s]\nalphabet [%s]",
            rec.value("id").toInt(),
@@ -261,10 +263,11 @@ void AlphabetData::displayRec(QSqlRecord rec)
 }
 
 
-bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
+bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode)
 {
     bool result = true;
     QSqlQuery qry;
+    QString msg;
     QString errMsg;
     clearError();
 
@@ -275,8 +278,8 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
         // Must have a magic id indicating new row
         if (rec.value("id").toInt() != Globals::NEW_ID)
         {
-            QString msg = QString("Attempt to Insert an existing row id [%1]").
-                                arg(rec.value("id").toInt());
+            msg = QString("Attempt to Insert an existing row id [%1]").
+                          arg(rec.value("id").toInt());
             addError(msg);
             result = false;
         }
@@ -299,7 +302,7 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
             result = false;
         }
 
-        if (! hasDuplicateChars(rec.value("alphabet").toString()))
+        if (hasDuplicateChars(rec.value("alphabet").toString()))
         {
             result = false;
         }
@@ -310,8 +313,8 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
         // Must not have a magic id indicating new row
         if (rec.value("id").toInt() == Globals::NEW_ID)
         {
-            QString msg = QString("Attempt to Update a row id which has a marker for a new row[%1]").
-                                arg(rec.value("id").toInt());
+            msg = QString("Attempt to Update a row id which has a marker for a new row[%1]").
+                          arg(rec.value("id").toInt());
             addError(msg);
             result = false;
         }
@@ -336,7 +339,7 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
             result = false;
         }
 
-        if (! hasDuplicateChars(rec.value("alphabet").toString()))
+        if (hasDuplicateChars(rec.value("alphabet").toString()))
         {
             result = false;
         }
@@ -349,31 +352,47 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
             QString currentAlphabet = qry.record().value("alphabet").toString();
             QString newAlphabet = rec.value("alphabet").toString();
             bool alphabetChange = currentAlphabet.compare(newAlphabet, Qt::CaseSensitive) == 0;
-            if (isAlphabetInUse(rec) && alphabetChange)
+            if (isAlphabetInUse() && alphabetChange)
             {
-                QString msg = QString("Cannot change alphabet because it is in use");
+                msg = QString("Cannot change alphabet because it is in use");
                 addError(msg);
                 result = false;
             }
         }
-
-
-
 
         break;
 
     case Globals::ROW_DEL :
 
         // can't delete if the alphabet is in use
-        result = (! isAlphabetInUse(rec));
+        if (isAlphabetInUse())
+        {
+            msg = QString("Cannot delete an alphabetrow which is in use id [%1]").
+                    arg(rec.value("id").toInt());
+            addError(msg);
+            result = false;
+        }
 
         // Must not have a magic id indicating new row
         if (rec.value("id").toInt() == Globals::NEW_ID)
         {
-            QString msg = QString("Attempt to Delete a row which has a marker for a new row[%1]").
+            msg = QString("Attempt to Delete a row which has a marker for a new row[%1]").
                                 arg(rec.value("id").toInt());
             addError(msg);
             result = false;
+        }
+
+        if (result)
+        {
+            msg = QString("Deletion validation for alphabet row id [%1] passed").
+                                arg(rec.value("id").toInt());
+            addError(msg);
+        }
+        else
+        {
+            msg = QString("Deletion validation for alphabet row id [%1] failed").
+                                arg(rec.value("id").toInt());
+            addError(msg);
         }
 
         break;
@@ -389,7 +408,7 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
         break;
     }
 
-    QString msg = lastError("\n");
+    msg = lastError("\n");
     qDebug("Validation result [%s]\n%s",
            result ? "TRUE" : "FALSE",
            msg.toAscii().data());
@@ -398,15 +417,16 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode, QSqlRecord rec)
 }
 
 
-bool AlphabetData::writeRec(Globals::EDIT_MODE mode, QSqlRecord &rec)
+bool AlphabetData::writeRec(Globals::EDIT_MODE mode)
 {
     qDebug("AlphabetData::writeRec");
+    QString msg;
     bool result = false;
     QSqlQuery qry;
 
-    displayRec(rec);
+    displayRec();
 
-    if (! validateAlphabet(mode, rec))
+    if (! validateAlphabet(mode))
     {
         // Don't touch the database if the validation fails
         return false;
@@ -428,9 +448,26 @@ bool AlphabetData::writeRec(Globals::EDIT_MODE mode, QSqlRecord &rec)
             result = GenLib::execQry(qry, true);
             if (result)
             {
-                rec.setValue("id", qry.record().value("new_id").toInt());
+                int id = qry.record().value("new_id").toInt();
+                rec.setValue("id", id);
+                msg = QString("New Alphabet added id [%1]").arg(id);
+                addError(msg);
+                result = true;
+            }
+            else
+            {
+                // The row has been written although for some
+                // reason we cannot get the new id
+                addError(qry.lastError().text());
+                result = true;
             }
         }
+        else
+        {
+            addError(qry.lastError().text());
+            result = false;
+        }
+
         break;
 
     case Globals::ROW_EDIT :
@@ -442,15 +479,38 @@ bool AlphabetData::writeRec(Globals::EDIT_MODE mode, QSqlRecord &rec)
         qry.bindValue(":id", rec.value("id"));
         qry.bindValue(":name", rec.value("name"));
         qry.bindValue(":alphabet", rec.value("alphabet"));
-        result = GenLib::execQry(qry, false);
+        if (GenLib::execQry(qry, false))
+        {
+            msg = QString("alphabet table row updated - id = [%1]").
+                    arg(rec.value("id").toInt());
+            addError(msg);
+            result = true;
+        }
+        else
+        {
+            addError(qry.lastError().text());
+            result = false;
+        }
         break;
 
 
     case Globals::ROW_DEL :
+
         qry.prepare("delete from alphabet "
                     "where id = :id");
         qry.bindValue(":id", rec.value("id"));
-        result = GenLib::execQry(qry, false);
+        if (GenLib::execQry(qry, false))
+        {
+            msg = QString("Deleting Alphabet id = [%1]").
+                    arg(rec.value("id").toInt());
+            addError(msg);
+            result = true;
+        }
+        else
+        {
+            addError(qry.lastError().text());
+            result = false;
+        }
         break;
 
     default :
@@ -465,7 +525,35 @@ bool AlphabetData::writeRec(Globals::EDIT_MODE mode, QSqlRecord &rec)
 
     }
 
-    this->displayRec(rec);
+    this->displayRec();
+
+    return result;
+}
+
+
+bool AlphabetData::setId(int id)
+{
+    bool result = true;
+
+    rec.setValue("id", id);
+
+    return result;
+}
+
+bool AlphabetData::setName(QString name)
+{
+    bool result = true;
+
+    rec.setValue("name", name);
+
+    return result;
+}
+
+bool AlphabetData::setAlphabet(QString alphabet)
+{
+    bool result = true;
+
+    rec.setValue("alphabet", alphabet);
 
     return result;
 }

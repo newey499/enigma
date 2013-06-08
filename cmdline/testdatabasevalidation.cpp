@@ -56,37 +56,33 @@ QString TestDatabaseValidation::displayTestRec(QString msg, QSqlRecord rec)
 void TestDatabaseValidation::testAlphabetValidation()
 {
     qDebug("TestDatabaseValidation::testAlphabetValidation()");
-    QSqlRecord rec;
-    QSqlField fld;
+    AlphabetData ad(this);
 
-    rec.append(QSqlField("id", QVariant::Int));
-    rec.append(QSqlField("name", QVariant::String));
-    rec.append(QSqlField("alphabet", QVariant::String));
 
     // Base record values
-    rec.setValue("id", 1);
-    rec.setValue("name", "default");
-    rec.setValue("alphabet", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    ad.setId(1);
+    ad.setName("default");
+    ad.setAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-    displayTestRec("SUCCESS: Expected fail Add alphabet Rec name exists", rec);
-    AlphabetData().validateAlphabet(Globals::ROW_ADD, rec);
+    displayTestRec("SUCCESS: Expected fail Add alphabet Rec name exists", ad.getAlphabet());
+    ad.validateAlphabet(Globals::ROW_ADD);
 
-    rec.setValue("alphabet", "AABCDEFGHIJKLMNOPQRSTUVWXYZ");
-    displayTestRec("SUCCESS: Expected fail Add alphabet duplicate char(s) in alphabet", rec);
-    AlphabetData().validateAlphabet(Globals::ROW_ADD, rec);
+    ad.setAlphabet("AAAAAABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    displayTestRec("SUCCESS: Expected fail Add alphabet duplicate char(s) in alphabet", ad.getAlphabet());
+    ad.validateAlphabet(Globals::ROW_ADD);
 
-    rec.setValue("alphabet", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-    displayTestRec("SUCCESS: Expected validation pass Edit alphabet ", rec);
-    AlphabetData().validateAlphabet(Globals::ROW_EDIT, rec);
+    ad.setAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    displayTestRec("SUCCESS: Expected validation pass Edit alphabet ", ad.getAlphabet());
+    ad.validateAlphabet(Globals::ROW_EDIT);
 
-    rec.setValue("id", 3);
-    displayTestRec("SUCCESS: Expected fail Edit alphabet alphabet name already exists", rec);
-    AlphabetData().validateAlphabet(Globals::ROW_EDIT, rec);
+    ad.setId(3);
+    displayTestRec("SUCCESS: Expected fail Edit alphabet alphabet name already exists", ad.getAlphabet());
+    ad.validateAlphabet(Globals::ROW_EDIT);
 
 
-    rec.setValue("id", 1);
-    displayTestRec("SUCCESS: Expected fail Delete alphabet alphabet in use", rec);
-    AlphabetData().validateAlphabet(Globals::ROW_DEL, rec);
+    ad.setId(1);
+    displayTestRec("SUCCESS: Expected fail Delete alphabet alphabet in use", ad.getAlphabet());
+    ad.validateAlphabet(Globals::ROW_DEL);
 
 }
 

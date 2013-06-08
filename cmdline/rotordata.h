@@ -34,6 +34,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "componentbase.h"
 #include "enigmadatabase.h"
 #include "enigmaexception.h"
+#include "wheelbasedata.h"
 
 class RotorData : public ComponentBase
 {

@@ -54,7 +54,9 @@ SOURCES += main.cpp\
     ../cmdline/entrydata.cpp \
     ../cmdline/reflectordata.cpp \
     ../cmdline/rotordata.cpp \
-    ../cmdline/alphabetdata.cpp
+    ../cmdline/alphabetdata.cpp \
+    ../cmdline/wheellist.cpp \
+    ../cmdline/wheelbasedata.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -72,7 +74,9 @@ HEADERS  += mainwindow.h \
     ../cmdline/entrydata.h \
     ../cmdline/reflectordata.h \
     ../cmdline/rotordata.h \
-    ../cmdline/alphabetdata.h
+    ../cmdline/alphabetdata.h \
+    ../cmdline/wheellist.h \
+    ../cmdline/wheelbasedata.h
 
 
 FORMS    += mainwindow.ui

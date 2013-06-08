@@ -138,7 +138,6 @@ bool GenLib::hasDuplicateChars(QString str)
         }
     }
 
-
     return result;
 }
 

@@ -24,6 +24,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "reflector.h"
 
+
 Reflector::Reflector(QString reflectorName, QObject *parent) :
     QObject(parent)
 {

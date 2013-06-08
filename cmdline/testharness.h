@@ -39,12 +39,14 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "alphabet.h"
 #include "alphabetdata.h"
 #include "entry.h"
+#include "entrydata.h"
 #include "rotor.h"
 #include "reflector.h"
 #include "keyboard.h"
 #include "steckerboard.h"
 #include "enigmaexception.h"
 #include "machine.h"
+#include "mysql.h"
 
 #include "testdatabasevalidation.h"
 

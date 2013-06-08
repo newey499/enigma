@@ -344,6 +344,8 @@ void TestHarness::testSteckerboard()
 
 void TestHarness::testEntry()
 {
+    QString name;
+
     qDebug("TestHarness::testEntry()");
     if (! perform.value(TEST_ENTRY))
     {
@@ -352,6 +354,8 @@ void TestHarness::testEntry()
         return;
     }
 
+    QString tmp = MySql::getEnum("enigma", "rotor", "type").join(",");
+    qDebug("Entry: MySQL enum[%s]", tmp.toAscii().data());
 
     Entry entry("ENTRYNOMAP", this);
     //Entry entry("ENTRYREVERSE", this);
@@ -404,7 +408,93 @@ void TestHarness::testEntry()
            charIn.toAscii().data(),
            pinOut);
 
+    qDebug("*********************************");
+    qDebug("Test Add Entry Wheel Rec");
+    qDebug("*************************************");
+    EntryData ed;
 
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_ADD);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    ed.setName("AA");
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_ADD);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    ed.setName("Name");
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_ADD);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    ed.setAlphabetId(99);
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_ADD);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    ed.setAlphabetId(5);
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_ADD);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    ed.setPinRight("ABCD");
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_ADD);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    ed.setPinRight("ABCDEF");
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_ADD);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    qDebug("*********************************");
+    qDebug("Test Edit Entry Wheel Rec");
+    qDebug("*************************************");
+
+    name = "Name";
+    qDebug("Loading Entry wheel [%s]", name.toAscii().data());
+    ed.getEntry(name);
+    ed.displayRec();
+    qDebug("==========================================");
+
+    ed.setPinRight("FEDCBA");
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_EDIT);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    qDebug("*********************************");
+    qDebug("Test Delete Entry Wheel Rec");
+    qDebug("*************************************");
+
+    name = "Name";
+    qDebug("Loading Entry wheel [%s]", name.toAscii().data());
+    ed.getEntry(name);
+    ed.displayRec();
+    qDebug("==========================================");
+
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_DEL);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    name = "ENTRY";
+    qDebug("Loading Entry wheel [%s]", name.toAscii().data());
+    ed.getEntry(name);
+    ed.displayRec();
+    qDebug("==========================================");
+
+    ed.displayRec();
+    ed.writeRec(Globals::ROW_DEL);
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
 
 }
 
@@ -779,14 +869,14 @@ void TestHarness::createTestHash()
 
     perform.insert(TEST_KEYBOARD, false);
     perform.insert(TEST_STECKERBOARD, false);
-    perform.insert(TEST_ENTRY, false);
+    perform.insert(TEST_ENTRY, true);
     perform.insert(TEST_ROTOR, false);
-    perform.insert(TEST_REFLECTOR, true);
+    perform.insert(TEST_REFLECTOR, false);
     perform.insert(TEST_LAMPBOARD, false);
     perform.insert(TEST_RINGSETTING, false);
     perform.insert(TEST_TURNOVER, false);
     perform.insert(TEST_MACHINE, false);
-    perform.insert(TEST_DOUBLE_STEP, true);
+    perform.insert(TEST_DOUBLE_STEP, false);
     perform.insert(TEST_VALIDATION, false);
     perform.insert(TEST_ADD_AMEND_DEL, false);
 
@@ -998,10 +1088,8 @@ int TestHarness::execAddAmendDelTest()
 
     // Add
     /*********
-    Alphabet a(this);
-    QSqlRecord rec = a.getAlphabetRec();
-    rec.setValue("name", "ABCDEF");
-    rec.setValue("alphabet", "1234567890");
+    ad.setName("ABCDEF");
+    ad.setAlphabet("1234567890");
     ad.displayRec(rec);
     ad.writeRec(Globals::ROW_ADD, rec);
     ******************/
@@ -1009,22 +1097,19 @@ int TestHarness::execAddAmendDelTest()
 
     // Edit
     /******************
-    Alphabet a("ABCDEF", this);
-    QSqlRecord rec = a.getAlphabetRec();
-    rec.setValue("name", "ABCDEFXYZ");
-    rec.setValue("alphabet", "1234567890ABC");
-    ad.displayRec(rec);
-    ad.writeRec(Globals::ROW_EDIT, rec);
+    ad.setName("ABCDEFXYZ");
+    ad.setAlphabet("1234567890ABC");
+    ad.displayRec();
+    ad.writeRec(Globals::ROW_EDIT);
     ************************/
 
     // Delete
     // /**********************
-    Alphabet a("ABCDEFXYZ", this);
-    QSqlRecord rec = a.getAlphabetRec();
-    ad.displayRec(rec);
-    ad.writeRec(Globals::ROW_DEL, rec);
+    ad.setName("ABCDEFXYZ");
+    ad.displayRec();
+    ad.writeRec(Globals::ROW_DEL);
     // ************************/
-    ad.displayRec(rec);
+    ad.displayRec();
 
     return 0;
 }
