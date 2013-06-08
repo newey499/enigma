@@ -330,3 +330,64 @@ bool WheelBaseData::equalAlphabetLengths(int alphabetId, QString pinRight)
 
     return result;
 }
+
+
+
+bool WheelBaseData::notchesCheck(QString wheelType, QString notches, int alphabetId)
+{
+    bool result = true;
+    QSqlQuery qry;
+    QString msg;
+    QString name, alphabet;
+
+    addError("WheelBaseData::notchesCheck");
+
+    if (notches.isEmpty())
+    {
+        //addError("No notches to check");
+        return true;
+    }
+
+    qry.prepare("select name, alphabet from alphabet where id = :id");
+    qry.bindValue(":id", alphabetId);
+
+    if (GenLib::execQry(qry, true))
+    {
+        name = qry.record().value("name").toString();
+        alphabet = qry.record().value("alphabet").toString();
+        WheelList wl(wheelType, notches);
+        msg = QString("Notches [%1]").arg(notches);
+        addError(msg);
+        for (int i = 0; i < wl.count(); i++)
+        {
+            if (wl.at(i).length() != 1)
+            {
+                msg = QString("Each notch setting must be one char only [%1] is invalid").
+                        arg(wl.at(i));
+                addError(msg);
+                result = false;
+            }
+            else
+            {
+                if (! alphabet.contains(wl.at(i), Qt::CaseSensitive))
+                {
+                    msg = QString("Notch char [%1] is not in alphabet [%2] [%3]").
+                            arg(wl.at(i)).
+                            arg(name).
+                            arg(alphabet);
+                    addError(msg);
+                    result = false;
+                }
+            }
+        }
+
+    }
+    else
+    {
+        addError(qry.lastError().text());
+        result = false;
+    }
+
+
+    return result;
+}

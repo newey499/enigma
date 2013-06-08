@@ -52,7 +52,7 @@ public:
     static EnigmaDatabase *getInstance();
     ~EnigmaDatabase();
 
-    static QSqlRecord getWheel(QString type, QString name);
+    static QSqlRecord getWheel(QString name);
     static QSqlRecord getWheel(int id);
 
 

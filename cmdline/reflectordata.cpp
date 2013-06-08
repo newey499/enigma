@@ -39,7 +39,7 @@ ReflectorData::~ReflectorData()
 
 QSqlRecord ReflectorData::getReflector(const QString &rotorName)
 {
-    QSqlRecord rec = EnigmaDatabase::getWheel(EnigmaDatabase::WHEEL_REFLECTOR, rotorName);
+    QSqlRecord rec = EnigmaDatabase::getWheel(rotorName);
 
     return rec;
 }

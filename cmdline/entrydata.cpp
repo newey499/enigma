@@ -39,7 +39,7 @@ EntryData::~EntryData()
 
 QSqlRecord EntryData::getEntry(const QString &rotorName)
 {
-    rec = EnigmaDatabase::getWheel(EnigmaDatabase::WHEEL_ENTRY, rotorName);
+    rec = EnigmaDatabase::getWheel(rotorName);
 
     return rec;
 }

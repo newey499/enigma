@@ -33,6 +33,7 @@ public:
     virtual bool alphabetSanityCheck(QString alphabetName, QString alphabet,
                                      QString mappingName, QString mapping);
     virtual bool alphabetDuplicateCheck(QString alphabetName, QString alphabet);
+    virtual bool notchesCheck(QString wheelType, QString notches, int alphabetId);
 
     virtual void displayRec();
 

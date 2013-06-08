@@ -9,7 +9,7 @@ WheelList::WheelList(QString wheelType, QString list) :
 {
     this->wheelType = wheelType;
 
-    append(list.split(WheelList::SEPERATOR));
+    append(list.split(WheelList::SEPERATOR, QString::SkipEmptyParts, Qt::CaseSensitive));
     for (int i = 0; i < count(); i++)
     {
         this->replace(i, at(i).trimmed());
@@ -25,7 +25,6 @@ QString WheelList::join()
 bool WheelList::setWheelType()
 {
     bool result = true;
-
 
     return result;
 }

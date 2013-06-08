@@ -75,7 +75,7 @@ EnigmaDatabase * EnigmaDatabase::getInstance()
 }
 
 
-QSqlRecord EnigmaDatabase::getWheel(QString type, QString name)
+QSqlRecord EnigmaDatabase::getWheel(QString name)
 {
     QSqlQuery qry;
     QSqlRecord rec;
@@ -84,9 +84,8 @@ QSqlRecord EnigmaDatabase::getWheel(QString type, QString name)
     qry.prepare("select "
                 "id, name, alphabetid, type, pinright, notches "
                 "from rotor "
-                "where type = :type and name = :name");
+                "where name = :name");
 
-    qry.bindValue(":type", type);
     qry.bindValue(":name", name);
 
     if (qry.exec())
