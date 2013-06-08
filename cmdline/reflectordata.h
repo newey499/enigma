@@ -37,7 +37,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "wheelbasedata.h"
 
-class ReflectorData : public ComponentBase
+class ReflectorData : public WheelBaseData
 {
     Q_OBJECT
 
@@ -46,9 +46,21 @@ public:
     explicit ReflectorData(QObject *parent = 0);
     ~ReflectorData();
 
+    // The id is the primary key and maintained internally
+    //virtual bool setId(int id);
+    virtual bool setName(QString name);
+    virtual bool setAlphabetId(int id);
+    virtual bool setType(QString type);
+    virtual bool setPinRight(QString pinRight);
+    virtual bool setNotches(QString notches);
+
+    virtual QSqlRecord getEmptyReflector();
+    virtual QSqlRecord getReflector();
     virtual QSqlRecord getReflector(int id);
     virtual QSqlRecord getReflector(const QString &rotorName);
-    virtual bool validateReflector(Globals::EDIT_MODE mode, QSqlRecord rec);
+    virtual bool validateReflector(Globals::EDIT_MODE mode);
+
+    virtual bool writeRec(Globals::EDIT_MODE mode);
 
 signals:
 

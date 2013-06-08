@@ -148,9 +148,9 @@ bool RotorData::setType(QString type)
     bool result = true;
     clearError();
 
-    // Should always be "ENTRY"
+    // Should always be "ROTOR"
     // rec.setValue("type", type);
-    type = "ENTRY";
+    type = "ROTOR";
     rec.setValue("type", type);
 
     return result;
@@ -526,7 +526,7 @@ bool RotorData::writeRec(Globals::EDIT_MODE mode)
                 if (result)
                 {
                     rec.setValue("id", qry.record().value("new_id").toInt());
-                    msg = QString("rotor table row added - ENTRY wheel id = [%1]").
+                    msg = QString("rotor table row added - ROTOR wheel id = [%1]").
                             arg(rec.value("id").toInt());
                     addError(msg);
                     result = true;
@@ -564,7 +564,7 @@ bool RotorData::writeRec(Globals::EDIT_MODE mode)
             qry.bindValue(":id", rec.value("id").toInt());
             if ((result = GenLib::execQry(qry, false)))
             {
-                msg = QString("rotor table row updated - ENTRY wheel id = [%1]").
+                msg = QString("rotor table row updated - ROTOR wheel id = [%1]").
                         arg(rec.value("id").toInt());
                 addError(msg);
                 result = true;
@@ -584,7 +584,7 @@ bool RotorData::writeRec(Globals::EDIT_MODE mode)
             qry.bindValue(":id", rec.value("id"));
             if (GenLib::execQry(qry, false))
             {
-                msg = QString("Deleting Entry Wheel id = [%1]").
+                msg = QString("Deleting Rotor Wheel id = [%1]").
                         arg(rec.value("id").toInt());
                 addError(msg);
                 result = true;

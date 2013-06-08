@@ -779,6 +779,64 @@ void TestHarness::testReflector()
            pinIn,
            pinOut);
 
+
+    qDebug("********************************************");
+    qDebug("START: Test Add/Amend/Delete Reflector Wheel Rec");
+    qDebug("********************************************");
+    ReflectorData rd;
+
+    rd.displayRec();
+    rd.writeRec(Globals::ROW_ADD);
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+
+
+    rd.setAlphabetId(5);
+    rd.setNotches("A ,B,D");
+    rd.displayRec();
+    rd.writeRec(Globals::ROW_ADD);
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    rd.setPinRight("ABCDEF");
+    rd.displayRec();
+    rd.writeRec(Globals::ROW_ADD);
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+
+    rd.setName("testreflector");
+    rd.displayRec();
+    rd.writeRec(Globals::ROW_ADD);
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+    // This add should fail
+    rd.displayRec();
+    rd.writeRec(Globals::ROW_ADD);
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+
+    rd.setPinRight("FEDCBA");
+    rd.displayRec();
+    rd.writeRec(Globals::ROW_EDIT);
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+
+    rd.getReflector("testreflector");
+    rd.displayRec();
+    rd.writeRec(Globals::ROW_DEL);
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("==========================================");
+
+
+    qDebug("*********************************************");
+    qDebug("FINISH: Test Add/Amend/Delete Rotor Wheel Rec");
+    qDebug("*********************************************");
+
 }
 
 
@@ -926,8 +984,8 @@ void TestHarness::createTestHash()
     perform.insert(TEST_KEYBOARD, false);
     perform.insert(TEST_STECKERBOARD, false);
     perform.insert(TEST_ENTRY, false);
-    perform.insert(TEST_ROTOR, true);
-    perform.insert(TEST_REFLECTOR, false);
+    perform.insert(TEST_ROTOR, false);
+    perform.insert(TEST_REFLECTOR, true);
     perform.insert(TEST_LAMPBOARD, false);
     perform.insert(TEST_RINGSETTING, false);
     perform.insert(TEST_TURNOVER, false);
