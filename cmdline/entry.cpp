@@ -110,11 +110,11 @@ int Entry::getAlphabetSize()
 
 int Entry::mapCharToPin(QString keyIn)
 {
-    int result = Globals::INVALID_PIN;
+    int result = Globals::INVALID_PIN_NUMBER;
 
     if (! isValidKey(keyIn))
     {
-        result = Globals::INVALID_PIN;
+        result = Globals::INVALID_PIN_NUMBER;
         qDebug("requested key [%s] not in alphabet [%s] [%s]",
                keyIn.toAscii().data(),
                alphabetName.toAscii().data(),
@@ -132,7 +132,7 @@ int Entry::mapCharToPin(QString keyIn)
 
     if (result == -1)
     {
-        result = Globals::INVALID_PIN;
+        result = Globals::INVALID_PIN_NUMBER;
         qDebug("requested key [%s] not in entry mapping [%s] [%s]",
                keyIn.toAscii().data(),
                entryName.toAscii().data(),

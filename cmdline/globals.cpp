@@ -35,7 +35,7 @@ const QString Globals::DB_USERNAME      = "cdn";
 const QString Globals::DB_PASSWORD      = "charlton";
 
 const Globals::UNWRITTEN_ID Globals::NEW_ID = -999;
-const int Globals::INVALID_PIN = -888;
+const int Globals::INVALID_PIN_NUMBER = -888;
 
 Globals::Globals(QObject *parent) :
     QObject(parent)

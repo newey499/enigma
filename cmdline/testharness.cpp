@@ -404,7 +404,7 @@ void TestHarness::testEntry()
     pinOut = entry.mapCharToPin(charIn);
     qDebug("%s Fails Should return invalid pin no [%d] :: mapCharToPin  charIn [%s] pinOut [%d]",
            MSG_OK,
-           Globals::INVALID_PIN,
+           Globals::INVALID_PIN_NUMBER,
            charIn.toAscii().data(),
            pinOut);
 
@@ -766,7 +766,7 @@ void TestHarness::testReflector()
     pinOut = reflector.map(pinIn);
     qDebug("%s Reflector::map Expected Failure pin returned [%d] returned pinIn [%d] pinOut [%d]",
            MSG_OK,
-           Globals::INVALID_PIN,
+           Globals::INVALID_PIN_NUMBER,
            pinIn,
            pinOut);
 
@@ -775,7 +775,7 @@ void TestHarness::testReflector()
     pinOut = reflector.map(pinIn);
     qDebug("%s Reflector::map Expected Failure pin returned [%d] pinIn [%d] pinOut [%d]",
            MSG_OK,
-           Globals::INVALID_PIN,
+           Globals::INVALID_PIN_NUMBER,
            pinIn,
            pinOut);
 

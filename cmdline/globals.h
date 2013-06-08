@@ -42,7 +42,7 @@ public:
     typedef int UNWRITTEN_ID;
 
     static const UNWRITTEN_ID NEW_ID;
-    static const int INVALID_PIN;
+    static const int INVALID_PIN_NUMBER;
 
     static const QString ORGANIZATION_NAME;
     static const QString APPLICATION_NAME;

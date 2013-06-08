@@ -106,13 +106,13 @@ and the left side of the reflector to be in mapping order.
 ********************/
 int Reflector::map(int pinIn)
 {
-    int result = Globals::INVALID_PIN;
+    int result = Globals::INVALID_PIN_NUMBER;
     int origPinIn = pinIn;
 
 
     if (! isValidPinNo(pinIn))
     {
-        result = Globals::INVALID_PIN;
+        result = Globals::INVALID_PIN_NUMBER;
         qDebug("requested pin [%d] not in valid range [%d...%d]",
                pinIn,
                1,
@@ -126,7 +126,7 @@ int Reflector::map(int pinIn)
 
     if (result == -1)
     {
-        result = Globals::INVALID_PIN;
+        result = Globals::INVALID_PIN_NUMBER;
         qDebug("reflector map pin number [%d] not found",
                 pinIn);
         return result;
