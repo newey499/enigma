@@ -30,8 +30,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    QSettings settings(Globals::ORGANIZATION_NAME, Globals::APPLICATION_NAME);
+    restoreGeometry(settings.value("geometry").toByteArray());
 
     globals = new Globals(this);
+
+    buildMenusAndForms();
 
 }
 
@@ -41,28 +45,149 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::exec()
+void MainWindow::saveSettings()
 {
-    qDebug("EntryPoint::exec()");
+    QSettings settings(Globals::ORGANIZATION_NAME, Globals::APPLICATION_NAME);
+    settings.setValue("geometry", saveGeometry());
+}
 
-    try
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    int ret = quitYesNo();
+
+    if (ret == QMessageBox::Yes)
     {
-        QSqlQuery qry("select * from rotor");
-        QSqlRecord rec;
-
-        while (qry.next())
-        {
-            rec = qry.record();
-            qDebug("%s", rec.value("name").toString().toAscii().data());
-        }
-
+        saveSettings();
+        event->accept();
     }
-    catch (EnigmaException &e)
+    else
     {
-        qDebug("%s", e.what().toAscii().data());
-        this->close();
-        // TODO Display a message box displaying the exception
-        qApp->exit(1);
+        event->ignore();
     }
+}
 
+int MainWindow::quitYesNo()
+{
+    QString exit = QString("Exit ");
+    QString appName = Globals::APPLICATION_NAME;
+
+    exit = exit.append(appName);
+
+    int ret = QMessageBox::question(this,
+                                    tr(appName.toAscii().data()),
+                                    tr(exit.toAscii().data()),
+                                    QMessageBox::Yes | QMessageBox::No,
+                                    QMessageBox::Yes);
+
+    return ret;
+}
+
+
+void MainWindow::quitApplication()
+{
+    int ret = quitYesNo();
+    if (ret == QMessageBox::Yes)
+    {
+        saveSettings();
+        qApp->quit();
+    }
+}
+
+
+void MainWindow::buildMenusAndForms()
+{
+    QMenu *fileMenu     = new QMenu("&File", this);
+        connect(addMenuItem(fileMenu, "E&xit"), SIGNAL(triggered()),
+                this, SLOT(quitApplication()));
+
+    QMenu *machineMenu     = new QMenu("&Machines", this);
+        createMachineMenuItems(machineMenu);
+
+    QMenu *testMenu     = new QMenu("&Test", this);
+        connect(addMenuItem(testMenu, "Test &Alphabet"), SIGNAL(triggered()),
+                this, SLOT(slotFormTestAlphabet()));
+
+    QMenu *settingsMenu = new QMenu("&Settings", this);
+
+
+    QMenu *helpMenu     = new QMenu("&Help", this);
+        connect(addMenuItem(helpMenu, "About &Enigma"), SIGNAL(triggered()),
+                this, SLOT(aboutEnigma()));
+        connect(addMenuItem(helpMenu, "About &Qt"), SIGNAL(triggered()),
+                this, SLOT(aboutQt()));
+
+
+    /**************
+    QAction *actAboutQt = new QAction(tr("About &Qt"), this);
+    actAboutQt->setStatusTip(tr("About Qt"));
+    connect(actAboutQt, SIGNAL(triggered()),
+            this, SLOT(aboutQt()));
+    helpMenu->addAction(actAboutQt);
+    *********************/
+
+    menuBar()->clear();
+    this->menuBar()->addMenu(fileMenu);
+    this->menuBar()->addMenu(machineMenu);
+    this->menuBar()->addMenu(testMenu);
+    this->menuBar()->addMenu(settingsMenu);
+    this->menuBar()->addMenu(helpMenu);
+}
+
+void MainWindow::createMachineMenuItems(QMenu *menu)
+{
+    QSqlQuery qry;
+
+    qry.prepare("select id, name, steckerboard, "
+                "rotorcount, entrylist, rotorlist, "
+                "reflectorlist, alphabetid "
+                "from machine");
+    GenLib::execQry(qry, false);
+    while (qry.next())
+    {
+        QString title = qry.record().value("name").toString();
+        EnigmaAction *action = addMenuItem(menu, title);
+        action->setData(qry.record().value("id").toInt());
+        connect(action, SIGNAL(signalTriggered(EnigmaAction *)),
+                this, SLOT(slotMachine(EnigmaAction *)));
+    }
+}
+
+EnigmaAction * MainWindow::addMenuItem(QMenu *menu, QString title)
+{
+    EnigmaAction *action = new EnigmaAction(tr(title.toAscii().data()), this);
+    action->setStatusTip(tr(title.replace("&", "").toAscii().data()));
+    menu->addAction(action);
+
+    return action;
+}
+
+
+void MainWindow::aboutEnigma()
+{
+    QString title = QString("%1 %2 %3").arg(Globals::APPLICATION_NAME).
+                                        arg(" version: ").
+                                        arg(Globals::APPLICATION_VERSION);
+    QString text("Enigma cypher machine emulation\n\n"
+                 "Copyright Chris Newey 2013\n"
+                 "Enigma is distributed under the terms of the GNU General Public License");
+    QMessageBox::about(this, title, text);
+}
+
+void MainWindow::aboutQt()
+{
+    QMessageBox::aboutQt(this, "Qiptables");
+}
+
+void MainWindow::slotFormTestAlphabet()
+{
+    qDebug("void MainWindow::slotFormTestAlphabet()");
+}
+
+
+void MainWindow::slotMachine(EnigmaAction *action)
+{
+    int machineId = action->data().toInt();
+    // QMainWindow takes ownership and deletes the object from the heap
+    // when it finished with
+    setCentralWidget(new FormMachine(machineId, this));
 }

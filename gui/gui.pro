@@ -56,7 +56,10 @@ SOURCES += main.cpp\
     ../cmdline/rotordata.cpp \
     ../cmdline/alphabetdata.cpp \
     ../cmdline/wheellist.cpp \
-    ../cmdline/wheelbasedata.cpp
+    ../cmdline/wheelbasedata.cpp \
+    enigmaaction.cpp \
+    formmachine.cpp
+
 
 
 HEADERS  += mainwindow.h \
@@ -76,7 +79,11 @@ HEADERS  += mainwindow.h \
     ../cmdline/rotordata.h \
     ../cmdline/alphabetdata.h \
     ../cmdline/wheellist.h \
-    ../cmdline/wheelbasedata.h
+    ../cmdline/wheelbasedata.h \
+    enigmaaction.h \
+    formmachine.h
 
 
-FORMS    += mainwindow.ui
+
+FORMS    += mainwindow.ui \
+    formmachine.ui
