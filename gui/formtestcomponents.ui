@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FormTestComponents</class>
+ <widget class="QWidget" name="FormTestComponents">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="testCheckboxLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Tests</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Select</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="btnSelectAll">
+         <property name="text">
+          <string>All</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="btnSelectNone">
+         <property name="text">
+          <string>None</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnRunTests">
+       <property name="text">
+        <string>Run Tests</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QPlainTextEdit" name="edtTxt"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>btnRunTests</sender>
+   <signal>clicked()</signal>
+   <receiver>FormTestComponents</receiver>
+   <slot>slotRunTests()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>48</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSelectAll</sender>
+   <signal>clicked()</signal>
+   <receiver>FormTestComponents</receiver>
+   <slot>slotSelectAll()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>48</x>
+     <y>243</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSelectNone</sender>
+   <signal>clicked()</signal>
+   <receiver>FormTestComponents</receiver>
+   <slot>slotSelectNone()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>133</x>
+     <y>243</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>slotRunTests()</slot>
+  <slot>slotSelectAll()</slot>
+  <slot>slotSelectNone()</slot>
+ </slots>
+</ui>

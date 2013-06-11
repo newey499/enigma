@@ -19,7 +19,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Qiptables.  If not, see <http://www.gnu.org/licenses/>.
+# along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###########################################################################
 
@@ -29,6 +29,8 @@
 # Project created by QtCreator 2013-05-17T18:21:11
 #
 #-------------------------------------------------
+
+DEFINES -= BUILD_GUI
 
 QT       += core
 QT       += sql

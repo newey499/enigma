@@ -104,8 +104,8 @@ void MainWindow::buildMenusAndForms()
         createMachineMenuItems(machineMenu);
 
     QMenu *testMenu     = new QMenu("&Test", this);
-        connect(addMenuItem(testMenu, "Test &Alphabet"), SIGNAL(triggered()),
-                this, SLOT(slotFormTestAlphabet()));
+        connect(addMenuItem(testMenu, "Test &Components"), SIGNAL(triggered()),
+                this, SLOT(slotFormTestComponents()));
 
     QMenu *settingsMenu = new QMenu("&Settings", this);
 
@@ -175,7 +175,7 @@ void MainWindow::aboutEnigma()
 
 void MainWindow::aboutQt()
 {
-    QMessageBox::aboutQt(this, "Qiptables");
+    QMessageBox::aboutQt(this, "Enigma");
 }
 
 void MainWindow::slotFormTestAlphabet()
@@ -190,4 +190,12 @@ void MainWindow::slotMachine(EnigmaAction *action)
     // QMainWindow takes ownership and deletes the object from the heap
     // when it finished with
     setCentralWidget(new FormMachine(machineId, this));
+}
+
+
+void MainWindow::slotFormTestComponents()
+{
+    // QMainWindow takes ownership and deletes the object from the heap
+    // when it finished with
+    setCentralWidget(new FormTestComponents(this));
 }

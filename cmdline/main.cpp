@@ -82,8 +82,6 @@ int main(int argc, char *argv[])
     QPointer<TestHarness> testHarness = new TestHarness();
 
     result = testHarness->exec();
-    result = testHarness->execValidationTest();
-    result = testHarness->execAddAmendDelTest();
 
     // Clean up heap
     if (testHarness)

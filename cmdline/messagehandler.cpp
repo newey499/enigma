@@ -61,6 +61,12 @@ void MessageHandler::messageHandler(QtMsgType type, const char *msg)
             break;
     }
 
+    QString tmp = QString(msg);
+    if (! tmp.isEmpty())
+    {
+        //emit debugMsg(tmp);
+    }
+
     if (! txt.isEmpty())
     {
         if (MessageHandler::writeLog)

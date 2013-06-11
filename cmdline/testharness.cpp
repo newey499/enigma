@@ -35,7 +35,13 @@ const char *TestHarness::MSG_OK_FAIL = "SUCCESS:: Should throw exception :: ";
 TestHarness::TestHarness(QObject *parent) :
     QObject(parent)
 {
-    createTestHash();
+    perform = new TestHash(this);
+}
+
+
+TestHash * TestHarness::getPerform()
+{
+    return perform;
 }
 
 
@@ -45,49 +51,38 @@ int TestHarness::exec()
     QString component;
     qDebug("TestHarness::exec()");
     edb = EnigmaDatabase::getInstance();
-    tdv = new TestDatabaseValidation(this);
 
-    qDebug("=======================================");
-    qDebug("grep this output for the string \"FAIL\"");
-    qDebug("to find any test that failed.");
-    qDebug("=======================================");
+
+
+    result = execValidationTest();
+    result = execAddAmendDelTest();
 
     try
     {
-        component = "Keyboard";
-        debugHeader(component);
         testKeyboard();
-        debugFooter(component);
     }
     catch (EnigmaException &e)
     {
+
         qDebug("Error Testing %s\n%s",
                component.toAscii().data(),
                e.what().toAscii().data());
-        debugFooter(component);
     }
 
     try
     {
-        component = "Steckerboard";
-        debugHeader(component);
         testSteckerboard();
-        debugFooter(component);
     }
     catch (EnigmaException &e)
     {
         qDebug("Error Testing %s\n%s",
                component.toAscii().data(),
                e.what().toAscii().data());
-        debugFooter(component);
     }
 
     try
     {
-        component = "Entry Wheel";
-        debugHeader(component);
         testEntry();
-        debugFooter(component);
     }
     catch (EnigmaException &e)
     {
@@ -99,10 +94,7 @@ int TestHarness::exec()
 
     try
     {
-        component = "Rotor";
-        debugHeader(component);
         testRotor();
-        debugFooter(component);
     }
     catch (EnigmaException &e)
     {
@@ -114,10 +106,7 @@ int TestHarness::exec()
 
     try
     {
-        component = "Reflector";
-        debugHeader(component);
         testReflector();
-        debugFooter(component);
     }
     catch (EnigmaException &e)
     {
@@ -130,10 +119,7 @@ int TestHarness::exec()
 
     try
     {
-        component = "Lampboard";
-        debugHeader(component);
         testLampboard();
-        debugFooter(component);
     }
     catch (EnigmaException &e)
     {
@@ -144,23 +130,14 @@ int TestHarness::exec()
     }
 
 
-    component = "Test Turnover";
-    debugHeader(component);
+
     testTurnover();
-    debugFooter(component);
 
 
-    component = "MACHINE with rotors I, II, III and reflector B\n"
-            "all rotors are set to ring setting 1 and window char \"A\"";
-    debugHeader(component);
     testMachine();
-    debugFooter(component);
 
 
-    component = "Double Step rotor turnover";
-    debugHeader(component);
     testDoubleStep();
-    debugFooter(component);
 
 
     qDebug("\n");
@@ -198,13 +175,14 @@ QString TestHarness::debugFooter(QString component)
 
 void TestHarness::testKeyboard()
 {
-    qDebug("TestHarness::testKeyboard()");
-    if (! perform.value(TEST_KEYBOARD))
+
+    if (! perform->getEnabled(TestHash::TEST_KEYBOARD))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return;
     }
+
+    QString component = "Keyboard";
+    debugHeader(component);
 
     Keyboard keyboard("default", this);
 
@@ -244,18 +222,19 @@ void TestHarness::testKeyboard()
     }
 
 
+    debugFooter(component);
 }
 
 
 void TestHarness::testSteckerboard()
 {
-    qDebug("TestHarness::testSteckerboard()");
-    if (! perform.value(TEST_STECKERBOARD))
+    if (! perform->getEnabled(TestHash::TEST_STECKERBOARD))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return;
     }
+
+    QString component = "Steckerboard";
+    debugHeader(component);
 
     Steckerboard stecker("default", this);
 
@@ -338,6 +317,7 @@ void TestHarness::testSteckerboard()
            stecker.delStecker(from) ? "Yes" : "No",
            from.toAscii().data());
 
+    debugFooter(component);
 }
 
 
@@ -346,13 +326,14 @@ void TestHarness::testEntry()
 {
     QString name;
 
-    qDebug("TestHarness::testEntry()");
-    if (! perform.value(TEST_ENTRY))
+
+    if (! perform->getEnabled(TestHash::TEST_ENTRY))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return;
     }
+
+    QString component = "Entry Wheel";
+    debugHeader(component);
 
     QString tmp = MySql::getEnum("enigma", "rotor", "type").join(",");
     qDebug("Entry: MySQL enum[%s]", tmp.toAscii().data());
@@ -496,18 +477,20 @@ void TestHarness::testEntry()
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
+    debugFooter(component);
 }
 
 
 void TestHarness::testRotor()
 {
-    qDebug("TestHarness::testRotor()");
-    if (! perform.value(TEST_ROTOR))
+
+    if (! perform->getEnabled(TestHash::TEST_ROTOR))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return;
     }
+
+    QString component = "Rotor";
+    debugHeader(component);
 
     QString rotorName;
     rotorName = "NOMAP";
@@ -608,18 +591,20 @@ void TestHarness::testRotor()
     qDebug("FINISH: Test Add/Amend/Delete Rotor Wheel Rec");
     qDebug("*********************************************");
 
+    debugFooter(component);
+
 }
 
 
 void TestHarness::testInvalidRingSetting(Rotor &rotor, int ringSetting)
 {
-    qDebug("TestHarness::testInvalidRingSetting(Rotor &rotor, int ringSetting)");
-    if (! perform.value(TEST_RINGSETTING))
+    if (! perform->getEnabled(TestHash::TEST_RINGSETTING))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return;
     }
+
+    QString component = "Reflector";
+    debugHeader(component);
 
     try
     {
@@ -636,6 +621,8 @@ void TestHarness::testInvalidRingSetting(Rotor &rotor, int ringSetting)
                e.what().toAscii().data());
 
     }
+
+    debugFooter(component);
 
 }
 
@@ -726,13 +713,13 @@ int TestHarness::testRepeatMapRightToLeft(Rotor &rotor, int repeat, int pinIn, Q
 
 void TestHarness::testReflector()
 {
-    qDebug("TestHarness::testReflector()");
-    if (! perform.value(TEST_REFLECTOR))
+    if (! perform->getEnabled(TestHash::TEST_REFLECTOR))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return;
     }
+
+    QString component = "Reflector";
+    debugHeader(component);
 
     Reflector reflector("REFLECTORNOMAP", this);
     //Reflector reflector("REFLECTORREVERSE", this);
@@ -837,6 +824,8 @@ void TestHarness::testReflector()
     qDebug("FINISH: Test Add/Amend/Delete Rotor Wheel Rec");
     qDebug("*********************************************");
 
+
+    debugFooter(component);
 }
 
 
@@ -956,13 +945,14 @@ void TestHarness::testReflector()
 
 void TestHarness::testTurnover()
 {
-    if (! perform.value(TEST_TURNOVER))
+    if (! perform->getEnabled(TestHash::TEST_TURNOVER))
     {
-        qDebug("TestHarness::testTurnover() disabled");
         return;
     }
 
-    qDebug("TestHarness::testTurnover()");
+    QString component = "Test Turnover";
+    debugHeader(component);
+
     Rotor r_1("I", this);
     r_1.setLetterSetting("A");
     r_1.setRingSetting(1);
@@ -973,41 +963,21 @@ void TestHarness::testTurnover()
         r_1.rotate();
     }
 
-
+    debugFooter(component);
 }
-
-
-void TestHarness::createTestHash()
-{
-    perform.clear();
-
-    perform.insert(TEST_KEYBOARD, false);
-    perform.insert(TEST_STECKERBOARD, false);
-    perform.insert(TEST_ENTRY, false);
-    perform.insert(TEST_ROTOR, false);
-    perform.insert(TEST_REFLECTOR, true);
-    perform.insert(TEST_LAMPBOARD, false);
-    perform.insert(TEST_RINGSETTING, false);
-    perform.insert(TEST_TURNOVER, false);
-    perform.insert(TEST_MACHINE, false);
-    perform.insert(TEST_DOUBLE_STEP, false);
-    perform.insert(TEST_VALIDATION, false);
-    perform.insert(TEST_ADD_AMEND_DEL, false);
-
-}
-
 
 
 void TestHarness::testMachine()
 {
-    qDebug("TestHarness::testMachine()");
 
-    if (! perform.value(TEST_MACHINE))
+    if (! perform->getEnabled(TestHash::TEST_MACHINE))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return;
     }
+
+    QString component = "MACHINE with rotors I, II, III and reflector B\n"
+            "all rotors are set to ring setting 1 and window char \"A\"";
+    debugHeader(component);
 
     Machine machine("Wermacht", this);
     QMap<int, QPointer<Rotor> > rotors;
@@ -1052,21 +1022,23 @@ void TestHarness::testMachine()
                e.what().toAscii().data());
     }
 
+    debugFooter(component);
+
 }
 
 
 void TestHarness::testDoubleStep()
 {
-    qDebug("TestHarness::testDoubleStep()");
     QString expected;
     QString winStr;
 
-    if (! perform.value(TEST_DOUBLE_STEP))
+    if (! perform->getEnabled(TestHash::TEST_DOUBLE_STEP))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return;
     }
+
+    QString component = "Double Step rotor turnover";
+    debugHeader(component);
 
     Machine machine("Wermacht", this);
     QMap<int, QPointer<Rotor> > rotors;
@@ -1074,7 +1046,9 @@ void TestHarness::testDoubleStep()
 
     try
     {
-        qDebug("========================");
+        qDebug("===================================");
+        qDebug("START: Test machine double stepping");
+        qDebug("===================================");
         qDebug("Initial set up");
         qDebug("------------------------");
         qDebug("Rotors III, II, I");
@@ -1152,6 +1126,9 @@ void TestHarness::testDoubleStep()
                expected.toAscii().data(),
                winStr.toAscii().data());
 
+        qDebug("===================================");
+        qDebug("FINISH: Test machine double stepping");
+        qDebug("===================================");
     }
     catch (EnigmaException &e)
     {
@@ -1160,25 +1137,28 @@ void TestHarness::testDoubleStep()
                e.what().toAscii().data());
     }
 
+    debugFooter(component);
+
 }
 
 
 
 int TestHarness::execValidationTest()
 {
-    qDebug("int TestHarness::execValidationTest()");
-
-    if (! perform.value(TEST_VALIDATION))
+    if (! perform->getEnabled(TestHash::TEST_VALIDATION))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return 1;
     }
+
+    QString component = "Alphabet Validation ";
+    debugHeader(component);
 
     edb = EnigmaDatabase::getInstance();
     tdv = new TestDatabaseValidation(this);
 
     tdv->testAlphabetValidation();
+
+    debugFooter(component);
 
     return 0;
 }
@@ -1186,14 +1166,14 @@ int TestHarness::execValidationTest()
 
 int TestHarness::execAddAmendDelTest()
 {
-    qDebug("int TestHarness::execAddAmendDelTest()");
 
-    if (! perform.value(TEST_ADD_AMEND_DEL))
+    if (! perform->getEnabled(TestHash::TEST_ADD_AMEND_DEL))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return 1;
     }
+
+    QString component = "Add/Amend/Delete";
+    debugHeader(component);
 
     edb = EnigmaDatabase::getInstance();
 
@@ -1225,19 +1205,23 @@ int TestHarness::execAddAmendDelTest()
     // ************************/
     ad.displayRec();
 
+    debugFooter(component);
+
     return 0;
 }
 
 
 void TestHarness::testLampboard()
 {
-    qDebug("TestHarness::testLampboard()");
-    if (! perform.value(TEST_LAMPBOARD))
+
+    if (! perform->getEnabled(TestHash::TEST_LAMPBOARD))
     {
-        qDebug("Test Disabled");
-        qDebug("=============\n");
         return;
     }
+
+    QString component = "Lampboard";
+    debugHeader(component);
+
     Lampboard lb("default", this);
 
     QString keyIn;
@@ -1254,6 +1238,7 @@ void TestHarness::testLampboard()
     keyIn = "L";
     lb.illuminate(keyIn);
 
+    debugFooter(component);
 }
 
 #pragma GCC diagnostic pop

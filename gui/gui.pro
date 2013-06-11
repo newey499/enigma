@@ -30,6 +30,8 @@
 #
 #-------------------------------------------------
 
+DEFINES += BUILD_GUI
+
 QT       += core gui
 QT       += sql
 
@@ -58,7 +60,17 @@ SOURCES += main.cpp\
     ../cmdline/wheellist.cpp \
     ../cmdline/wheelbasedata.cpp \
     enigmaaction.cpp \
-    formmachine.cpp
+    ../cmdline/testharness.cpp \
+    ../cmdline/keyboard.cpp \
+    ../cmdline/testdatabasevalidation.cpp \
+    ../cmdline/machine.cpp \
+    ../cmdline/mysql.cpp \
+    ../cmdline/lampboard.cpp \
+    ../cmdline/machinedata.cpp \
+    formmachine.cpp \
+    formtestcomponents.cpp \
+    emitstring.cpp \
+    guimessagehandler.cpp
 
 
 
@@ -81,9 +93,20 @@ HEADERS  += mainwindow.h \
     ../cmdline/wheellist.h \
     ../cmdline/wheelbasedata.h \
     enigmaaction.h \
-    formmachine.h
+    ../cmdline/testharness.h \
+    ../cmdline/keyboard.h \
+    ../cmdline/testdatabasevalidation.h \
+    ../cmdline/machine.h \
+    ../cmdline/mysql.h \
+    ../cmdline/lampboard.h \
+    ../cmdline/machinedata.h \
+    formmachine.h \
+    formtestcomponents.h \
+    emitstring.h \
+    guimessagehandler.h
 
 
 
 FORMS    += mainwindow.ui \
-    formmachine.ui
+    formmachine.ui \
+    formtestcomponents.ui

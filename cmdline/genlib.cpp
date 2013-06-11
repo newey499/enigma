@@ -163,3 +163,21 @@ bool GenLib::execQry(QSqlQuery &qry, bool moveFirst)
 
     return result;
 }
+
+
+#ifdef BUILD_GUI
+QWidget * GenLib::getWidgetPointer(QString widgetObjectName)
+{
+    foreach (QWidget *widget, QApplication::topLevelWidgets())
+    {
+        if (widget->objectName().compare(widgetObjectName, Qt::CaseSensitive) == 0)
+        {
+            return widget;
+        }
+    }
+
+    return 0; // Widget not found - return null pointer
+}
+#endif
+
+

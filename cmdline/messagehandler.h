@@ -51,6 +51,8 @@ public:
 
 signals:
 
+    void debugMsg(QString msg);
+
 public slots:
 
 

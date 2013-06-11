@@ -21,6 +21,7 @@
 #include "enigmaaction.h"
 
 #include "formmachine.h"
+#include "formtestcomponents.h"
 
 namespace Ui {
 class MainWindow;
@@ -43,6 +44,7 @@ public slots:
     virtual void slotFormTestAlphabet();
     virtual void createMachineMenuItems(QMenu *menu);
     virtual void slotMachine(EnigmaAction *action);
+    virtual void slotFormTestComponents();
 
 protected:
 

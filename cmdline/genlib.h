@@ -25,6 +25,12 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GENLIB_H
 #define GENLIB_H
 
+#ifdef BUILD_GUI
+    #include <QApplication>
+    #include <QWidget>
+#else
+    #include <QtCore/QCoreApplication>
+#endif
 #include <QtDebug>
 #include <QFile>
 #include <QTextStream>
@@ -32,6 +38,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QObject>
 #include <QString>
 #include <QSqlQuery>
+
 
 #include "globals.h"
 #include "enigmaexception.h"
@@ -53,6 +60,17 @@ public:
     static bool hasDuplicateChars(QString str);
 
     static bool execQry(QSqlQuery &qry, bool moveFirst = false);
+
+#ifdef BUILD_GUI
+    /**
+    \brief get pointer to top level widget using widget instance name
+
+    The return pointer (if not null) has to be cast to the required widget type
+
+    \return pointer to QWidget or 0 if not found.
+      *****************************/
+    static QWidget * getWidgetPointer(QString widgetObjectName);
+#endif
 
 signals:
 
