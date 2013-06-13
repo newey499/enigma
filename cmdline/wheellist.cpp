@@ -4,11 +4,16 @@
 const QString WheelList::SEPERATOR = ",";
 
 
-WheelList::WheelList(QString wheelType, QString list) :
+WheelList::WheelList() :
     QStringList()
 {
-    this->wheelType = wheelType;
 
+}
+
+
+WheelList::WheelList(QString list) :
+    QStringList()
+{
     append(list.split(WheelList::SEPERATOR, QString::SkipEmptyParts, Qt::CaseSensitive));
     for (int i = 0; i < count(); i++)
     {
@@ -16,21 +21,22 @@ WheelList::WheelList(QString wheelType, QString list) :
     }
 }
 
+WheelList::WheelList(QStringList list) :
+    QStringList(list)
+{
+
+}
+
 
 QString WheelList::join()
 {
-    return QStringList().join(WheelList::SEPERATOR);
-}
-
-bool WheelList::setWheelType()
-{
-    bool result = true;
+    QString result = QStringList::join(WheelList::SEPERATOR);
 
     return result;
 }
 
-QString WheelList::getWheelType()
-{
-    return wheelType;
-}
+
+
+
+
 

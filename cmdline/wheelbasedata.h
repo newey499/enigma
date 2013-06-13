@@ -33,9 +33,8 @@ public:
     virtual bool alphabetSanityCheck(QString alphabetName, QString alphabet,
                                      QString mappingName, QString mapping);
     virtual bool alphabetDuplicateCheck(QString alphabetName, QString alphabet);
-    virtual bool notchesCheck(QString wheelType, QString notches, int alphabetId);
+    virtual bool notchesCheck(QString notches, int alphabetId);
 
-    virtual void displayRec();
 
 signals:
 
@@ -44,8 +43,6 @@ public slots:
 
 
 protected:
-
-    QSqlRecord rec;
 
     bool checkIsInUse(QString machineName, QStringList lst, QString colName, QString strId);
 

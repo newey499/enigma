@@ -9,20 +9,6 @@ WheelBaseData::WheelBaseData(QObject *parent) :
 }
 
 
-void WheelBaseData::displayRec()
-{
-    //QSqlRecord rec;
-    qDebug("START:: WheelBaseData::displayRec()");
-    for (int i = 0; i < rec.count(); i++)
-    {
-        qDebug("%s [%s]",
-               rec.field(i).name().toAscii().data(),
-               rec.field(i).value().toString().toAscii().data());
-    }
-    qDebug("FINISH:: WheelBaseData::displayRec()");
-}
-
-
 bool WheelBaseData::isUniqueName(QSqlQuery qry, QString errMsg)
 {
     bool result = true;
@@ -76,10 +62,7 @@ bool WheelBaseData::isNameMinLengthOk(QString name)
     {
         QString msg = QString("Name must contain at least %1 characters").
                         arg(AlphabetData::MIN_ALPHABET_NAME_LENGTH);
-        qDebug("name [%s] len %d min len %d",
-               name.toAscii().data(),
-               name.length(),
-               AlphabetData::MIN_ALPHABET_NAME_LENGTH);
+        qDebug("%s", msg.toAscii().data());
         addError(msg);
         result = false;
     }
@@ -333,7 +316,7 @@ bool WheelBaseData::equalAlphabetLengths(int alphabetId, QString pinRight)
 
 
 
-bool WheelBaseData::notchesCheck(QString wheelType, QString notches, int alphabetId)
+bool WheelBaseData::notchesCheck(QString notches, int alphabetId)
 {
     bool result = true;
     QSqlQuery qry;
@@ -355,7 +338,7 @@ bool WheelBaseData::notchesCheck(QString wheelType, QString notches, int alphabe
     {
         name = qry.record().value("name").toString();
         alphabet = qry.record().value("alphabet").toString();
-        WheelList wl(wheelType, notches);
+        WheelList wl(notches);
         msg = QString("Notches [%1]").arg(notches);
         addError(msg);
         for (int i = 0; i < wl.count(); i++)

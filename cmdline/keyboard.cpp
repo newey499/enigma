@@ -54,6 +54,8 @@ void Keyboard::commonConstructor()
     alphabetMap.prepend(" ");
     alphabetName = oAlphabet->getAlphabetName();
 
+    forceToUpper = false;
+
     qDebug("keyboard alphabet [%s]",
            alphabetName.toAscii().data());
 }
@@ -100,6 +102,13 @@ QString Keyboard::keyIn(QString keyIn)
     {
         keyIn = "";
     }
+    else
+    {
+        if (forceToUpper)
+        {
+            keyIn = keyIn.toUpper();
+        }
+    }
 
     return keyIn;
 }
@@ -109,3 +118,15 @@ QPointer<Alphabet> Keyboard::getAlphabetObj()
     return oAlphabet;
 }
 
+
+
+bool Keyboard::getForceToUpper()
+{
+    return forceToUpper;
+}
+
+
+void Keyboard::setForceToUpper(bool toUpper)
+{
+    forceToUpper = toUpper;
+}

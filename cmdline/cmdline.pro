@@ -97,4 +97,5 @@ HEADERS += \
 
 OTHER_FILES += \
     ../README.md \
-    ../license.txt
+    ../license.txt \
+    machine-validation-notes.txt

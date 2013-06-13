@@ -67,6 +67,8 @@ void FormTestComponents::slotRunTests()
 }
 
 
+// This is called indirectly from the message handler via the
+// EmitString class
 void FormTestComponents::slotAppendString(QString msg)
 {
     ui->edtTxt->appendPlainText(msg);

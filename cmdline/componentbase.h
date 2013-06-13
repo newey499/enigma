@@ -29,6 +29,8 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QSqlRecord>
+#include <QSqlField>
 
 class ComponentBase : public QObject
 {
@@ -44,6 +46,9 @@ public:
     virtual void addError(QString err);
     virtual void addError(QStringList err);
     virtual void clearError();
+    virtual QString dispError(QString seperator = "\n");
+
+    virtual void dispRec();
 
 signals:
 
@@ -53,6 +58,8 @@ public slots:
 protected:
 
     QStringList errorList;
+
+    QSqlRecord rec;
 
 private:
 

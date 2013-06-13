@@ -254,15 +254,6 @@ bool AlphabetData::isAlphabetInUse()
 }
 
 
-void AlphabetData::displayRec()
-{
-    qDebug("id [%d]\nname [%s]\nalphabet [%s]",
-           rec.value("id").toInt(),
-           rec.value("name").toString().toAscii().data(),
-           rec.value("alphabet").toString().toAscii().data());
-}
-
-
 bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode)
 {
     bool result = true;
@@ -424,7 +415,7 @@ bool AlphabetData::writeRec(Globals::EDIT_MODE mode)
     bool result = false;
     QSqlQuery qry;
 
-    displayRec();
+    dispRec();
 
     if (! validateAlphabet(mode))
     {
@@ -525,7 +516,7 @@ bool AlphabetData::writeRec(Globals::EDIT_MODE mode)
 
     }
 
-    this->displayRec();
+    this->dispRec();
 
     return result;
 }

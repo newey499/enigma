@@ -284,8 +284,7 @@ bool ReflectorData::validateReflector(Globals::EDIT_MODE mode)
         }
 
         // Validate Notches - Rotor Wheels may have a notch
-        if (! notchesCheck("REFLECTOR",
-                           rec.value("notches").toString(),
+        if (! notchesCheck(rec.value("notches").toString(),
                            rec.value("alphabetid").toInt()))
         {
             result = false;
@@ -294,7 +293,7 @@ bool ReflectorData::validateReflector(Globals::EDIT_MODE mode)
         {
             // write cleaned up version of notches if
             // the notches passed validation
-            WheelList wl("REFLECTOR", rec.value("notches").toString());
+            WheelList wl(rec.value("notches").toString());
             setNotches(wl.join());
         }
 
@@ -409,8 +408,7 @@ bool ReflectorData::validateReflector(Globals::EDIT_MODE mode)
         }
 
         // Validate Notches - Reflector Wheels may have a notch
-        if (! notchesCheck("REFLECTOR",
-                           rec.value("notches").toString(),
+        if (! notchesCheck(rec.value("notches").toString(),
                            rec.value("alphabetid").toInt()))
         {
             result = false;
@@ -419,7 +417,7 @@ bool ReflectorData::validateReflector(Globals::EDIT_MODE mode)
         {
             // write cleaned up version of notches if
             // the notches passed validation
-            WheelList wl("REFLECTOR", rec.value("notches").toString());
+            WheelList wl(rec.value("notches").toString());
             setNotches(wl.join());
         }
 

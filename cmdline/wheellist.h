@@ -11,11 +11,11 @@ public:
 
     static const QString SEPERATOR;
 
-    explicit WheelList(QString wheelType, QString list);
+    explicit WheelList();
+    explicit WheelList(QString list);
+    explicit WheelList(QStringList list);
 
     virtual QString join();
-    virtual bool setWheelType();
-    virtual QString getWheelType();
 
 signals:
 
@@ -25,7 +25,6 @@ public slots:
 
 protected:
 
-    QString wheelType;
 
 private:
 

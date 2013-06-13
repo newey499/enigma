@@ -84,3 +84,5 @@ QSqlRecord Alphabet::getAlphabetRec()
 {
     return recAlphabet;
 }
+
+

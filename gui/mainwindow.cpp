@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     buildMenusAndForms();
 
+    slotFormTestComponents();
+
 }
 
 MainWindow::~MainWindow()

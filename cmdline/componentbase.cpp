@@ -65,3 +65,24 @@ void ComponentBase::clearError()
     errorList.clear();
 }
 
+QString ComponentBase::dispError(QString seperator)
+{
+    QString output = errorList.join(seperator);
+
+    qDebug("%s", output.toAscii().data());
+    return output;
+}
+
+
+void ComponentBase::dispRec()
+{
+    //QSqlRecord rec;
+    qDebug("START:: WheelBaseData::dispRec()");
+    for (int i = 0; i < rec.count(); i++)
+    {
+        qDebug("%s [%s]",
+               rec.field(i).name().toAscii().data(),
+               rec.field(i).value().toString().toAscii().data());
+    }
+    qDebug("FINISH:: WheelBaseData::dispRec()");
+}

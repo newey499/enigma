@@ -46,6 +46,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "steckerboard.h"
 #include "enigmaexception.h"
 #include "machine.h"
+#include "machinedata.h"
 #include "mysql.h"
 
 #include "testdatabasevalidation.h"
@@ -77,6 +78,7 @@ public:
        TEST_LAMPBOARD,
        TEST_TURNOVER,
        TEST_MACHINE,
+       TEST_VALIDATE_MACHINE_CONFIG,
        TEST_DOUBLE_STEP,
        TEST_ADD_AMEND_DEL,
        TEST_VALIDATION
@@ -93,6 +95,7 @@ public:
         insertNewItem(TEST_LAMPBOARD, "Lampboard");
         insertNewItem(TEST_TURNOVER, "Turnover");
         insertNewItem(TEST_MACHINE, "Machine");
+        insertNewItem(TEST_VALIDATE_MACHINE_CONFIG, "Validate Machine Config");
         insertNewItem(TEST_DOUBLE_STEP, "Double Step");
         insertNewItem(TEST_ADD_AMEND_DEL, "Add/Amend/Del");
         insertNewItem(TEST_VALIDATION, "Validation");
@@ -213,6 +216,7 @@ public:
     virtual void testRotor();
     virtual void testReflector();
     virtual void testMachine();
+    virtual void testMachineConfigurationValidation();
     virtual void testTurnover();
     virtual void testDoubleStep();
     virtual void testLampboard();
@@ -239,6 +243,8 @@ protected:
     virtual int testRepeatMapRightToLeft(Rotor &rotor, int repeat, int pinIn, QString letter);
     virtual void testReverseMapping(Rotor &rotor, int keyIn, QString windowChar);
     virtual void testInvalidRingSetting(Rotor &rotor, int ringSetting);
+
+    virtual void performMachineTest(MachineData *md, Globals::EDIT_MODE mode);
 
 private:
 

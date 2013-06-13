@@ -64,8 +64,6 @@ public:
     virtual bool isAlphabetInUse();
     virtual bool hasDuplicateChars(QString alphabet);
 
-    virtual void displayRec();
-
     virtual bool writeRec(Globals::EDIT_MODE mode);
 
 signals:
@@ -74,8 +72,6 @@ public slots:
 
 
 protected:
-
-    QSqlRecord rec;
 
 
 private:

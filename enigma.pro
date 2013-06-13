@@ -30,3 +30,6 @@ SUBDIRS += \
     gui \
     gui
 
+# Use .depends to specify that a project depends on another.
+gui.depends = cmdline
+

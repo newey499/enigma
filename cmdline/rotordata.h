@@ -59,7 +59,6 @@ public:
     virtual QSqlRecord getRotor(const QString &rotorName);
     virtual bool validateRotor(Globals::EDIT_MODE mode);
 
-
     virtual bool writeRec(Globals::EDIT_MODE mode);
 
 signals:

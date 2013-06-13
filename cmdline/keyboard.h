@@ -55,6 +55,9 @@ public:
 
     virtual QPointer<Alphabet> getAlphabetObj();
 
+    virtual bool getForceToUpper();
+    virtual void setForceToUpper(bool toUpper);
+
 signals:
 
 public slots:
@@ -69,6 +72,7 @@ protected:
     QSqlRecord recAlphabet;
 
     int alphabetSize;
+    bool forceToUpper;
 
     QString alphabetMap;
     QString alphabetName;

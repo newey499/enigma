@@ -30,11 +30,14 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSqlField>
 #include <QVariant>
 
+#include "genlib.h"
 #include "globals.h"
 #include "componentbase.h"
 #include "enigmadatabase.h"
 #include "enigmaexception.h"
-
+#include "mysql.h"
+#include "alphabetdata.h"
+#include "wheellist.h"
 
 class MachineData : public ComponentBase
 {
@@ -45,11 +48,21 @@ public:
     explicit MachineData(QObject *parent = 0);
     ~MachineData();
 
-    virtual QSqlRecord getMachine(const QString &machineName);
-    virtual QSqlRecord getMachine(int id);
-    virtual bool validateMachine(Globals::EDIT_MODE mode, QSqlRecord rec);
+    virtual bool setName(QString name);
+    virtual bool setAlphabetId(int id);
+    virtual bool setSteckerboard(QString steckerboard);
+    virtual bool setRotorCount(int rotorCount);
 
-    virtual QSqlRecord _getMachine(QSqlQuery qry);
+    virtual bool isUniqueName(QSqlQuery qry, QString errMsg);
+    virtual bool isNameMinLengthOk(QString name);
+
+    virtual QSqlRecord getEmptyMachine();
+    virtual QSqlRecord getMachine();
+    virtual QSqlRecord getMachine(int id);
+    virtual QSqlRecord getMachine(const QString &machineName);
+    virtual bool validateMachine(Globals::EDIT_MODE mode);
+
+    virtual bool writeRec(Globals::EDIT_MODE mode);
 
 signals:
 
@@ -57,6 +70,8 @@ public slots:
 
 
 protected:
+
+    WheelList steckerboardEnum;
 
 
 private:

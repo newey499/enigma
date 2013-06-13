@@ -52,7 +52,7 @@ int TestHarness::exec()
     qDebug("TestHarness::exec()");
     edb = EnigmaDatabase::getInstance();
 
-
+    perform->setEnabled(TestHash::TEST_VALIDATE_MACHINE_CONFIG, true);
 
     result = execValidationTest();
     result = execAddAmendDelTest();
@@ -135,6 +135,8 @@ int TestHarness::exec()
 
 
     testMachine();
+
+    testMachineConfigurationValidation();
 
 
     testDoubleStep();
@@ -394,43 +396,43 @@ void TestHarness::testEntry()
     qDebug("*************************************");
     EntryData ed;
 
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     ed.setName("AA");
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     ed.setName("Name");
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     ed.setAlphabetId(99);
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     ed.setAlphabetId(5);
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     ed.setPinRight("ABCD");
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     ed.setPinRight("ABCDEF");
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
@@ -442,11 +444,11 @@ void TestHarness::testEntry()
     name = "Name";
     qDebug("Loading Entry wheel [%s]", name.toAscii().data());
     ed.getEntry(name);
-    ed.displayRec();
+    ed.dispRec();
     qDebug("==========================================");
 
     ed.setPinRight("FEDCBA");
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_EDIT);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
@@ -458,10 +460,10 @@ void TestHarness::testEntry()
     name = "Name";
     qDebug("Loading Entry wheel [%s]", name.toAscii().data());
     ed.getEntry(name);
-    ed.displayRec();
+    ed.dispRec();
     qDebug("==========================================");
 
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_DEL);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
@@ -469,10 +471,10 @@ void TestHarness::testEntry()
     name = "ENTRY";
     qDebug("Loading Entry wheel [%s]", name.toAscii().data());
     ed.getEntry(name);
-    ed.displayRec();
+    ed.dispRec();
     qDebug("==========================================");
 
-    ed.displayRec();
+    ed.dispRec();
     ed.writeRec(Globals::ROW_DEL);
     qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
@@ -541,7 +543,7 @@ void TestHarness::testRotor()
     qDebug("********************************************");
     RotorData rd;
 
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
@@ -550,39 +552,39 @@ void TestHarness::testRotor()
 
     rd.setAlphabetId(5);
     rd.setNotches("A ,B,D");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     rd.setPinRight("ABCDEF");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
 
     rd.setName("testrotor");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     // This add should fail
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     rd.setPinRight("FEDCBA");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_EDIT);
     qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
 
     rd.getRotor("testrotor");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_DEL);
     qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
@@ -772,7 +774,7 @@ void TestHarness::testReflector()
     qDebug("********************************************");
     ReflectorData rd;
 
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
@@ -781,40 +783,40 @@ void TestHarness::testReflector()
 
     rd.setAlphabetId(5);
     rd.setNotches("A ,B,D");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     rd.setPinRight("ABCDEF");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
 
     rd.setName("testreflector");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
     // This add should fail
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
     qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
 
     rd.setPinRight("FEDCBA");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_EDIT);
     qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
 
 
     rd.getReflector("testreflector");
-    rd.displayRec();
+    rd.dispRec();
     rd.writeRec(Globals::ROW_DEL);
     qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
     qDebug("==========================================");
@@ -964,66 +966,6 @@ void TestHarness::testTurnover()
     }
 
     debugFooter(component);
-}
-
-
-void TestHarness::testMachine()
-{
-
-    if (! perform->getEnabled(TestHash::TEST_MACHINE))
-    {
-        return;
-    }
-
-    QString component = "MACHINE with rotors I, II, III and reflector B\n"
-            "all rotors are set to ring setting 1 and window char \"A\"";
-    debugHeader(component);
-
-    Machine machine("Wermacht", this);
-    QMap<int, QPointer<Rotor> > rotors;
-
-    try
-    {
-        rotors.insert(1, machine.rotorFactory("I",   1, "A"));
-        rotors.insert(2, machine.rotorFactory("II",  1, "A"));
-        rotors.insert(3, machine.rotorFactory("III", 1, "A"));
-
-        machine.addRotors(rotors);
-
-        qDebug("=========================");
-        qDebug("G is expected to map to P");
-        qDebug("=========================");
-
-        QString keyIn = "G";
-        QString keyOut;
-
-        keyOut = machine.keyPress(keyIn);
-
-        if (keyIn == "G" && keyOut == "P")
-        {
-            qDebug("%s [G] maps to [P] Through rotors I, II, III and reflector B",
-                   TestHarness::MSG_OK);
-        }
-        else
-        {
-
-            qDebug("%s [G] should map to [P] Through rotors I, II, III and reflector B",
-                   "FAIL:: ");
-            qDebug("%s [G] mapped to [%s]",
-                   "FAIL:: ",
-                   keyOut.toAscii().data());
-        }
-
-    }
-    catch (EnigmaException &e)
-    {
-        qDebug("Error Testing %s\n%s",
-               "Test Machine",
-               e.what().toAscii().data());
-    }
-
-    debugFooter(component);
-
 }
 
 
@@ -1193,17 +1135,17 @@ int TestHarness::execAddAmendDelTest()
     /******************
     ad.setName("ABCDEFXYZ");
     ad.setAlphabet("1234567890ABC");
-    ad.displayRec();
+    ad.dispRec();
     ad.writeRec(Globals::ROW_EDIT);
     ************************/
 
     // Delete
     // /**********************
     ad.setName("ABCDEFXYZ");
-    ad.displayRec();
+    ad.dispRec();
     ad.writeRec(Globals::ROW_DEL);
     // ************************/
-    ad.displayRec();
+    ad.dispRec();
 
     debugFooter(component);
 
@@ -1240,5 +1182,124 @@ void TestHarness::testLampboard()
 
     debugFooter(component);
 }
+
+
+void TestHarness::testMachine()
+{
+
+    if (! perform->getEnabled(TestHash::TEST_MACHINE))
+    {
+        return;
+    }
+
+    QString component = "MACHINE with rotors I, II, III and reflector B\n"
+            "all rotors are set to ring setting 1 and window char \"A\"";
+    debugHeader(component);
+
+    Machine machine("Wermacht", this);
+    QMap<int, QPointer<Rotor> > rotors;
+
+    try
+    {
+        rotors.insert(1, machine.rotorFactory("I",   1, "A"));
+        rotors.insert(2, machine.rotorFactory("II",  1, "A"));
+        rotors.insert(3, machine.rotorFactory("III", 1, "A"));
+
+        machine.addRotors(rotors);
+
+        qDebug("=========================");
+        qDebug("G is expected to map to P");
+        qDebug("=========================");
+
+        QString keyIn = "G";
+        QString keyOut;
+
+        keyOut = machine.keyPress(keyIn);
+
+        if (keyIn == "G" && keyOut == "P")
+        {
+            qDebug("%s [G] maps to [P] Through rotors I, II, III and reflector B",
+                   TestHarness::MSG_OK);
+        }
+        else
+        {
+
+            qDebug("%s [G] should map to [P] Through rotors I, II, III and reflector B",
+                   "FAIL:: ");
+            qDebug("%s [G] mapped to [%s]",
+                   "FAIL:: ",
+                   keyOut.toAscii().data());
+        }
+
+    }
+    catch (EnigmaException &e)
+    {
+        qDebug("Error Testing %s\n%s",
+               "Test Machine",
+               e.what().toAscii().data());
+    }
+
+    debugFooter(component);
+
+}
+
+void TestHarness::performMachineTest(MachineData *md, Globals::EDIT_MODE mode)
+{
+    md->dispRec();
+    md->validateMachine(mode);
+    qDebug("-----------------------------");
+    md->dispError();
+    qDebug("=============================");
+}
+
+void TestHarness::testMachineConfigurationValidation()
+{
+
+    if (! perform->getEnabled(TestHash::TEST_VALIDATE_MACHINE_CONFIG))
+    {
+        return;
+    }
+
+    QString component = "Validate machine configuration";
+    debugHeader(component);
+
+    MachineData *md = new MachineData(this);
+
+    performMachineTest(md, Globals::ROW_ADD);
+
+    md->setName("AB");
+    performMachineTest(md, Globals::ROW_ADD);
+
+    md->setName("ABCD");
+    performMachineTest(md, Globals::ROW_ADD);
+
+
+    md->setAlphabetId(888);
+    performMachineTest(md, Globals::ROW_ADD);
+
+    md->setAlphabetId(5);
+    performMachineTest(md, Globals::ROW_ADD);
+
+    md->setSteckerboard("Rubbish");
+    performMachineTest(md, Globals::ROW_ADD);
+
+    md->setSteckerboard("yes");
+    performMachineTest(md, Globals::ROW_ADD);
+
+    md->setSteckerboard("YES");
+    performMachineTest(md, Globals::ROW_ADD);
+
+    md->setRotorCount(-99);
+    performMachineTest(md, Globals::ROW_ADD);
+
+    md->setRotorCount(0);
+    performMachineTest(md, Globals::ROW_ADD);
+
+    md->setRotorCount(3);
+    performMachineTest(md, Globals::ROW_ADD);
+
+    debugFooter(component);
+}
+
 
 #pragma GCC diagnostic pop

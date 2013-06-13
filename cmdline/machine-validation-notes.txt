@@ -1,0 +1,71 @@
+machine-validation-notes.txt
+===================================================
+
+example new record
+==================
+id [-999]
+name []
+steckerboard []
+rotorcount [0]
+entrylist []
+rotorlist []
+reflectorlist []
+alphabetid [-999]
+FINISH:: WheelBaseData::dispRec()
+
+===================================================
+
+Add a machine
+=============
+
+id must be -999
+
+name must not exist and may not be empty and must contain a minimum number of chars
+alphabet id must exist on alphabet table
+
+steckerboard = YES or NO
+
+rotor count >= 0
+
+entrylist must contain at least one valid entry wheel with same alphabet id
+
+rotorlist must contain at least as many entries as the rotor count. Each
+rotor in the list must be a valid rotor with the required alphabet id
+
+reflectorlist must contain at least one valid reflector wheel with the required
+alphabet id
+
+===================================================
+
+Edit a machine
+==============
+
+id must not be -999 
+id must exist on the machine table
+
+name must not exist with a different id on the machine table and may not be empty and 
+must contain a minimum number of chars
+
+alphabet id must exist on alphabet table
+steckerboard = YES or NO
+rotor count >= 0
+entrylist must contain at least one valid entry wheel with same alphabet id
+
+rotorlist must contain at least as many entries as the rotor count. Each
+rotor in the list must be a valid rotor with the required alphabet id
+
+reflectorlist must contain at least one valid reflector wheel with the required
+alphabet id
+
+Any changes to the machine definition must not invalidate a record on the
+machine definition table (enigma.machinedefn)
+
+===================================================
+
+Delete a machine
+================
+id must not be -999
+id must exist on the machine table
+id must not be in use on the machine definition table (enigma.machinedefn)
+
+
