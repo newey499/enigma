@@ -1209,12 +1209,15 @@ void TestHarness::testMachine()
         machine.addRotors(rotors);
         ***********************/
 
+        Entry *oEntry = new Entry("ENTRY", this);
+        machine.addEntry(oEntry);
 
         machine.addRotor(1, machine.rotorFactory("I",   1, "A"));
         machine.addRotor(2, machine.rotorFactory("II",  1, "A"));
         machine.addRotor(3, machine.rotorFactory("III", 1, "Z"));
 
-
+        Reflector *oReflector = new Reflector("B", this);
+        machine.addReflector(oReflector);
 
         qDebug("=========================");
         qDebug("G is expected to map to P");
@@ -1227,8 +1230,10 @@ void TestHarness::testMachine()
 
         if (keyIn == "G" && keyOut == "P")
         {
-            qDebug("%s [G] maps to [P] Through rotors I, II, III and reflector B",
-                   TestHarness::MSG_OK);
+            qDebug("%s [%s] maps to [%s] Through rotors I, II, III and reflector B",
+                   TestHarness::MSG_OK,
+                   keyIn.toAscii().data(),
+                   keyOut.toAscii().data());
         }
         else
         {
