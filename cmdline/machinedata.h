@@ -46,6 +46,8 @@ class MachineData : public ComponentBase
 public:
 
     explicit MachineData(QObject *parent = 0);
+    explicit MachineData(int id, QObject *parent = 0);
+    explicit MachineData(QString machineName, QObject *parent = 0);
     ~MachineData();
 
     virtual bool setName(QString name);

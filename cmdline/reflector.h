@@ -46,9 +46,12 @@ class Reflector : public QObject
 public:
 
     explicit Reflector(QString reflectorName, QObject *parent = 0);
+    explicit Reflector(int reflectorId, QObject *parent = 0);
     ~Reflector();
 
     virtual int map(int pinIn);
+
+    virtual QString getId();
 
 signals:
 
@@ -74,6 +77,8 @@ protected:
     virtual bool sanityCheck();
     virtual bool isValidPinNo(int pinNo);
     virtual int getAlphabetSize();
+
+    virtual void commonConstructor();
 
 private:
 

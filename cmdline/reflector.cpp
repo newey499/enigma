@@ -28,10 +28,23 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 Reflector::Reflector(QString reflectorName, QObject *parent) :
     QObject(parent)
 {
+    recReflector = ReflectorData().getReflector(reflectorName);
+    commonConstructor();
+}
 
+
+Reflector::Reflector(int reflectorId, QObject *parent):
+    QObject(parent)
+{
+    recReflector = ReflectorData().getReflector(reflectorId);
+    commonConstructor();
+}
+
+
+void Reflector::commonConstructor()
+{
     try
     {
-        recReflector = ReflectorData().getReflector(reflectorName);
         oAlphabet = new Alphabet(recReflector.value("alphabetid").toInt(), this);
         recAlphabet = oAlphabet->getAlphabetRec();
 
@@ -61,13 +74,18 @@ Reflector::Reflector(QString reflectorName, QObject *parent) :
     {
         throw e;
     }
-
 }
 
 
 Reflector::~Reflector()
 {
 
+}
+
+
+QString Reflector::getId()
+{
+    return recReflector.value("id").toString();
 }
 
 

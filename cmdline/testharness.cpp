@@ -52,7 +52,8 @@ int TestHarness::exec()
     qDebug("TestHarness::exec()");
     edb = EnigmaDatabase::getInstance();
 
-    perform->setEnabled(TestHash::TEST_VALIDATE_MACHINE_CONFIG, true);
+    //perform->setEnabled(TestHash::TEST_VALIDATE_MACHINE_CONFIG, true);
+    perform->setEnabled(TestHash::TEST_MACHINE, true);
 
     result = execValidationTest();
     result = execAddAmendDelTest();
@@ -133,13 +134,12 @@ int TestHarness::exec()
 
     testTurnover();
 
-
-    testMachine();
+    testDoubleStep();
 
     testMachineConfigurationValidation();
 
+    testMachine();
 
-    testDoubleStep();
 
 
     qDebug("\n");
@@ -1197,15 +1197,24 @@ void TestHarness::testMachine()
     debugHeader(component);
 
     Machine machine("Wermacht", this);
-    QMap<int, QPointer<Rotor> > rotors;
+
 
     try
     {
+        /**************
+        QMap<int, QPointer<Rotor> > rotors;
         rotors.insert(1, machine.rotorFactory("I",   1, "A"));
         rotors.insert(2, machine.rotorFactory("II",  1, "A"));
-        rotors.insert(3, machine.rotorFactory("III", 1, "A"));
-
+        rotors.insert(3, machine.rotorFactory("III", 1, "Z"));
         machine.addRotors(rotors);
+        ***********************/
+
+
+        machine.addRotor(1, machine.rotorFactory("I",   1, "A"));
+        machine.addRotor(2, machine.rotorFactory("II",  1, "A"));
+        machine.addRotor(3, machine.rotorFactory("III", 1, "Z"));
+
+
 
         qDebug("=========================");
         qDebug("G is expected to map to P");
@@ -1303,3 +1312,4 @@ void TestHarness::testMachineConfigurationValidation()
 
 
 #pragma GCC diagnostic pop
+

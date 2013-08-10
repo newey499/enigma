@@ -30,10 +30,24 @@ Entry::Entry(QString entryName, QObject *parent) :
     ComponentBase(parent)
 {
 
+    recEntry = EntryData().getEntry(entryName);
+    commonConstructor();
+
+}
+
+
+Entry::Entry(int entryId, QObject *parent) :
+    ComponentBase(parent)
+{
+    recEntry = EntryData().getEntry(entryId);
+    commonConstructor();
+}
+
+
+void Entry::commonConstructor()
+{
     try
     {
-
-        recEntry = EntryData().getEntry(entryName);
         oAlphabet = new Alphabet(recEntry.value("alphabetid").toInt(), this);
         recAlphabet = oAlphabet->getAlphabetRec();
 
@@ -63,7 +77,6 @@ Entry::Entry(QString entryName, QObject *parent) :
     {
         throw e;
     }
-
 }
 
 
@@ -72,6 +85,11 @@ Entry::~Entry()
 
 }
 
+
+QString Entry::getId()
+{
+    return this->recEntry.value("id").toString();
+}
 
 bool Entry::sanityCheck()
 {

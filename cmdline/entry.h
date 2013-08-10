@@ -48,10 +48,14 @@ class Entry : public ComponentBase
 public:
 
     explicit Entry(QString entryName, QObject *parent = 0);
+    explicit Entry(int entryId, QObject *parent = 0);
+
     ~Entry();
 
     virtual int mapCharToPin(QString keyIn);
     virtual QString mapPinToChar(int pinIn);
+
+    virtual QString getId();
 
 signals:
 
@@ -71,6 +75,8 @@ protected:
     QString alphabetName;
     QString entryMap;
     QString entryName;
+
+    virtual void commonConstructor();
 
     virtual bool sanityCheck();
     virtual bool isValidPinNo(int pinNo);

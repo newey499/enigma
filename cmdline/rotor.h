@@ -63,6 +63,8 @@ public:
 
     virtual QString getRotorName();
 
+    virtual QString getId();
+
     virtual int mapRightToLeft(int pinIn);
     virtual int mapLeftToRight(int pinIn);
 

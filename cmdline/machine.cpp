@@ -43,9 +43,19 @@ Machine::Machine(QString machineName, QObject *parent) :
 
     oKeyboard = new Keyboard(alphabetId, this);
     oSteckerboard = new Steckerboard(oKeyboard->getAlphabetObj()->getAlphabetName(), this);
-    oEntry = new Entry("ENTRY", this);
+
+    QStringList sl = recMachine.value("entrylist").toString().split(",");
+    Entry *oEnt = new Entry(sl.at(0).toInt(), this);
+    //Entry *oEnt = new Entry("ENTRY", this);
+    addEntry(oEnt);
+
     // Rotors
-    oReflector = new Reflector("B", this);
+    sl = recMachine.value("reflectorList").toString().split(",");
+
+    //Reflector *oRef = new Reflector("B", this);
+    Reflector *oRef = new Reflector(sl.at(0).toInt(), this);
+    addReflector(oRef);
+
     oLampboard = new Lampboard(oKeyboard->getAlphabetObj()->getAlphabetName(), this);
 }
 
@@ -55,6 +65,10 @@ QString Machine::keyPress(QString keyIn)
     QString keyOut = keyIn;
     int pinIn;
     int pinOut;
+
+    // The enigma machine performs the rotor turnover before
+    // processing the key press
+    performTurnover();
 
     keyOut = oSteckerboard->mapStecker(keyIn);
     qDebug("\tStecker keyIn [%s] keyOut [%s]",
@@ -136,17 +150,81 @@ QPointer<Rotor> Machine::rotorFactory(QString name, int ringSetting, QString win
     return oRotor;
 }
 
-void Machine::addRotors(QMap<int, QPointer<Rotor> > rotorArray)
+
+bool Machine::addEntry(Entry *oEntry)
 {
+    bool result = false;
+
+    QStringList rl = entryList.split(",");
+    QString id = oEntry->getId();
+
+    if (rl.contains(id))
+    {
+        oEntry->setParent(this);
+        delete this->oEntry;
+        this->oEntry = oEntry;
+        result = true;
+    }
+
+    return result;
+}
+
+bool Machine::addReflector(Reflector *oReflector)
+{
+    bool result = false;
+
+    QStringList rl = reflectorList.split(",");
+    QString id = oReflector->getId();
+
+    if (rl.contains(id))
+    {
+        oReflector->setParent(this);
+        delete this->oReflector;
+        this->oReflector = oReflector;
+        result = true;
+    }
+
+    return result;
+}
+
+bool Machine::addRotor(int rotorPosition, Rotor *oRotor)
+{
+    bool result = false;
+
+    QStringList rl = rotorList.split(",");
+    QString id = oRotor->getId();
+
+    if (rl.contains(id))
+    {
+        oRotor->setParent(this);
+        delete rotorArray.value(rotorPosition);
+        rotorArray.insert(rotorPosition, oRotor);
+        result = true;
+    }
+    return result;
+}
+
+bool Machine::addRotors(QMap<int, QPointer<Rotor> > rotorArray)
+{
+    bool result = true;
     this->rotorArray.clear();
 
     this->rotorArray = rotorArray;
+
+    rotorArray.count();
     QMapIterator<int, QPointer<Rotor> > i(rotorArray);
     while (i.hasNext())
     {
         i.next();
-        i.value()->setParent(this);
+        if (! addRotor(i.key(), i.value()))
+        {
+            this->rotorArray.clear();
+            result = false;
+            return result;
+        }
     }
+
+    return result;
 }
 
 

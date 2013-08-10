@@ -32,6 +32,21 @@ MachineData::MachineData(QObject *parent) :
 }
 
 
+MachineData::MachineData(int id, QObject *parent) :
+    ComponentBase(parent)
+{
+    steckerboardEnum << MySql::getEnum("enigma", "machine", "steckerboard");
+    rec = getMachine(id);
+}
+
+MachineData::MachineData(QString machineName, QObject *parent) :
+    ComponentBase(parent)
+{
+    steckerboardEnum << MySql::getEnum("enigma", "machine", "steckerboard");
+    rec = getMachine(machineName);
+}
+
+
 MachineData::~MachineData()
 {
 }

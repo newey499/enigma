@@ -95,6 +95,10 @@ QString Rotor::getRotorName()
     return objectName();
 }
 
+QString Rotor::getId()
+{
+    return recRotor.value("id").toString();
+}
 
 bool Rotor::sanityCheck()
 {
