@@ -81,6 +81,12 @@ int main(int argc, char *argv[])
     QPointer<Globals> globals = new Globals();
     QPointer<TestHarness> testHarness = new TestHarness();
 
+
+    testHarness->getPerform()->setEnabled(TestHash::TEST_VALIDATE_MACHINE_CONFIG, true);
+    //testHarness->getPerform()->setEnabled(TestHash::TEST_MACHINE, true);
+    //testHarness->getPerform()->setEnabled(TestHash::TEST_DOUBLE_STEP, true);
+    //testHarness->getPerform()->setEnabled(TestHash::TEST_TURNOVER, true);
+
     result = testHarness->exec();
 
     // Clean up heap

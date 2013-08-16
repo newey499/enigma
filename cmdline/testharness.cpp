@@ -52,8 +52,7 @@ int TestHarness::exec()
     qDebug("TestHarness::exec()");
     edb = EnigmaDatabase::getInstance();
 
-    //perform->setEnabled(TestHash::TEST_VALIDATE_MACHINE_CONFIG, true);
-    perform->setEnabled(TestHash::TEST_MACHINE, true);
+
 
     result = execValidationTest();
     result = execAddAmendDelTest();

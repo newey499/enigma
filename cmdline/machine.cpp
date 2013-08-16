@@ -32,6 +32,24 @@ Machine::Machine(QString machineName, QObject *parent) :
 
     recMachine = MachineData().getMachine(machineName);
 
+    commonConstructor();
+
+}
+
+
+Machine::Machine(int machineId, QObject *parent) :
+    ComponentBase(parent)
+{
+    edb = EnigmaDatabase::getInstance();
+
+    recMachine = MachineData().getMachine(machineId);
+
+    commonConstructor();
+}
+
+
+void Machine::commonConstructor()
+{
     id            = recMachine.value("id").toInt();
     name          = recMachine.value("name").toString();
     steckerboard  = recMachine.value("steckerboard").toString();
@@ -42,8 +60,12 @@ Machine::Machine(QString machineName, QObject *parent) :
     alphabetId    = recMachine.value("alphabetid").toInt();
 
     oKeyboard = new Keyboard(alphabetId, this);
+
+    // Always instantiate a Steckerboard object even if the machine
+    // definition says the machine does not have a steckerboard
     oSteckerboard = new Steckerboard(oKeyboard->getAlphabetObj()->getAlphabetName(), this);
 
+    // Default to the first entry wheel in the list
     QStringList sl = recMachine.value("entrylist").toString().split(",");
     Entry *oEnt = new Entry(sl.at(0).toInt(), this);
     //Entry *oEnt = new Entry("ENTRY", this);
@@ -52,13 +74,26 @@ Machine::Machine(QString machineName, QObject *parent) :
     // Rotors
     sl = recMachine.value("reflectorList").toString().split(",");
 
+    // Default to the first reflector wheel in the list
     //Reflector *oRef = new Reflector("B", this);
     Reflector *oRef = new Reflector(sl.at(0).toInt(), this);
     addReflector(oRef);
 
     oLampboard = new Lampboard(oKeyboard->getAlphabetObj()->getAlphabetName(), this);
+
 }
 
+
+bool Machine::hasSteckerboard()
+{
+    return (steckerboard.compare("YES") == 0);
+}
+
+
+QSqlRecord Machine::getRecMachine()
+{
+    return recMachine;
+}
 
 QString Machine::keyPress(QString keyIn)
 {
@@ -197,7 +232,6 @@ bool Machine::addRotor(int rotorPosition, Rotor *oRotor)
     if (rl.contains(id))
     {
         oRotor->setParent(this);
-        delete rotorArray.value(rotorPosition);
         rotorArray.insert(rotorPosition, oRotor);
         result = true;
     }

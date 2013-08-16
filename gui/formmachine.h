@@ -3,6 +3,20 @@
 
 #include <QWidget>
 
+#include "machine.h"
+#include <QComboBox>
+#include <QContextMenuEvent>
+#include <QLabel>
+#include <QSqlRecord>
+#include <QSqlQuery>
+
+
+#include "genlib.h"
+#include "rotorcombobox.h"
+#include "entry.h"
+#include "rotor.h"
+#include "reflector.h"
+
 namespace Ui {
 class FormMachine;
 }
@@ -15,10 +29,20 @@ public:
     explicit FormMachine(int machineId, QWidget *parent = 0);
     ~FormMachine();
 
+    virtual void setUpRotors();
+
+public slots:
+
+    virtual void slotAddEntry(QString name);
+    virtual void slotAddRotor(RotorComboBox *oCbxRotor);
+    virtual void slotAddReflector(QString name);
+
 protected:
 
     int machineId;
+    Machine *oMachine;
 
+    virtual void fillComboBox(QComboBox *cbx, QString list);
 
 private:
     Ui::FormMachine *ui;

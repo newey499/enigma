@@ -70,7 +70,8 @@ SOURCES += main.cpp\
     formmachine.cpp \
     formtestcomponents.cpp \
     emitstring.cpp \
-    guimessagehandler.cpp
+    guimessagehandler.cpp \
+    rotorcombobox.cpp
 
 
 
@@ -103,7 +104,8 @@ HEADERS  += mainwindow.h \
     formmachine.h \
     formtestcomponents.h \
     emitstring.h \
-    guimessagehandler.h
+    guimessagehandler.h \
+    rotorcombobox.h
 
 
 

@@ -57,6 +57,7 @@ class Machine : public ComponentBase
 public:
 
     explicit Machine(QString machineName, QObject *parent = 0);
+    explicit Machine(int machineId, QObject *parent = 0);
 
     ~Machine();
 
@@ -80,6 +81,9 @@ public:
     // including the dreaded "double step".
     virtual void performTurnover();
 
+    virtual bool hasSteckerboard();
+
+    virtual QSqlRecord getRecMachine();
 
 signals:
 
@@ -112,6 +116,8 @@ protected:
     QPointer<Lampboard>    oLampboard;
 
     QMap<int, int> turnoverCounters;
+
+    virtual void commonConstructor();
 
     // performTurnover() service methods
     virtual void clearCounters();

@@ -221,6 +221,7 @@ public:
     virtual void testDoubleStep();
     virtual void testLampboard();
 
+
     TestHash * getPerform();
 
 signals:
