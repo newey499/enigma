@@ -84,6 +84,11 @@ void Machine::commonConstructor()
 }
 
 
+Alphabet * Machine::getAlphabet()
+{
+    return oKeyboard->getAlphabetObj();
+}
+
 bool Machine::hasSteckerboard()
 {
     return (steckerboard.compare("YES") == 0);

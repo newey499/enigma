@@ -42,7 +42,7 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "enigmaexception.h"
 #include "enigmadatabase.h"
 
-
+#include "alphabet.h"
 #include "keyboard.h"
 #include "steckerboard.h"
 #include "entry.h"
@@ -84,6 +84,8 @@ public:
     virtual bool hasSteckerboard();
 
     virtual QSqlRecord getRecMachine();
+
+    virtual Alphabet *getAlphabet();
 
 signals:
 

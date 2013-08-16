@@ -115,8 +115,8 @@ void FormMachine::slotAddRotor(RotorComboBox *oCbxRotor)
 
     qDebug("FormMachine::slotAddRotor() [%s]", oCbxRotor->currentText().toAscii().data());
     oMachine->addRotor(oCbxRotor->getRotorPosition(),
-                       oMachine->rotorFactory(oCbxRotor->currentText(), 1, "A"));
-    // TODO Select first character of rotor alphabet
+                       oMachine->rotorFactory(oCbxRotor->currentText(), 1,
+                       QString(oMachine->getAlphabet()->getAlphabetMap().at(0)).toAscii().data()));
 }
 
 void FormMachine::slotAddReflector(QString name)
