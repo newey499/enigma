@@ -116,6 +116,12 @@ int Rotor::getAlphabetSize()
 }
 
 
+QString Rotor::getAlphabetMap()
+{
+    return alphabetMap;
+}
+
+
 int Rotor::getMaxRingSetting()
 {
   return getAlphabetSize();

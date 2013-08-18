@@ -69,6 +69,7 @@ public:
     virtual int mapLeftToRight(int pinIn);
 
     virtual int getAlphabetSize();
+    virtual QString getAlphabetMap();
 
     virtual int calculateOffset(int pinIn);
 

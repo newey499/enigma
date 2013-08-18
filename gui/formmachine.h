@@ -16,6 +16,7 @@
 #include "entry.h"
 #include "rotor.h"
 #include "reflector.h"
+#include "rotorsetupdialog.h"
 
 namespace Ui {
 class FormMachine;

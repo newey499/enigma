@@ -11,8 +11,9 @@ FormMachine::FormMachine(int machineId, QWidget *parent) :
     oMachine = new Machine(machineId, this);
 
     ui->edtMachineId->setText(QString("%1").arg(machineId));
+    ui->edtMachineId->setReadOnly(true);
     ui->edtMachineName->setText(oMachine->getRecMachine().value("name").toString());
-
+    ui->edtMachineName->setReadOnly(true);
     setUpRotors();
 }
 
@@ -112,11 +113,14 @@ void FormMachine::slotAddEntry(QString name)
 
 void FormMachine::slotAddRotor(RotorComboBox *oCbxRotor)
 {
-
+    Rotor *oRotor = oMachine->rotorFactory(oCbxRotor->currentText(),
+                                           1,
+                                           oMachine->getAlphabet()->getAlphabetMap().at(0));
+    oRotor->setParent(this);
+    oCbxRotor->setRotor(oRotor);
     qDebug("FormMachine::slotAddRotor() [%s]", oCbxRotor->currentText().toAscii().data());
-    oMachine->addRotor(oCbxRotor->getRotorPosition(),
-                       oMachine->rotorFactory(oCbxRotor->currentText(), 1,
-                       QString(oMachine->getAlphabet()->getAlphabetMap().at(0)).toAscii().data()));
+    oMachine->addRotor(oCbxRotor->getRotorPosition(), oRotor);
+
 }
 
 void FormMachine::slotAddReflector(QString name)

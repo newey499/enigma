@@ -3,6 +3,8 @@
 
 #include <QComboBox>
 #include <QContextMenuEvent>
+#include "rotor.h"
+#include "rotorsetupdialog.h"
 
 class RotorComboBox : public QComboBox
 {
@@ -13,6 +15,9 @@ public:
     explicit RotorComboBox(int rotorPosition, QWidget *parent = 0);
 
     int getRotorPosition();
+    virtual Rotor * getRotor();
+    virtual void setRotor(Rotor *rotor);
+
 
 signals:
 
@@ -25,6 +30,7 @@ public slots:
 protected:
 
     int rotorPosition;
+    Rotor *oRotor;
 
     virtual void contextMenuEvent(QContextMenuEvent *e);
 

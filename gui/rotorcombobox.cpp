@@ -17,21 +17,34 @@ int RotorComboBox::getRotorPosition()
 
 void RotorComboBox::contextMenuEvent(QContextMenuEvent *e)
 {
-
     qDebug("RotorComboBox::contextMenuEvent(QContextMenuEvent *e)");
+
+    RotorSetupDialog *dialog = new RotorSetupDialog(oRotor, getRotorPosition(), this);
     if (e->reason() == QContextMenuEvent::Mouse)
     {
-
         e->accept();
+        dialog->exec();
     }
     else
     {
         e->ignore();
     }
+    delete dialog;
 }
 
 
 void RotorComboBox::slotEmitRotorChanged()
 {
     emit rotorChanged(this);
+}
+
+
+Rotor * RotorComboBox::getRotor()
+{
+    return oRotor;
+}
+
+void RotorComboBox::setRotor(Rotor *rotor)
+{
+    oRotor = rotor;
 }
