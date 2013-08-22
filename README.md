@@ -14,3 +14,4 @@ Essentially this is a research tool and a fun toy.
 
 This code is a work in progress.
 
+The long term intention is to build a Bombe emulation capable of coping with multiple roters.
