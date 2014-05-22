@@ -22,10 +22,12 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
-#include <QtGui/QApplication>
+#include "mainwindow.h"
+#include <QApplication>
+
 #include <QString>
 
-#include "mainwindow.h"
+
 #include "enigmadatabase.h"
 
 

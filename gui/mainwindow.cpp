@@ -76,8 +76,8 @@ int MainWindow::quitYesNo()
     exit = exit.append(appName);
 
     int ret = QMessageBox::question(this,
-                                    tr(appName.toAscii().data()),
-                                    tr(exit.toAscii().data()),
+                                    tr(appName.toStdString().data()),
+                                    tr(exit.toStdString().data()),
                                     QMessageBox::Yes | QMessageBox::No,
                                     QMessageBox::Yes);
 
@@ -156,8 +156,8 @@ void MainWindow::createMachineMenuItems(QMenu *menu)
 
 EnigmaAction * MainWindow::addMenuItem(QMenu *menu, QString title)
 {
-    EnigmaAction *action = new EnigmaAction(tr(title.toAscii().data()), this);
-    action->setStatusTip(tr(title.replace("&", "").toAscii().data()));
+    EnigmaAction *action = new EnigmaAction(tr(title.toStdString().data()), this);
+    action->setStatusTip(tr(title.replace("&", "").toStdString().data()));
     menu->addAction(action);
 
     return action;

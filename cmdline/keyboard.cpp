@@ -57,7 +57,7 @@ void Keyboard::commonConstructor()
     forceToUpper = false;
 
     qDebug("keyboard alphabet [%s]",
-           alphabetName.toAscii().data());
+           alphabetName.toStdString().data());
 }
 
 
@@ -78,15 +78,15 @@ bool Keyboard::isValidKey(QString keyIn)
     {
         result = false;
         qDebug("Keyboard - input key must be one character key passed [%s]",
-                keyIn.toAscii().data());
+                keyIn.toStdString().data());
     }
 
     if (! alphabetMap.contains(keyIn, Qt::CaseSensitive))
     {
         result = false;
         qDebug("Keyboard - input key [%s] is not in alphabet [%s]",
-                 keyIn.toAscii().data(),
-                 alphabetMap.trimmed().toAscii().data());
+                 keyIn.toStdString().data(),
+                 alphabetMap.trimmed().toStdString().data());
     }
 
 

@@ -69,7 +69,7 @@ QString ComponentBase::dispError(QString seperator)
 {
     QString output = errorList.join(seperator);
 
-    qDebug("%s", output.toAscii().data());
+    qDebug("%s", output.toStdString().data());
     return output;
 }
 
@@ -81,8 +81,8 @@ void ComponentBase::dispRec()
     for (int i = 0; i < rec.count(); i++)
     {
         qDebug("%s [%s]",
-               rec.field(i).name().toAscii().data(),
-               rec.field(i).value().toString().toAscii().data());
+               rec.field(i).name().toStdString().data(),
+               rec.field(i).value().toString().toStdString().data());
     }
     qDebug("FINISH:: WheelBaseData::dispRec()");
 }

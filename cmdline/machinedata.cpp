@@ -172,7 +172,7 @@ bool MachineData::isNameMinLengthOk(QString name)
     {
         QString msg = QString("Name must contain at least %1 characters").
                         arg(AlphabetData::MIN_ALPHABET_NAME_LENGTH);
-        //qDebug("%s", msg.toAscii().data());
+        //qDebug("%s", msg.toStdString().data());
         addError(msg);
         result = false;
     }

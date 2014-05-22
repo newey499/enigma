@@ -112,13 +112,13 @@ QString Machine::keyPress(QString keyIn)
 
     keyOut = oSteckerboard->mapStecker(keyIn);
     qDebug("\tStecker keyIn [%s] keyOut [%s]",
-           keyIn.toAscii().data(),
-           keyOut.toAscii().data());
+           keyIn.toStdString().data(),
+           keyOut.toStdString().data());
 
     keyIn = keyOut;
     pinOut = oEntry->mapCharToPin(keyIn);
     qDebug("\tEntry keyIn [%s] pinOut [%d]",
-           keyIn.toAscii().data(),
+           keyIn.toStdString().data(),
            pinOut
            );
 
@@ -131,7 +131,7 @@ QString Machine::keyPress(QString keyIn)
         pinOut = rotor->mapRightToLeft(pinIn);
 
         qDebug("\t <<< Rotor [%s] pinIn [%d] pinOut = [%d]",
-               rotor->getRotorName().toAscii().data(),
+               rotor->getRotorName().toStdString().data(),
                pinIn,
                pinOut);
         i--;
@@ -154,7 +154,7 @@ QString Machine::keyPress(QString keyIn)
         pinOut = rotor->mapLeftToRight(pinIn);
 
         qDebug("\t >>> Rotor [%s] pinIn [%d] pinOut = [%d]",
-               rotor->getRotorName().toAscii().data(),
+               rotor->getRotorName().toStdString().data(),
                pinIn,
                pinOut);
         j++;
@@ -165,7 +165,7 @@ QString Machine::keyPress(QString keyIn)
 
     qDebug("Entry pinIn [%d] keyOut [%s]",
            pinIn,
-           keyOut.toAscii().data());
+           keyOut.toStdString().data());
 
     return keyOut;
 }
@@ -327,7 +327,7 @@ void Machine::displayCounters()
     {
         qDebug("\t\t rotor [%d] name [%s] turnover count [%d]",
                i,
-               rotorArray.value(i)->getRotorName().toAscii().data(),
+               rotorArray.value(i)->getRotorName().toStdString().data(),
                turnoverCounters.value(i));
     }
     qDebug("\t\t ==========================");
@@ -344,7 +344,7 @@ void Machine::performTurnover()
         if (rotorArray.value(i+1)->checkForTurnover())
         {
             qDebug("1 - rotorname [%s] number [%d] turnover YES",
-                   rotorArray.value(i)->getRotorName().toAscii().data(),
+                   rotorArray.value(i)->getRotorName().toStdString().data(),
                    i);
             incCounter(i);
         }
@@ -356,7 +356,7 @@ void Machine::performTurnover()
     {
         qDebug("\t\t Double Step rotor [%d] name [%s]",
                i,
-               rotorArray.value(i)->getRotorName().toAscii().data());
+               rotorArray.value(i)->getRotorName().toStdString().data());
         if (rotorArray.value(i)->checkForTurnover() )
         {
             incCounter(i);
@@ -365,7 +365,7 @@ void Machine::performTurnover()
 
     // The right hand rotor ALWAYS turns one position
     qDebug("3 - rotor name [%s] number [%d] turnover YES",
-           rotorArray.value(rotorArray.count())->getRotorName().toAscii().data(),
+           rotorArray.value(rotorArray.count())->getRotorName().toStdString().data(),
            rotorArray.count());
     incCounter(rotorArray.count()); // force a turnover on the right most rotor
 
@@ -385,7 +385,7 @@ void Machine::executeTurnovers()
             rotorArray.value(i)->rotate();
             qDebug("\t\t\t Incrementing rotor [%d] name [%s]",
                    i,
-                   rotorArray.value(i)->getRotorName().toAscii().data());
+                   rotorArray.value(i)->getRotorName().toStdString().data());
         }
     }
     clearCounters();
