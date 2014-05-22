@@ -76,8 +76,8 @@ void Rotor::commonConstructor(QString name)
     setLetterSetting(alphabetMap.at(1));
 
     qDebug("rotor [%s] alphabet [%s]",
-           recRotor.value("name").toString().toStdString().data(),
-           recAlphabet.value("name").toString().toStdString().data());
+           recRotor.value("name").toString().toAscii().data(),
+           recAlphabet.value("name").toString().toAscii().data());
 
     sanityCheck();
 
@@ -173,9 +173,9 @@ void Rotor::setRingSetting(QString setting)
     if (! isValidChar(setting))
     {
         qDebug("2) Ring setting requested [%s] is not in alphabet [%s] [%s]",
-                setting.toStdString().data(),
-                alphabetName.toStdString().data(),
-                alphabetMap.toStdString ().data());
+                setting.toAscii().data(),
+                alphabetName.toAscii().data(),
+                alphabetMap.toAscii().data());
     }
     else
     {
@@ -196,8 +196,8 @@ void Rotor::setLetterSetting(QString setting)
     if ( (setting.count() != 1) || (! alphabetMap.contains(setting, Qt::CaseSensitive)) )
     {
         qDebug("Letter setting requested [%s] is not in alphabet [%s]",
-                setting.toStdString().data(),
-                alphabetMap.toStdString().data());
+                setting.toAscii().data(),
+                alphabetMap.toAscii().data());
     }
     else
     {
@@ -329,7 +329,7 @@ int Rotor::rotate()
     setLetterSetting(alphabetMap.at(letterOffset));
 
     qDebug("Rotor::rotate() Rotating rotor name [%s] oldLetterOffset [%d] newLetterOffset [%d]",
-           getRotorName().toStdString().data(),
+           getRotorName().toAscii().data(),
            oldLetterOffset, newLetterOffset);
 
     return letterOffset;
@@ -340,7 +340,7 @@ bool Rotor::checkForTurnover()
 {
     bool result = false;
 
-    qDebug("Rotor::checkForTurnover() Letter [%s]", getLetterSetting().toStdString().data());
+    qDebug("Rotor::checkForTurnover() Letter [%s]", getLetterSetting().toAscii().data());
     if (isNotch(getLetterSetting()))
     {
         result = true;
@@ -362,8 +362,8 @@ bool Rotor::isNotch(QString charIn)
     result = getNotches().contains(charIn, Qt::CaseSensitive);
 
     qDebug("Rotor::isNotch charIn [%s] Notches [%s] Result [%s]",
-           charIn.toStdString().data(),
-           getNotches().toStdString().data(),
+           charIn.toAscii().data(),
+           getNotches().toAscii().data(),
            result ? "true" : "false");
 
     return result;

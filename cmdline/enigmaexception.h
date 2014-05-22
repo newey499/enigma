@@ -40,7 +40,6 @@ public:
 
     // EnigmaException(const string& message);
     EnigmaException(char *message, char *filename, int lineNo);
-    EnigmaException(string message, char *filename, int lineNo);
 
     virtual ~EnigmaException() throw();
 

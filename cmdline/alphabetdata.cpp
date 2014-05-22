@@ -160,7 +160,7 @@ bool AlphabetData::isAlphabetNameMinLengthOk(QString name)
         QString msg = QString("Alphabet Name must contain at least %1 characters").
                         arg(AlphabetData::MIN_ALPHABET_NAME_LENGTH);
         qDebug("alphabet name [%s] len %d min len %d",
-               name.toStdString().data(),
+               name.toAscii().data(),
                name.length(),
                AlphabetData::MIN_ALPHABET_NAME_LENGTH);
         addError(msg);
@@ -402,7 +402,7 @@ bool AlphabetData::validateAlphabet(Globals::EDIT_MODE mode)
     msg = lastError("\n");
     qDebug("Validation result [%s]\n%s",
            result ? "TRUE" : "FALSE",
-           msg.toStdString().data());
+           msg.toAscii().data());
 
     return result;
 }

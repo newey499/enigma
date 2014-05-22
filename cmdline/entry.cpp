@@ -68,8 +68,8 @@ void Entry::commonConstructor()
 
 
         qDebug("entry [%s] alphabet [%s]",
-               recEntry.value("name").toString().toStdString().data(),
-               recAlphabet.value("name").toString().toStdString().data());
+               recEntry.value("name").toString().toAscii().data(),
+               recAlphabet.value("name").toString().toAscii().data());
 
         sanityCheck();
     }
@@ -134,27 +134,27 @@ int Entry::mapCharToPin(QString keyIn)
     {
         result = Globals::INVALID_PIN_NUMBER;
         qDebug("requested key [%s] not in alphabet [%s] [%s]",
-               keyIn.toStdString().data(),
-               alphabetName.toStdString().data(),
-               alphabetMap.toStdString().data());
+               keyIn.toAscii().data(),
+               alphabetName.toAscii().data(),
+               alphabetMap.toAscii().data());
     }
 
     result = entryMap.indexOf(keyIn, 0, Qt::CaseSensitive);
     /*******************
     qDebug("charIn [%s] pinOut [%d] [%s] [%s]",
-           keyIn.toStdString().data(),
+           keyIn.toAscii().data(),
            result,
-           entryName.toStdString().data(),
-           entryMap.toStdString().data() );
+           entryName.toAscii().data(),
+           entryMap.toAscii().data() );
     ***********************/
 
     if (result == -1)
     {
         result = Globals::INVALID_PIN_NUMBER;
         qDebug("requested key [%s] not in entry mapping [%s] [%s]",
-               keyIn.toStdString().data(),
-               entryName.toStdString().data(),
-               entryMap.toStdString().data());
+               keyIn.toAscii().data(),
+               entryName.toAscii().data(),
+               entryMap.toAscii().data());
     }
 
     return result;

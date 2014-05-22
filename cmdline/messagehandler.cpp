@@ -76,6 +76,6 @@ void MessageHandler::messageHandler(QtMsgType type, const char *msg)
             QTextStream ts(&outFile);
             ts << txt << endl;
         }
-        fprintf(stdout, txt.append("\n").toStdString().data());
+        fprintf(stdout, txt.append("\n").toAscii().data());
     }
 }

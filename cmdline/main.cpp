@@ -24,7 +24,6 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QtCore/QCoreApplication>
 
-#include <QtGlobal>
 #include <QtDebug>
 #include <QFile>
 #include <QTextStream>
@@ -77,7 +76,7 @@ int main(int argc, char *argv[])
     ******************/
 
     // MessageHandler::messageHandler is a public static function
-    //qInstallMessageHandler(MessageHandler::messageHandler);
+    qInstallMsgHandler(MessageHandler::messageHandler);
 
     QPointer<Globals> globals = new Globals();
     QPointer<TestHarness> testHarness = new TestHarness();

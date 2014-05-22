@@ -93,11 +93,11 @@ void FormMachine::fillComboBox(QComboBox *cbx, QString list)
         if (! GenLib::execQry(qry, true))
         {
             qDebug("Query Failed");
-            qDebug("%s", qry.lastError().text().toStdString().data());
+            qDebug("%s", qry.lastError().text().toAscii().data());
         }
         else
         {
-            qDebug("List [%s]", qry.record().value("name").toString().toStdString().data());
+            qDebug("List [%s]", qry.record().value("name").toString().toAscii().data());
             cbx->addItem(qry.record().value("name").toString(), qry.record().value("id").toInt());
         }
     }
@@ -106,7 +106,7 @@ void FormMachine::fillComboBox(QComboBox *cbx, QString list)
 
 void FormMachine::slotAddEntry(QString name)
 {
-    qDebug("FormMachine::slotAddEntry() [%s]", name.toStdString().data());
+    qDebug("FormMachine::slotAddEntry() [%s]", name.toAscii().data());
     Entry *oEntry = new Entry(name, this);
     oMachine->addEntry(oEntry);
 }
@@ -118,14 +118,14 @@ void FormMachine::slotAddRotor(RotorComboBox *oCbxRotor)
                                            oMachine->getAlphabet()->getAlphabetMap().at(0));
     oRotor->setParent(this);
     oCbxRotor->setRotor(oRotor);
-    qDebug("FormMachine::slotAddRotor() [%s]", oCbxRotor->currentText().toStdString().data());
+    qDebug("FormMachine::slotAddRotor() [%s]", oCbxRotor->currentText().toAscii().data());
     oMachine->addRotor(oCbxRotor->getRotorPosition(), oRotor);
 
 }
 
 void FormMachine::slotAddReflector(QString name)
 {
-    qDebug("FormMachine::slotAddReflector() [%s]", name.toStdString().data());
+    qDebug("FormMachine::slotAddReflector() [%s]", name.toAscii().data());
     Reflector *oReflector = new Reflector(name, this);
     oMachine->addReflector(oReflector);
 }

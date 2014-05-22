@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-//#include <QtGui/QApplication>
+#include <QtGui/QApplication>
 
 #include <QCloseEvent>
 #include <QMainWindow>

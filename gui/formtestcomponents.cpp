@@ -32,7 +32,7 @@ void FormTestComponents::buildTestCheckBoxes()
     while (i.hasNext())
     {
         i.next();
-        QString prompt = QString(i.value()->prompt->toStdString().data());
+        QString prompt = i.value()->prompt->toAscii();
         cb = new QCheckBox(prompt, this);
         cb->setProperty ("TEST_KEY_VALUE", i.key());
         cb->setChecked(i.value()->enabled);
@@ -59,9 +59,9 @@ void FormTestComponents::slotRunTests()
     // Install handler that indirectly ends up with calling
     // FormTestComponents::slotAppendString(QString msg) which
     // is defined below
-    //qInstallMessageHandler(GuiMessageHandler::guiMessageOutput);
+    qInstallMsgHandler(GuiMessageHandler::guiMessageOutput);
     testHarness->exec();
-    //qInstallMessageHandler(0); // Restore original handler
+    qInstallMsgHandler(0); // Restore original handler
     ui->edtTxt->moveCursor(QTextCursor::Start); // Move cursor to top
     ui->edtTxt->ensureCursorVisible();
 }

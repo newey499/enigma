@@ -65,8 +65,8 @@ void Reflector::commonConstructor()
 
 
         qDebug("reflector [%s] alphabet [%s]",
-               recReflector.value("name").toString().toStdString().data(),
-               recAlphabet.value("name").toString().toStdString().data());
+               recReflector.value("name").toString().toAscii().data(),
+               recAlphabet.value("name").toString().toAscii().data());
 
         sanityCheck();
     }

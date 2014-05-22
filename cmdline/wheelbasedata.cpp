@@ -62,7 +62,7 @@ bool WheelBaseData::isNameMinLengthOk(QString name)
     {
         QString msg = QString("Name must contain at least %1 characters").
                         arg(AlphabetData::MIN_ALPHABET_NAME_LENGTH);
-        qDebug("%s", msg.toStdString().data());
+        qDebug("%s", msg.toAscii().data());
         addError(msg);
         result = false;
     }
@@ -175,10 +175,10 @@ bool WheelBaseData::alphabetsSanityCheck()
         QString alphabet = qry.record().value("alphabet").toString();
 
         qDebug("[%s] [%s] [%s] [%s]",
-               alphabetName.toStdString().data(),
-               alphabet.toStdString().data(),
-               rec.value("name").toString().toStdString().data(),
-               rec.value("pinright").toString().toStdString().data());
+               alphabetName.toAscii().data(),
+               alphabet.toAscii().data(),
+               rec.value("name").toString().toAscii().data(),
+               rec.value("pinright").toString().toAscii().data());
         if (! alphabetSanityCheck(alphabetName, alphabet,
                                   rec.value("name").toString(),
                                   rec.value("pinright").toString()))

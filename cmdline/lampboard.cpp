@@ -58,7 +58,7 @@ void Lampboard::commonConstructor()
     alphabetName = oAlphabet->getAlphabetName();
 
     qDebug("alphabet [%s]",
-           recAlphabet.value("name").toString().toStdString().data());
+           recAlphabet.value("name").toString().toAscii().data());
 }
 
 
@@ -75,20 +75,20 @@ void Lampboard::illuminate(QString charIn)
     if (charIn.length() != 1)
     {
         qDebug("Length of input char [%s] should be 1 not %d",
-               charIn.toStdString().data(),
+               charIn.toAscii().data(),
                charIn.length());
         return;
     }
 
     if (oAlphabet->getAlphabetMap().contains(charIn))
     {
-        qDebug("%s is a valid char", charIn.toStdString().data());
+        qDebug("%s is a valid char", charIn.toAscii().data());
     }
     else
     {
         qDebug("%s is not a valid char - not in alphabet [%s]",
-               charIn.toStdString().data(),
-               oAlphabet->getAlphabetMap().toStdString().data());
+               charIn.toAscii().data(),
+               oAlphabet->getAlphabetMap().toAscii().data());
         return;
     }
 

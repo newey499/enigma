@@ -122,9 +122,7 @@ public:
 
         if (tmp)
         {
-            //result =  tmp->prompt->toStdString();
-            result =  tmp->prompt->toStdString().data();
-
+            result =  tmp->prompt->toAscii();
         }
         return result;
     }
@@ -136,7 +134,7 @@ public:
 
         if (tmp)
         {
-            *(tmp->prompt) = prompt.toStdString().data();
+            *(tmp->prompt) = prompt.toAscii();
         }
     }
 
