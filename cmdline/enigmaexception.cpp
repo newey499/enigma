@@ -38,6 +38,14 @@ EnigmaException::EnigmaException(char *message, char *filename, int lineNo) :
     this->lineNo    = lineNo;
 }
 
+EnigmaException::EnigmaException(string message, char *filename, int lineNo) :
+    runtime_error(message)
+{
+    this->message   = QString(message.data());
+    this->filename  = filename;
+    this->lineNo    = lineNo;
+}
+
 
 QString EnigmaException::what()
 {

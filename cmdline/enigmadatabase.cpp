@@ -38,10 +38,12 @@ const char * EnigmaDatabase::WHEEL_REFLECTOR = "REFLECTOR";
 EnigmaDatabase::EnigmaDatabase(QObject *parent) :
     ComponentBase(parent)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
 
-    db.setHostName("127.0.0.1");
-    db.setDatabaseName("enigma");
+    // hostname note needed for ODBC
+    // db.setHostName("127.0.0.1");
+    //db.setDatabaseName("enigma");
+    db.setDatabaseName("enigma_mysql");
     db.setUserName("cdn");
     db.setPassword("charlton");
 
@@ -51,7 +53,7 @@ EnigmaDatabase::EnigmaDatabase(QObject *parent) :
 
     // Check driver opens database
     qDebug("enigma database driver [%s] opened [%s]",
-                 db.driverName().toAscii().data(),
+                 db.driverName().toStdString().data(),
                  (ok ? "Yes": "No") );
 
 }
@@ -109,7 +111,7 @@ QSqlRecord EnigmaDatabase::getWheel(QString name)
         QString msg = qry.lastError().text();
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+        throw EnigmaException(msg.toStdString(),__FILE__, __LINE__);
 #pragma GCC diagnostic pop
     }
 
@@ -150,7 +152,7 @@ QSqlRecord EnigmaDatabase::getWheel(int id)
         QString msg = qry.lastError().text();
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
-        throw EnigmaException(msg.toAscii().data(),__FILE__, __LINE__);
+        throw EnigmaException(msg.toStdString().data(),__FILE__, __LINE__);
 #pragma GCC diagnostic pop
     }
 

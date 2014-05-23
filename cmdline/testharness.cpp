@@ -65,8 +65,8 @@ int TestHarness::exec()
     {
 
         qDebug("Error Testing %s\n%s",
-               component.toAscii().data(),
-               e.what().toAscii().data());
+               component.toStdString().data(),
+               e.what().toStdString().data());
     }
 
     try
@@ -76,8 +76,8 @@ int TestHarness::exec()
     catch (EnigmaException &e)
     {
         qDebug("Error Testing %s\n%s",
-               component.toAscii().data(),
-               e.what().toAscii().data());
+               component.toStdString().data(),
+               e.what().toStdString().data());
     }
 
     try
@@ -87,8 +87,8 @@ int TestHarness::exec()
     catch (EnigmaException &e)
     {
         qDebug("Error Testing %s\n%s",
-               component.toAscii().data(),
-               e.what().toAscii().data());
+               component.toStdString().data(),
+               e.what().toStdString().data());
         debugFooter(component);
     }
 
@@ -99,8 +99,8 @@ int TestHarness::exec()
     catch (EnigmaException &e)
     {
         qDebug("Error Testing %s\n%s",
-               component.toAscii().data(),
-               e.what().toAscii().data());
+               component.toStdString().data(),
+               e.what().toStdString().data());
         debugFooter(component);
     }
 
@@ -111,8 +111,8 @@ int TestHarness::exec()
     catch (EnigmaException &e)
     {
         qDebug("Error Testing %s\n%s",
-               component.toAscii().data(),
-               e.what().toAscii().data());
+               component.toStdString().data(),
+               e.what().toStdString().data());
         debugFooter(component);
     }
 
@@ -124,8 +124,8 @@ int TestHarness::exec()
     catch (EnigmaException &e)
     {
         qDebug("Error Testing %s\n%s",
-               component.toAscii().data(),
-               e.what().toAscii().data());
+               component.toStdString().data(),
+               e.what().toStdString().data());
         debugFooter(component);
     }
 
@@ -155,7 +155,7 @@ QString TestHarness::debugHeader(QString component)
     result = result.append("START TEST %1 \n").arg(component.toUpper());
     result = result.append("======================================================");
 
-    qDebug("%s", result.toAscii().data());
+    qDebug("%s", result.toStdString().data());
 
     return result;
 }
@@ -168,7 +168,7 @@ QString TestHarness::debugFooter(QString component)
     result = result.append("END TEST %1 \n").arg(component.toUpper());
     result = result.append("======================================================");
 
-    qDebug("%s", result.toAscii().data());
+    qDebug("%s", result.toStdString().data());
 
     return result;
 }
@@ -193,14 +193,14 @@ void TestHarness::testKeyboard()
     keyboard.keyIn(keyPress);
     qDebug("%s key in [%s] valid [%s]",
            MSG_OK,
-           keyPress.toAscii().data(),
+           keyPress.toStdString().data(),
            keyboard.isValidKey(keyPress) ? "Yes" : "No");
 
     keyPress = "Z";
     keyboard.keyIn(keyPress);
     qDebug("%s key in [%s] valid [%s]",
            MSG_OK,
-           keyPress.toAscii().data(),
+           keyPress.toStdString().data(),
            keyboard.isValidKey(keyPress) ? "Yes" : "No");
 
 
@@ -210,16 +210,16 @@ void TestHarness::testKeyboard()
     {
         qDebug("%s key in [%s] valid %s - returned empty string",
                MSG_OK,
-               keyPress.toAscii().data(),
+               keyPress.toStdString().data(),
                keyboard.isValidKey(keyPress) ? "Yes" : "No");
     }
     else
     {
         qDebug("%s key in [%s] valid %s - returned [%s] - should have returned empty string",
                MSG_FAIL,
-               keyPress.toAscii().data(),
+               keyPress.toStdString().data(),
                keyboard.isValidKey(keyPress) ? "Yes" : "No",
-               keyOut.toAscii().data());
+               keyOut.toStdString().data());
     }
 
 
@@ -246,60 +246,60 @@ void TestHarness::testSteckerboard()
     to = "B";
     qDebug("%s addStecker [%s, %s] %s",
            MSG_OK,
-           from.toAscii().data(),
-           to.toAscii().data(),
+           from.toStdString().data(),
+           to.toStdString().data(),
            stecker.addStecker(from, to) ? "added" : "not added");
 
     from = "C";
     to = "D";
     qDebug("%s addStecker [%s, %s] %s",
            MSG_OK,
-           from.toAscii().data(),
-           to.toAscii().data(),
+           from.toStdString().data(),
+           to.toStdString().data(),
            stecker.addStecker(from, to) ? "added" : "not added");
 
     from = "E";
     to = "F";
     qDebug("%s addStecker [%s, %s] %s",
            MSG_OK,
-           from.toAscii().data(),
-           to.toAscii().data(),
+           from.toStdString().data(),
+           to.toStdString().data(),
            stecker.addStecker(from, to) ? "added" : "not added");
 
     from = "A";
     to = "W";
     qDebug("%s addStecker failed A already steckered [%s, %s] %s",
            MSG_OK,
-           from.toAscii().data(),
-           to.toAscii().data(),
+           from.toStdString().data(),
+           to.toStdString().data(),
            stecker.addStecker(from, to) ? "added" : "not added");
 
     from = "A";
     to = stecker.mapStecker(from);
     qDebug("%s [%s] mapped to [%s]",
            MSG_OK,
-           from.toAscii().data(),
-           to.toAscii().data());
+           from.toStdString().data(),
+           to.toStdString().data());
 
 
     from = "B";
     to = stecker.mapStecker(from);
     qDebug("%s [%s] mapped to [%s]",
            MSG_OK,
-           from.toAscii().data(),
-           to.toAscii().data());
+           from.toStdString().data(),
+           to.toStdString().data());
 
     from = "W";
     to = stecker.mapStecker(from);
     qDebug("%s [%s] mapped to [%s]",
            MSG_OK,
-           from.toAscii().data(),
-           to.toAscii().data());
+           from.toStdString().data(),
+           to.toStdString().data());
 
     from = "D";
     qDebug("%s [%s] deleted [%s]",
            MSG_OK,
-           from.toAscii().data(),
+           from.toStdString().data(),
            stecker.delStecker(from) ? "Yes" : "No");
 
 
@@ -307,16 +307,16 @@ void TestHarness::testSteckerboard()
     from = "D";
     qDebug("%s [%s] deleted [%s] Failed as [%s] is not steckered",
            MSG_OK,
-           from.toAscii().data(),
+           from.toStdString().data(),
            stecker.delStecker(from) ? "Yes" : "No",
-           from.toAscii().data());
+           from.toStdString().data());
 
     from = "L";
     qDebug("%s [%s] deleted [%s] Failed as [%s] is not steckered",
            MSG_OK,
-           from.toAscii().data(),
+           from.toStdString().data(),
            stecker.delStecker(from) ? "Yes" : "No",
-           from.toAscii().data());
+           from.toStdString().data());
 
     debugFooter(component);
 }
@@ -337,7 +337,7 @@ void TestHarness::testEntry()
     debugHeader(component);
 
     QString tmp = MySql::getEnum("enigma", "rotor", "type").join(",");
-    qDebug("Entry: MySQL enum[%s]", tmp.toAscii().data());
+    qDebug("Entry: MySQL enum[%s]", tmp.toStdString().data());
 
     Entry entry("ENTRYNOMAP", this);
     //Entry entry("ENTRYREVERSE", this);
@@ -351,33 +351,33 @@ void TestHarness::testEntry()
     pinIn = 1;
     charOut = entry.mapPinToChar(pinIn);
     qDebug("%s Entry::mapPinToChar  pinIn [%d] charOut [%s]",
-           MSG_OK, pinIn, charOut.toAscii().data());
+           MSG_OK, pinIn, charOut.toStdString().data());
 
 
     pinIn = 26;
     charOut = entry.mapPinToChar(pinIn);
     qDebug("%s Entry::mapPinToChar  pinIn [%d] charOut [%s]",
-           MSG_OK, pinIn, charOut.toAscii().data());
+           MSG_OK, pinIn, charOut.toStdString().data());
 
 
     // invalid pinNo - produces exception
     pinIn = 27;
     charOut = entry.mapPinToChar(pinIn);
     qDebug("%s Fails - Should return empty string :: Entry::mapPinToChar pinIn [%d] charOut [%s]",
-           MSG_OK, pinIn, charOut.toAscii().data());
+           MSG_OK, pinIn, charOut.toStdString().data());
 
 
 
     charIn = "A";
     pinOut = entry.mapCharToPin(charIn);
     qDebug("%s Entry::mapCharToPin  charIn [%s] pinOut [%d]",
-           MSG_OK, charIn.toAscii().data(),
+           MSG_OK, charIn.toStdString().data(),
            pinOut);
 
     charIn = "Z";
     pinOut = entry.mapCharToPin(charIn);
     qDebug("%s Entry::mapCharToPin charIn [%s] pinOut [%d]",
-           MSG_OK, charIn.toAscii().data(),
+           MSG_OK, charIn.toStdString().data(),
            pinOut);
 
 
@@ -387,7 +387,7 @@ void TestHarness::testEntry()
     qDebug("%s Fails Should return invalid pin no [%d] :: mapCharToPin  charIn [%s] pinOut [%d]",
            MSG_OK,
            Globals::INVALID_PIN_NUMBER,
-           charIn.toAscii().data(),
+           charIn.toStdString().data(),
            pinOut);
 
     qDebug("*********************************");
@@ -397,43 +397,43 @@ void TestHarness::testEntry()
 
     ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     ed.setName("AA");
     ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     ed.setName("Name");
     ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     ed.setAlphabetId(99);
     ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     ed.setAlphabetId(5);
     ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     ed.setPinRight("ABCD");
     ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     ed.setPinRight("ABCDEF");
     ed.dispRec();
     ed.writeRec(Globals::ROW_ADD);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     qDebug("*********************************");
@@ -441,7 +441,7 @@ void TestHarness::testEntry()
     qDebug("*************************************");
 
     name = "Name";
-    qDebug("Loading Entry wheel [%s]", name.toAscii().data());
+    qDebug("Loading Entry wheel [%s]", name.toStdString().data());
     ed.getEntry(name);
     ed.dispRec();
     qDebug("==========================================");
@@ -449,7 +449,7 @@ void TestHarness::testEntry()
     ed.setPinRight("FEDCBA");
     ed.dispRec();
     ed.writeRec(Globals::ROW_EDIT);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     qDebug("*********************************");
@@ -457,25 +457,25 @@ void TestHarness::testEntry()
     qDebug("*************************************");
 
     name = "Name";
-    qDebug("Loading Entry wheel [%s]", name.toAscii().data());
+    qDebug("Loading Entry wheel [%s]", name.toStdString().data());
     ed.getEntry(name);
     ed.dispRec();
     qDebug("==========================================");
 
     ed.dispRec();
     ed.writeRec(Globals::ROW_DEL);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     name = "ENTRY";
-    qDebug("Loading Entry wheel [%s]", name.toAscii().data());
+    qDebug("Loading Entry wheel [%s]", name.toStdString().data());
     ed.getEntry(name);
     ed.dispRec();
     qDebug("==========================================");
 
     ed.dispRec();
     ed.writeRec(Globals::ROW_DEL);
-    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toAscii().data());
+    qDebug("Class EntryData\n%s", ed.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     debugFooter(component);
@@ -544,7 +544,7 @@ void TestHarness::testRotor()
 
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
 
@@ -553,39 +553,39 @@ void TestHarness::testRotor()
     rd.setNotches("A ,B,D");
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     rd.setPinRight("ABCDEF");
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
 
     rd.setName("testrotor");
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     // This add should fail
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     rd.setPinRight("FEDCBA");
     rd.dispRec();
     rd.writeRec(Globals::ROW_EDIT);
-    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
 
     rd.getRotor("testrotor");
     rd.dispRec();
     rd.writeRec(Globals::ROW_DEL);
-    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class RotorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     qDebug("*********************************************");
@@ -619,7 +619,7 @@ void TestHarness::testInvalidRingSetting(Rotor &rotor, int ringSetting)
         qDebug("%s Invalid ring setting of [%d] : [%s]",
                MSG_OK_FAIL,
                ringSetting,
-               e.what().toAscii().data());
+               e.what().toStdString().data());
 
     }
 
@@ -650,9 +650,9 @@ void TestHarness::testRepeatRotate(Rotor &rotor, int repeat, int pinIn, QString 
         qDebug("%s rotor.rotate ringstellung [%2d] old win [%s] old offset [%2d] new win [%s] new offset [%2d]",
                MSG_OK,
                rotor.getRingSetting(),
-               oldWindowChar.toAscii().data(),
+               oldWindowChar.toStdString().data(),
                oldLetterOffset,
-               rotor.getLetterSetting().toAscii().data(),
+               rotor.getLetterSetting().toStdString().data(),
                rotor.rotate()
                );
     }
@@ -671,9 +671,9 @@ int TestHarness::testRepeatMapLeftToRight(Rotor &rotor, int repeat, int pinIn, Q
         pinOut = rotor.mapLeftToRight(pinIn);
         qDebug("%s rotor.mapLeftToRight windowChar [%s] ring [%2d] [%s] pinIn [%2d] mapped to pinOut [%2d]",
                MSG_OK,
-               rotor.getLetterSetting().toAscii().data(),
+               rotor.getLetterSetting().toStdString().data(),
                rotor.getRingSetting(),
-               rotor.getRotorName().toAscii().data(),
+               rotor.getRotorName().toStdString().data(),
                pinIn,
                pinOut);
         //rotor.rotate();
@@ -697,9 +697,9 @@ int TestHarness::testRepeatMapRightToLeft(Rotor &rotor, int repeat, int pinIn, Q
         pinOut = rotor.mapRightToLeft(pinIn);
         qDebug("%s rotor.mapRightToLeft windowChar [%s] ring [%2d] [%s] pinIn [%2d] mapped to pinOut [%2d]",
                MSG_OK,
-               rotor.getLetterSetting().toAscii().data(),
+               rotor.getLetterSetting().toStdString().data(),
                rotor.getRingSetting(),
-               rotor.getRotorName().toAscii().data(),
+               rotor.getRotorName().toStdString().data(),
                pinIn,
                pinOut);
         //rotor.rotate();
@@ -775,7 +775,7 @@ void TestHarness::testReflector()
 
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
 
@@ -784,40 +784,40 @@ void TestHarness::testReflector()
     rd.setNotches("A ,B,D");
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     rd.setPinRight("ABCDEF");
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
 
     rd.setName("testreflector");
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
     // This add should fail
     rd.dispRec();
     rd.writeRec(Globals::ROW_ADD);
-    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
 
     rd.setPinRight("FEDCBA");
     rd.dispRec();
     rd.writeRec(Globals::ROW_EDIT);
-    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
 
     rd.getReflector("testreflector");
     rd.dispRec();
     rd.writeRec(Globals::ROW_DEL);
-    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toAscii().data());
+    qDebug("Class ReflectorData\n%s", rd.lastError("\t\n").toStdString().data());
     qDebug("==========================================");
 
 
@@ -843,9 +843,9 @@ void TestHarness::testReflector()
     pinOut = rotor.mapLeftToRight(pinIn);
     qDebug("%s rotor.mapLeftToRight windowChar [%s] ring [%d] [%s] pinIn [%d] mapped to pinOut [%d]",
            MSG_OK,
-           rotor.getLetterSetting().toAscii().data(),
+           rotor.getLetterSetting().toStdString().data(),
            rotor.getRingSetting(),
-           rotorName.toAscii().data(),
+           rotorName.toStdString().data(),
            pinIn,
            pinOut);
 
@@ -860,9 +860,9 @@ void TestHarness::testReflector()
     pinOut = rotor.mapLeftToRight(pinIn);
     qDebug("%s rotor.mapLeftToRight windowChar [%s] ring [%d] [%s] pinIn [%d] mapped to pinOut [%d]",
            MSG_OK,
-           rotor.getLetterSetting().toAscii().data(),
+           rotor.getLetterSetting().toStdString().data(),
            rotor.getRingSetting(),
-           rotorName.toAscii().data(),
+           rotorName.toStdString().data(),
            pinIn,
            pinOut);
 
@@ -874,9 +874,9 @@ void TestHarness::testReflector()
     pinOut = rotor.mapLeftToRight(pinIn);
     qDebug("%s rotor.mapLeftToRight windowChar [%s] ring [%d] [%s] pinIn [%d] mapped to pinOut [%d]",
            MSG_OK,
-           rotor.getLetterSetting().toAscii().data(),
+           rotor.getLetterSetting().toStdString().data(),
            rotor.getRingSetting(),
-           rotorName.toAscii().data(),
+           rotorName.toStdString().data(),
            pinIn,
            pinOut);
 
@@ -888,9 +888,9 @@ void TestHarness::testReflector()
     pinOut = rotor.mapLeftToRight(pinIn);
     qDebug("%s rotor.mapLeftToRight windowChar [%s] ring [%d] [%s] pinIn [%d] mapped to pinOut [%d]",
            MSG_OK,
-           rotor.getLetterSetting().toAscii().data(),
+           rotor.getLetterSetting().toStdString().data(),
            rotor.getRingSetting(),
-           rotorName.toAscii().data(),
+           rotorName.toStdString().data(),
            pinIn,
            pinOut);
 
@@ -904,9 +904,9 @@ void TestHarness::testReflector()
     pinOut = rotor.mapRightToLeft(pinIn);
     qDebug("%s rotor.mapRightToLeft windowChar [%s] ring [%d] [%s] pinIn [%d] mapped to pinOut [%d]",
            MSG_OK,
-           rotor.getLetterSetting().toAscii().data(),
+           rotor.getLetterSetting().toStdString().data(),
            rotor.getRingSetting(),
-           rotorName.toAscii().data(),
+           rotorName.toStdString().data(),
            pinIn,
            pinOut);
 
@@ -918,9 +918,9 @@ void TestHarness::testReflector()
     pinOut = rotor.mapRightToLeft(pinIn);
     qDebug("%s rotor.mapRightToLeft windowChar [%s] ring [%d] [%s] pinIn [%d] mapped to pinOut [%d]",
            MSG_OK,
-           rotor.getLetterSetting().toAscii().data(),
+           rotor.getLetterSetting().toStdString().data(),
            rotor.getRingSetting(),
-           rotorName.toAscii().data(),
+           rotorName.toStdString().data(),
            pinIn,
            pinOut);
 
@@ -930,9 +930,9 @@ void TestHarness::testReflector()
     pinOut = rotor.mapRightToLeft(pinIn);
     qDebug("%s rotor.mapRightToLeft windowChar [%s] ring [%d] [%s] pinIn [%d] mapped to pinOut [%d]",
            MSG_OK,
-           rotor.getLetterSetting().toAscii().data(),
+           rotor.getLetterSetting().toStdString().data(),
            rotor.getRingSetting(),
-           rotorName.toAscii().data(),
+           rotorName.toStdString().data(),
            pinIn,
            pinOut);
 
@@ -1009,8 +1009,8 @@ void TestHarness::testDoubleStep()
         winStr = machine.getWindowChars();
         qDebug("%s Expected [%s] [___] Actual [%s]",
                QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-               expected.toAscii().data(),
-               winStr.toAscii().data());
+               expected.toStdString().data(),
+               winStr.toStdString().data());
 
 
 
@@ -1019,8 +1019,8 @@ void TestHarness::testDoubleStep()
         winStr = machine.getWindowChars();
         qDebug("%s Expected [%s] [__*] Actual [%s]",
                QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-               expected.toAscii().data(),
-               winStr.toAscii().data());
+               expected.toStdString().data(),
+               winStr.toStdString().data());
 
 
         expected = "KDQ";
@@ -1028,8 +1028,8 @@ void TestHarness::testDoubleStep()
         winStr = machine.getWindowChars();
         qDebug("%s Expected [%s] [__*] Actual [%s]",
                QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-               expected.toAscii().data(),
-               winStr.toAscii().data());
+               expected.toStdString().data(),
+               winStr.toStdString().data());
 
 
         expected = "KER";
@@ -1037,8 +1037,8 @@ void TestHarness::testDoubleStep()
         winStr = machine.getWindowChars();
         qDebug("%s Expected [%s] [_**] Actual [%s]",
                QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-               expected.toAscii().data(),
-               winStr.toAscii().data());
+               expected.toStdString().data(),
+               winStr.toStdString().data());
 
 
         expected = "LFS";
@@ -1046,8 +1046,8 @@ void TestHarness::testDoubleStep()
         winStr = machine.getWindowChars();
         qDebug("%s Expected [%s] [***] Actual [%s]",
                QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-               expected.toAscii().data(),
-               winStr.toAscii().data());
+               expected.toStdString().data(),
+               winStr.toStdString().data());
 
 
         expected = "LFT";
@@ -1055,8 +1055,8 @@ void TestHarness::testDoubleStep()
         winStr = machine.getWindowChars();
         qDebug("%s Expected [%s] [__*] Actual [%s]",
                QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-               expected.toAscii().data(),
-               winStr.toAscii().data());
+               expected.toStdString().data(),
+               winStr.toStdString().data());
 
 
         expected = "LFU";
@@ -1064,8 +1064,8 @@ void TestHarness::testDoubleStep()
         winStr = machine.getWindowChars();
         qDebug("%s Expected [%s] [__*] Actual [%s]",
                QString(expected).compare(winStr) == 0 ? MSG_OK : MSG_FAIL_NO_EXCEPTION,
-               expected.toAscii().data(),
-               winStr.toAscii().data());
+               expected.toStdString().data(),
+               winStr.toStdString().data());
 
         qDebug("===================================");
         qDebug("FINISH: Test machine double stepping");
@@ -1075,7 +1075,7 @@ void TestHarness::testDoubleStep()
     {
         qDebug("Error Testing %s\n%s",
                "Test Machine",
-               e.what().toAscii().data());
+               e.what().toStdString().data());
     }
 
     debugFooter(component);
@@ -1231,8 +1231,8 @@ void TestHarness::testMachine()
         {
             qDebug("%s [%s] maps to [%s] Through rotors I, II, III and reflector B",
                    TestHarness::MSG_OK,
-                   keyIn.toAscii().data(),
-                   keyOut.toAscii().data());
+                   keyIn.toStdString().data(),
+                   keyOut.toStdString().data());
         }
         else
         {
@@ -1241,7 +1241,7 @@ void TestHarness::testMachine()
                    "FAIL:: ");
             qDebug("%s [G] mapped to [%s]",
                    "FAIL:: ",
-                   keyOut.toAscii().data());
+                   keyOut.toStdString().data());
         }
 
     }
@@ -1249,7 +1249,7 @@ void TestHarness::testMachine()
     {
         qDebug("Error Testing %s\n%s",
                "Test Machine",
-               e.what().toAscii().data());
+               e.what().toStdString().data());
     }
 
     debugFooter(component);

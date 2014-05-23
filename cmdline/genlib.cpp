@@ -54,7 +54,7 @@ bool GenLib::alphabetDuplicateCheck(QString alphabetName, QString alphabet)
                             arg(alphabet.count(alphabet.at(i), Qt::CaseSensitive )).
                             arg(alphabetName);
             result = false;
-            throw EnigmaException(tmp.toAscii().data(), __FILE__ , __LINE__);
+            throw EnigmaException(tmp.toStdString().data(), __FILE__ , __LINE__);
         }
     }
 

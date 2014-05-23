@@ -58,8 +58,8 @@ bool Steckerboard::addStecker(QString from, QString to)
     {
         result = false;
         qDebug("Cannot add stecker [%s, %s] - Characters are the same",
-                from.toAscii().data(),
-                to.toAscii().data());
+                from.toStdString().data(),
+                to.toStdString().data());
     }
 
     bool fromInUse = isCharInUse(from);
@@ -69,10 +69,10 @@ bool Steckerboard::addStecker(QString from, QString to)
     {
         result = false;
         qDebug("Cannot add stecker [%s, %s] %s %s",
-                from.toAscii().data(),
-                to.toAscii().data(),
-                fromInUse ? QString("[%1] in use").arg(from).toAscii().data() : "",
-                toInUse ? QString("[%1] in use").arg(to).toAscii().data() : "");
+                from.toStdString().data(),
+                to.toStdString().data(),
+                fromInUse ? QString("[%1] in use").arg(from).toStdString().data() : "",
+                toInUse ? QString("[%1] in use").arg(to).toStdString().data() : "");
     }
     else
     {
@@ -119,8 +119,8 @@ QString Steckerboard::mapStecker(QString charIn)
     if (! isValidChar(charIn))
     {
         qDebug("[%s] is not in alphabet [%s]",
-                charIn.toAscii().data(),
-                alphabetName.toAscii().data());
+                charIn.toStdString().data(),
+                alphabetName.toStdString().data());
 
         return "";
     }
@@ -150,7 +150,7 @@ bool Steckerboard::isValidChar(QString keyIn)
     if (keyIn.size() != 1)
     {
         qDebug("Input string must be a single char - passed [%s]",
-                keyIn.toAscii().data());
+                keyIn.toStdString().data());
 
         return false;
     }
@@ -158,8 +158,8 @@ bool Steckerboard::isValidChar(QString keyIn)
     if (alphabetMap.indexOf(keyIn, 0, Qt::CaseSensitive) == -1)
     {
         qDebug("Input key [%s] not found in alphabet [%s]",
-                keyIn.toAscii().data(),
-                alphabetName.toAscii().data());
+                keyIn.toStdString().data(),
+                alphabetName.toStdString().data());
         return false;
     }
 

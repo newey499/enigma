@@ -39,15 +39,15 @@ QString TestDatabaseValidation::displayTestRec(QString msg, QSqlRecord rec)
 
 
     msg = msg.prepend("\n===================================\n");
-    //qDebug("%s", msg.toAscii().data());
+    //qDebug("%s", msg.toStdString().data());
     for (int i = 0; i < rec.count(); i++)
     {
         msg = msg.append("\n%1 : %2").
-                arg(rec.fieldName(i).toAscii().data()).
-                arg(rec.value(i).toString().toAscii().data());
+                arg(rec.fieldName(i).toStdString().data()).
+                arg(rec.value(i).toString().toStdString().data());
     }
 
-    qDebug("%s", msg.toAscii().data());
+    qDebug("%s", msg.toStdString().data());
 
     return msg;
 }
