@@ -41,10 +41,13 @@ bool MessageHandler::deleteLogFile()
     return QFile::remove(MessageHandler::logFile);
 }
 
-
-void MessageHandler::messageHandler(QtMsgType type, const char *msg)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+void MessageHandler::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QString txt;
+
+
     switch (type)
     {
         case QtDebugMsg:
@@ -79,3 +82,4 @@ void MessageHandler::messageHandler(QtMsgType type, const char *msg)
         fprintf(stdout, txt.append("\n").toStdString().data());
     }
 }
+#pragma GCC diagnostic pop
