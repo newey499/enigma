@@ -16,4 +16,5 @@
 *.avi
 *.tar*
 .~*
+*.autosave
 build-*/

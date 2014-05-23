@@ -40,7 +40,7 @@ EnigmaDatabase::EnigmaDatabase(QObject *parent) :
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
 
-    // hostname note needed for ODBC
+    // hostname not needed for ODBC
     // db.setHostName("127.0.0.1");
     //db.setDatabaseName("enigma");
     db.setDatabaseName("enigma_mysql");
