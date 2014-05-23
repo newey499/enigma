@@ -9,14 +9,28 @@ GuiMessageHandler::GuiMessageHandler(QObject *parent) :
 }
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-void GuiMessageHandler::guiMessageOutput(QtMsgType type, const char *msg)
+
+void GuiMessageHandler::guiMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     EmitString es(GuiMessageHandler::formPtr);
-
-    //es.slotEmitStr(QString("%1%2").arg(msg).arg("\n"));
-    es.slotEmitStr(QString("%1").arg(msg));
-    std::cerr << msg << std::endl;
+    QByteArray localMsg = msg.toLocal8Bit();
+    switch (type) {
+    case QtDebugMsg:
+        fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        es.slotEmitStr(QString("%1").arg(msg));
+        break;
+    case QtWarningMsg:
+        fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        es.slotEmitStr(QString("%1").arg(msg));
+        break;
+    case QtCriticalMsg:
+        fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        es.slotEmitStr(QString("%1").arg(msg));
+        break;
+    case QtFatalMsg:
+        fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        es.slotEmitStr(QString("%1").arg(msg));
+        abort();
+    }
 }
-#pragma GCC diagnostic pop
+

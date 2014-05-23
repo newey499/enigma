@@ -32,7 +32,7 @@
 
 DEFINES += BUILD_GUI
 
-QT       += core gui
+QT       += core gui widgets
 QT       += sql
 
 TARGET = gui
@@ -72,7 +72,8 @@ SOURCES += main.cpp\
     emitstring.cpp \
     guimessagehandler.cpp \
     rotorcombobox.cpp \
-    rotorsetupdialog.cpp
+    rotorsetupdialog.cpp \
+    ../cmdline/messagehandler.cpp
 
 
 
@@ -107,7 +108,8 @@ HEADERS  += mainwindow.h \
     emitstring.h \
     guimessagehandler.h \
     rotorcombobox.h \
-    rotorsetupdialog.h
+    rotorsetupdialog.h \
+    ../cmdline/messagehandler.h
 
 
 

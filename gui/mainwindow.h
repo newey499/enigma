@@ -1,7 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QApplication>
+#include "formmachine.h"
+#include "formtestcomponents.h"
+#include <QApplication>
 
 #include <QCloseEvent>
 #include <QMainWindow>
@@ -20,8 +22,7 @@
 #include "enigmaexception.h"
 #include "enigmaaction.h"
 
-#include "formmachine.h"
-#include "formtestcomponents.h"
+
 
 namespace Ui {
 class MainWindow;

@@ -1,15 +1,13 @@
 #ifndef FORMMACHINE_H
 #define FORMMACHINE_H
 
-#include <QWidget>
-
 #include "machine.h"
 #include <QComboBox>
 #include <QContextMenuEvent>
 #include <QLabel>
 #include <QSqlRecord>
 #include <QSqlQuery>
-
+#include <QWidget>
 
 #include "genlib.h"
 #include "rotorcombobox.h"

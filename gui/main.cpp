@@ -22,12 +22,14 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 
 ***************************************************************************/
 
-#include <QtGui/QApplication>
-#include <QString>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "mainwindow.h"
-#include "enigmadatabase.h"
+#include <QApplication>
+#include <QString>
 
+#include "enigmadatabase.h"
 
 
 int main(int argc, char *argv[])
@@ -42,4 +44,6 @@ int main(int argc, char *argv[])
     return a.exec();
 
     edb->disconnect();
+
+    return 0;
 }

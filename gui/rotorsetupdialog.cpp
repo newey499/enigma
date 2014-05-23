@@ -30,7 +30,7 @@ void RotorSetupDialog::commonConstructor()
     }
     index = ui->cbxWindowChar->findText(oRotor->getLetterSetting());
     ui->cbxWindowChar->setCurrentIndex(index);
-    qDebug("window char [%s]", oRotor->getLetterSetting().toAscii().data());
+    qDebug("window char [%s]", oRotor->getLetterSetting().toStdString().data());
 
     ui->cbxRingSetting->clear();
     for (int i = 1; i <= oRotor->getAlphabetSize(); i++)
@@ -40,7 +40,7 @@ void RotorSetupDialog::commonConstructor()
     QString ringSetting = QString("%1").arg(oRotor->getRingSetting());
     index = ui->cbxRingSetting->findText(ringSetting);
     ui->cbxRingSetting->setCurrentIndex(index);
-    qDebug("ring setting [%s]", ringSetting.toAscii().data());
+    qDebug("ring setting [%s]", ringSetting.toStdString().data());
 
 
 
@@ -62,8 +62,8 @@ void RotorSetupDialog::slotAccept()
     oRotor->setRingSetting(ringSetting);
 
     qDebug("rotor letter [%s] ring [%s]",
-           ui->cbxWindowChar->currentText().toAscii().data(),
-           ui->cbxRingSetting->currentText().toAscii().data()
+           ui->cbxWindowChar->currentText().toStdString().data(),
+           ui->cbxRingSetting->currentText().toStdString().data()
            );
     accept();
 }

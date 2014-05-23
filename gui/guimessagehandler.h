@@ -20,7 +20,7 @@ public:
 
     explicit GuiMessageHandler(QObject *parent = 0);
 
-    static void guiMessageOutput(QtMsgType type, const char *msg);
+    static void guiMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
 signals:
 
