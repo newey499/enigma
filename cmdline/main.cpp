@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     // MessageHandler::messageHandler is a public static function
     qInstallMessageHandler(MessageHandler::messageHandler);
 
-    QPointer<Globals> globals = new Globals();
+    QPointer<Globals> globals = Globals::getInstance();
     QPointer<TestHarness> testHarness = new TestHarness();
 
 

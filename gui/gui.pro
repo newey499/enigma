@@ -72,7 +72,8 @@ SOURCES += main.cpp\
     emitstring.cpp \
     guimessagehandler.cpp \
     rotorcombobox.cpp \
-    rotorsetupdialog.cpp
+    rotorsetupdialog.cpp \
+    formsettings.cpp
 
 
 
@@ -107,11 +108,13 @@ HEADERS  += mainwindow.h \
     emitstring.h \
     guimessagehandler.h \
     rotorcombobox.h \
-    rotorsetupdialog.h
+    rotorsetupdialog.h \
+    formsettings.h
 
 
 
 FORMS    += mainwindow.ui \
     formmachine.ui \
     formtestcomponents.ui \
-    rotorsetupdialog.ui
+    rotorsetupdialog.ui \
+    formsettings.ui

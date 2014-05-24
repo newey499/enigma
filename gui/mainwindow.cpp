@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings settings(Globals::ORGANIZATION_NAME, Globals::APPLICATION_NAME);
     restoreGeometry(settings.value("geometry").toByteArray());
 
-    globals = new Globals(this);
+    globals = Globals::getInstance();
 
     buildMenusAndForms();
 
@@ -50,7 +50,7 @@ MainWindow::~MainWindow()
 void MainWindow::saveSettings()
 {
     QSettings settings(Globals::ORGANIZATION_NAME, Globals::APPLICATION_NAME);
-    settings.setValue("geometry", saveGeometry());
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -110,7 +110,8 @@ void MainWindow::buildMenusAndForms()
                 this, SLOT(slotFormTestComponents()));
 
     QMenu *settingsMenu = new QMenu("&Settings", this);
-
+        connect(addMenuItem(settingsMenu, "&Settings"), SIGNAL(triggered()),
+            this, SLOT(slotFormSettings()));
 
     QMenu *helpMenu     = new QMenu("&Help", this);
         connect(addMenuItem(helpMenu, "About &Enigma"), SIGNAL(triggered()),
@@ -200,4 +201,12 @@ void MainWindow::slotFormTestComponents()
     // QMainWindow takes ownership and deletes the object from the heap
     // when it finished with
     setCentralWidget(new FormTestComponents(this));
+}
+
+
+void MainWindow::slotFormSettings()
+{
+    // QMainWindow takes ownership and deletes the object from the heap
+    // when it finished with
+    setCentralWidget(new FormSettings(this));
 }

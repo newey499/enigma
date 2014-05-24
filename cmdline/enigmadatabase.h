@@ -25,6 +25,8 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef ENIGMADATABASE_H
 #define ENIGMADATABASE_H
 
+
+
 #include <QPointer>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -38,6 +40,8 @@ along with Enigma.  If not, see <http://www.gnu.org/licenses/>.
 #include "enigmaexception.h"
 #include "globals.h"
 #include "componentbase.h"
+
+
 
 class EnigmaDatabase : public ComponentBase
 {
@@ -55,6 +59,7 @@ public:
     static QSqlRecord getWheel(QString name);
     static QSqlRecord getWheel(int id);
 
+    QStringList getDriverList();
 
 signals:
 
@@ -70,6 +75,7 @@ private:
 
     static bool instanceFlag;
     static QPointer<EnigmaDatabase> singleton;
+    QPointer<Globals> globals;
 
     explicit EnigmaDatabase(QObject *parent = 0);
 

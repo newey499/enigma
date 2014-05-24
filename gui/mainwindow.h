@@ -3,6 +3,7 @@
 
 #include "formmachine.h"
 #include "formtestcomponents.h"
+#include "formsettings.h"
 #include <QApplication>
 
 #include <QCloseEvent>
@@ -46,6 +47,7 @@ public slots:
     virtual void createMachineMenuItems(QMenu *menu);
     virtual void slotMachine(EnigmaAction *action);
     virtual void slotFormTestComponents();
+    virtual void slotFormSettings();
 
 protected:
 

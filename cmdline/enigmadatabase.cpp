@@ -38,14 +38,17 @@ const char * EnigmaDatabase::WHEEL_REFLECTOR = "REFLECTOR";
 EnigmaDatabase::EnigmaDatabase(QObject *parent) :
     ComponentBase(parent)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
+
+    globals = Globals::getInstance();
+
+    //QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
+    db = QSqlDatabase::addDatabase(globals->db_driver());
 
     // hostname not needed for ODBC
-    // db.setHostName("127.0.0.1");
-    //db.setDatabaseName("enigma");
-    db.setDatabaseName("enigma_mysql");
-    db.setUserName("cdn");
-    db.setPassword("charlton");
+    db.setHostName("127.0.0.1");
+    db.setDatabaseName(globals->db_databasename());
+    db.setUserName(globals->db_username());
+    db.setPassword(globals->db_password());
 
     db.open();
 
@@ -56,6 +59,7 @@ EnigmaDatabase::EnigmaDatabase(QObject *parent) :
                  db.driverName().toStdString().data(),
                  (ok ? "Yes": "No") );
 
+    globals->display();
 }
 
 
@@ -157,6 +161,11 @@ QSqlRecord EnigmaDatabase::getWheel(int id)
     }
 
     return rec;
+}
+
+QStringList EnigmaDatabase::getDriverList()
+{
+    return QSqlDatabase::drivers();
 }
 
 
