@@ -166,6 +166,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="btnTestConn">
+       <property name="text">
+        <string>Test Connection</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="btnSave">
        <property name="text">
         <string>Save</string>
@@ -194,9 +201,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnTestConn</sender>
+   <signal>clicked()</signal>
+   <receiver>FormSettings</receiver>
+   <slot>slotTestConn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>98</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slotSaveSettings()</slot>
-  <slot>slotDriverChanged(QString)</slot>
+  <slot>slotTestConn()</slot>
  </slots>
 </ui>

@@ -61,6 +61,8 @@ public:
 
     QStringList getDriverList();
 
+    bool testConnection(QString driver, QString host, QString database, QString username, QString password);
+
 signals:
 
 public slots:
@@ -69,6 +71,8 @@ public slots:
 protected:
 
     QSqlDatabase db;
+
+    bool openDatabase();
 
 
 private:

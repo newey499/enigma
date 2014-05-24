@@ -41,18 +41,7 @@ EnigmaDatabase::EnigmaDatabase(QObject *parent) :
 
     globals = Globals::getInstance();
 
-    //QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-    db = QSqlDatabase::addDatabase(globals->db_driver());
-
-    // hostname not needed for ODBC
-    db.setHostName("127.0.0.1");
-    db.setDatabaseName(globals->db_databasename());
-    db.setUserName(globals->db_username());
-    db.setPassword(globals->db_password());
-
-    db.open();
-
-    bool ok = db.open();
+    bool ok = openDatabase();
 
     // Check driver opens database
     qDebug("enigma database driver [%s] opened [%s]",
@@ -68,6 +57,25 @@ EnigmaDatabase::~EnigmaDatabase()
     instanceFlag = false;
 }
 
+bool EnigmaDatabase::openDatabase()
+{
+    bool result = false;
+
+    //QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
+    db = QSqlDatabase::addDatabase(globals->db_driver());
+
+    // hostname not needed for ODBC
+    db.setHostName(globals->db_hostname());
+    db.setDatabaseName(globals->db_databasename());
+    db.setUserName(globals->db_username());
+    db.setPassword(globals->db_password());
+
+    db.open();
+
+    result = db.open();
+
+    return result;
+}
 
 EnigmaDatabase * EnigmaDatabase::getInstance()
 {
@@ -166,6 +174,44 @@ QSqlRecord EnigmaDatabase::getWheel(int id)
 QStringList EnigmaDatabase::getDriverList()
 {
     return QSqlDatabase::drivers();
+}
+
+
+bool EnigmaDatabase::testConnection(QString driver, QString host, QString database,
+                                    QString username, QString password)
+{
+    bool result = false;
+
+    cout << "driver " << driver.toStdString() <<
+            "\nhost " << host.toStdString() <<
+            "\ndatabase " << database.toStdString() <<
+            "\nusername " << username.toStdString() <<
+            "\npassword " << password.toStdString() <<
+            endl;
+
+    db = QSqlDatabase::addDatabase(driver);
+    db.setHostName(host);
+    db.setDatabaseName(database);
+    db.setUserName(username);
+    db.setPassword(password);
+
+    result = db.open();
+
+    if (result)
+    {
+        db.close();
+        qDebug("Database %s opened Ok", database.toStdString().data());
+    }
+    else
+    {
+        qDebug("Failed to open database %s", database.toStdString().data());
+        QSqlError err = db.lastError();
+        qDebug("SQL Error [%s]", err.text().toStdString().data());
+    }
+
+    openDatabase();
+
+    return result;
 }
 
 

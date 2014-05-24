@@ -22,6 +22,7 @@ public slots:
 
     void slotSaveSettings();
     void slotDriverChanged(QString newDriver);
+    void slotTestConn();
 
 protected:
 

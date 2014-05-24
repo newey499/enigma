@@ -70,3 +70,15 @@ void FormSettings::slotDriverChanged(QString newDriver)
     //cout << "newDriver [" << newDriver.toStdString() << "]" << endl;
     globals->setDb_driver(newDriver);
 }
+
+void FormSettings::slotTestConn()
+{
+    qDebug("FormSettings::slotTestConn()");
+    database->testConnection(
+                                ui->cbxDriver->currentText(),
+                                ui->txtHostname->text(),
+                                ui->txtDatabasename->text(),
+                                ui->txtUsername->text(),
+                                ui->txtPassword->text()
+                            );
+}
